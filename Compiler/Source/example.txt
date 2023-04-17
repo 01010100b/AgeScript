@@ -1,0 +1,11 @@
+﻿Globals:
+Int ga
+Int gb
+Int gc
+
+Function Void Main():
+Int c
+ga = 12
+gb = 6
+gc = ga
+ChatDataToSelf("gc = %d", gc)
