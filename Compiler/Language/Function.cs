@@ -16,7 +16,7 @@ namespace Compiler.Language
         public int Address { get; set; }
         public string AddressableName { get; } = Guid.NewGuid().ToString();
         public IEnumerable<Variable> AllVariables => Parameters.Concat(LocalVariables);
-        public int RegisterCount => AllVariables.Sum(x => x.Type.Size);
+        public int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // first register is return addr
         public IEnumerable<Variable> GetScopedVariables(Script script) => script.GlobalVariables.Values.Concat(AllVariables);
 
         public bool TryGetScopedVariable(Script script, string name, out Variable? variable)

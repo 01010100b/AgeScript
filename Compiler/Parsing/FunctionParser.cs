@@ -88,49 +88,70 @@ namespace Compiler.Parsing
 
         private Statement ParseStatement(Script script, Function function, string line)
         {
-            if (line.Contains('\"'))
+            if (line == "return" || line.StartsWith("return "))
             {
-                // has string literal
+                // return statement
 
-                var lits = line.IndexOf('\"');
-                var lite = line.LastIndexOf('\"');
-                var literal = line[lits..(lite + 1)];
-                var id = Guid.NewGuid().ToString();
-                line = line.Replace(literal, id);
-                Literals.Add(id, literal);
-            }
+                var expr = line.Replace("return", "").Trim();
 
-            var eq_pos = line.IndexOf('=');
-            var lhs = eq_pos != -1 ? line[..eq_pos].Trim() : string.Empty;
-            var rhs = line[(eq_pos + 1)..].Trim();
-
-            Variable? variable = null;
-            int offset = 0;
-            var type = Primitives.Types.Single(x => x.Name == "Void");
-
-            if (!string.IsNullOrWhiteSpace(lhs))
-            {
-                if (function.TryGetScopedVariable(script, lhs, out var v))
+                if (string.IsNullOrWhiteSpace(expr))
                 {
-                    variable = v!;
-                    type = variable.Type;
+                    return new ReturnStatement() { Expression = null };
                 }
                 else
                 {
-                    throw new Exception("Variable to assign to not found.");
+                    var expression = ParseExpression(script, function, expr);
+                    return new ReturnStatement() { Expression = expression };
                 }
             }
-
-            var expression = ParseExpression(script, function, rhs);
-            var statement = new AssignStatement()
+            else
             {
-                Variable = variable,
-                Offset = offset,
-                Type = type,
-                Expression = expression
-            };
+                // assign statement
 
-            return statement;
+                if (line.Contains('\"'))
+                {
+                    // has string literal
+
+                    var lits = line.IndexOf('\"');
+                    var lite = line.LastIndexOf('\"');
+                    var literal = line[lits..(lite + 1)];
+                    var id = Guid.NewGuid().ToString();
+                    line = line.Replace(literal, id);
+                    Literals.Add(id, literal);
+                }
+
+                var eq_pos = line.IndexOf('=');
+                var lhs = eq_pos != -1 ? line[..eq_pos].Trim() : string.Empty;
+                var rhs = line[(eq_pos + 1)..].Trim();
+
+                Variable? variable = null;
+                int offset = 0;
+                var type = Primitives.Types.Single(x => x.Name == "Void");
+
+                if (!string.IsNullOrWhiteSpace(lhs))
+                {
+                    if (function.TryGetScopedVariable(script, lhs, out var v))
+                    {
+                        variable = v!;
+                        type = variable.Type;
+                    }
+                    else
+                    {
+                        throw new Exception("Variable to assign to not found.");
+                    }
+                }
+
+                var expression = ParseExpression(script, function, rhs);
+                var statement = new AssignStatement()
+                {
+                    Variable = variable,
+                    Offset = offset,
+                    Type = type,
+                    Expression = expression
+                };
+
+                return statement;
+            }
         }
 
         private Expression ParseExpression(Script script, Function function, string expression)

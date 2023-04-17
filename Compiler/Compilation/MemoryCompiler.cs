@@ -9,7 +9,7 @@ namespace Compiler.Compilation
 {
     internal class MemoryCompiler
     {
-        public static readonly string[] NAMED_GOALS = { "stack-ptr", "return-addr", "sp0", "sp1", "sp2", "sp3" };
+        public static readonly string[] NAMED_GOALS = { "stack-ptr", "sp0", "sp1", "sp2", "sp3" };
         
         public void Compile(Script script, RuleList rules) 
         {
@@ -32,7 +32,7 @@ namespace Compiler.Compilation
 
             foreach (var function in script.Functions)
             {
-                var offset = 0;
+                var offset = 1;
 
                 foreach (var variable in function.AllVariables)
                 {
@@ -43,6 +43,8 @@ namespace Compiler.Compilation
 
             goal -= script.Functions.Max(x => x.ReturnType.Size);
             script.CallResultBase = goal;
+
+            rules.AddAction($"set-goal {script.RegisterBase} 20000");
         }
     }
 }

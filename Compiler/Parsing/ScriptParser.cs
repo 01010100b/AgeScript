@@ -36,6 +36,7 @@ namespace Compiler.Parsing
                 }
                 else if (REGEX_FUNCTION.IsMatch(line))
                 {
+                    Console.WriteLine($"Matched function {line}");
                     current = new();
                     function_codes.Add(current);
                 }

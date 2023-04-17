@@ -12,12 +12,26 @@ namespace Compiler.Compilation
 {
     internal class FunctionCompiler
     {
+        private int LastReturnStatement { get; set; }
+
         public void Compile(Script script, Function function, RuleList rules)
         {
+            if (function.Statements.Count == 0)
+            {
+                return;
+            }
+
+            LastReturnStatement = -1;
             Console.WriteLine($"Compiling function {function.Name}");
             rules.StartNewRule();
             function.Address = rules.CurrentRuleIndex;
             CompileBlock(script, function, rules, 0);
+
+            if (LastReturnStatement < function.Statements.Count - 1)
+            {
+                rules.AddAction($"up-jump-direct g: {script.RegisterBase}");
+            }
+
             rules.StartNewRule();
         }
 
@@ -36,7 +50,18 @@ namespace Compiler.Compilation
                         address = assign.Variable.Address + assign.Offset;
                     }
 
-                    CompileExpression(script, function, rules, assign.Expression, address);
+                    Utils.CompileExpression(script, function, rules, assign.Expression, address);
+                }
+                else if (statement is ReturnStatement ret)
+                {
+                    if (ret.Expression is not null)
+                    {
+                        Utils.CompileExpression(script, function, rules, ret.Expression, script.CallResultBase);
+                    }
+
+                    rules.AddAction($"up-jump-direct g: {script.RegisterBase}");
+                    rules.StartNewRule();
+                    LastReturnStatement = i;
                 }
                 else
                 {
@@ -45,48 +70,6 @@ namespace Compiler.Compilation
             }
 
             return index;
-        }
-
-        private void CompileExpression(Script script, Function function, RuleList rules, 
-            Expression expression, int? address)
-        {
-            if (expression is ConstExpression cst && address is not null)
-            {
-                if (cst.Type.Name == "Int")
-                {
-                    var value = int.Parse(cst.Value);
-                    rules.AddAction($"set-goal {address} {value}");
-                }
-                else if (cst.Type.Name == "Bool")
-                {
-                    var value = bool.Parse(cst.Value);
-                    var iv = value ? 1 : 0;
-                    rules.AddAction($"set-goal {address} {iv}");
-                }
-                else 
-                { 
-                    throw new NotImplementedException(); 
-                }
-            }
-            else if (expression is VariableExpression vr && address is not null)
-            {
-                Utils.MemCopy(rules, vr.Variable.Address, address.Value, vr.Variable.Type.Size, false, false);
-            }
-            else if (expression is CallExpression cl)
-            {
-                if (cl.Function is Intrinsic intr)
-                {
-                    intr.Compile(rules, cl);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

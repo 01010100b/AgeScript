@@ -33,6 +33,11 @@ namespace Compiler.Language
 
         public override void Validate()
         {
+            if (Functions.Count(x => x.Name == "Main") != 1)
+            {
+                throw new Exception("Must have a unique Main function.");
+            }
+
             throw new NotImplementedException();
         }
 

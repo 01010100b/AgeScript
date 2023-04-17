@@ -26,13 +26,13 @@ namespace Compiler
                 }
             }
 
-            Run();
+            Run(true);
 
             File.Delete(file);
             File.WriteAllText(file, JsonSerializer.Serialize(Settings, options));
         }
 
-        private static void Run()
+        private static void Run(bool debug)
         {
             var dirs = new List<string>() { SourceFolder };
             var lines = new List<string>();
@@ -62,6 +62,11 @@ namespace Compiler
             File.Create(ai);
             var per = Path.Combine(Settings.Folder, $"{Settings.Name}.per");
             File.WriteAllText(per, code);
+
+            if (debug)
+            {
+                Console.WriteLine(script.ToString());
+            }
         }
     }
 }

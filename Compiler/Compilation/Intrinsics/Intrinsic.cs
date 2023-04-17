@@ -33,6 +33,6 @@ namespace Compiler.Compilation.Intrinsics
 
         }
 
-        public abstract void Compile(RuleList rules, CallExpression cl);
+        public abstract void Compile(RuleList rules, CallExpression cl, int? address);
     }
 }

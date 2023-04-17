@@ -17,7 +17,22 @@ namespace Compiler.Compilation
             mem.Compile(script, rules);
 
             var func = new FunctionCompiler();
-            
+            script.Functions.Sort((a, b) =>
+            {
+                if (a.Name == "Main")
+                {
+                    return -1;
+                }
+                else if (b.Name == "Main")
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            });
+
             foreach (var function in script.Functions)
             {
                 func.Compile(script, function, rules);

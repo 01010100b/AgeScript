@@ -7,5 +7,12 @@ Function Void Main():
 Int c
 ga = 12
 gb = 6
-gc = ga
+gc = Add(ga, gb)
 ChatDataToSelf("gc = %d", gc)
+
+Function Int Add2(Int a, Int b):
+Int c
+Int d
+c = Add(a, b)
+d = Add(a, b)
+return Add(c, d)
