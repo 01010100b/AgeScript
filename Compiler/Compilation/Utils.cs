@@ -25,6 +25,8 @@ namespace Compiler.Compilation
         {
             if (length < Program.Settings.MaxElementsPerRule)
             {
+                // optimized if small length and no pointers
+
                 if (!ref_from && !ref_to)
                 {
                     MemCopyDirect(script, rules, from, to, length, from_offset, to_offset);
@@ -61,6 +63,21 @@ namespace Compiler.Compilation
             if (to_offset != 0)
             {
                 rules.AddAction($"up-modify-goal {script.Sp2} c:+ {to_offset}");
+            }
+
+            if (length <= Program.Settings.MaxElementsPerRule / 3)
+            {
+                // optimized for small lengths
+
+                for (int i = 0; i < length; i++)
+                {
+                    rules.AddAction($"up-get-indirect-goal g: {script.Sp1} {script.Sp3}");
+                    rules.AddAction($"up-set-indirect-goal g: {script.Sp2} g: {script.Sp3}");
+                    rules.AddAction($"up-modify-goal {script.Sp1} c:+ 1");
+                    rules.AddAction($"up-modify-goal {script.Sp2} c:+ 1");
+                }
+
+                return;
             }
 
             rules.StartNewRule($"up-compare-goal {script.Sp0} c:> 0");
