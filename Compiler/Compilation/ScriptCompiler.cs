@@ -38,6 +38,11 @@ namespace Compiler.Compilation
                 func.Compile(script, function, rules);
             }
 
+            foreach (var function in script.Functions)
+            {
+                rules.ReplaceStrings(function.AddressableName, function.Address.ToString());
+            }
+
             return rules;
         }
     }

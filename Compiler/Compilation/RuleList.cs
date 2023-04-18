@@ -8,7 +8,6 @@ namespace Compiler.Compilation
 {
     internal class RuleList
     {
-        public int MaxElementsPerRule { get; set; } = 16;
         public Dictionary<string, int> Constants { get; } = new();
         public int CurrentRuleIndex => Rules.Count;
 
@@ -41,7 +40,7 @@ namespace Compiler.Compilation
             CurrentRule.AppendLine($"\t({action})");
             CurrentRuleElements++;
 
-            if (CurrentRuleElements >= MaxElementsPerRule)
+            if (CurrentRuleElements >= Program.Settings.MaxElementsPerRule)
             {
                 StartNewRule();
             }

@@ -1,14 +1,13 @@
 ﻿Globals:
 Int ga
 Int gb
-Int gc
 
 Function Void Main():
 Int c
 ga = 12
 gb = 6
-gc = Add(ga, gb)
-ChatDataToSelf("gc = %d", gc)
+c = Add2(ga, gb)
+ChatDataToSelf("c = %d", c)
 
 Function Int Add2(Int a, Int b):
 Int c

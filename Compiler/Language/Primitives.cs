@@ -8,6 +8,11 @@ namespace Compiler.Language
 {
     internal static class Primitives
     {
+        public static IEnumerable<string> Keywords { get; } = new List<string>()
+        {
+            "Struct", "Globals", "Function", "return"
+        };
+
         public static IEnumerable<Type> Types { get; }  = new List<Type>()
         {
             new() { Name = "Int", Size = 1 },

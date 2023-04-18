@@ -21,6 +21,11 @@ namespace Compiler.Language
             {
                 throw new Exception($"Name {Name} does not follow rules.");
             }
+
+            if (Primitives.Keywords.Contains(Name))
+            {
+                throw new Exception($"Name {Name} is a reserved keyword.");
+            }
         }
     }
 }

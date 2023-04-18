@@ -29,6 +29,11 @@ namespace Compiler.Language.Expressions
                 {
                     throw new Exception("Argument type mismatch");
                 }
+
+                if (a is CallExpression)
+                {
+                    throw new Exception("Can not nest call expressions.");
+                }
             }
         }
     }

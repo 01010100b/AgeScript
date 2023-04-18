@@ -50,13 +50,13 @@ namespace Compiler.Compilation
                         address = assign.Variable.Address + assign.Offset;
                     }
 
-                    Utils.CompileExpression(script, function, rules, assign.Expression, address);
+                    ExpressionCompiler.CompileExpression(script, function, rules, assign.Expression, address);
                 }
                 else if (statement is ReturnStatement ret)
                 {
                     if (ret.Expression is not null)
                     {
-                        Utils.CompileExpression(script, function, rules, ret.Expression, script.CallResultBase);
+                        ExpressionCompiler.CompileExpression(script, function, rules, ret.Expression, script.CallResultBase);
                     }
 
                     rules.AddAction($"up-jump-direct g: {script.RegisterBase}");
@@ -69,7 +69,7 @@ namespace Compiler.Compilation
                 }
             }
 
-            return index;
+            return function.Statements.Count;
         }
     }
 }

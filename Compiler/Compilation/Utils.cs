@@ -11,56 +11,22 @@ namespace Compiler.Compilation
 {
     internal static class Utils
     {
-        public static void CompileExpression(Script script, Function function, RuleList rules,
-            Expression expression, int? address)
+        public static void Clear(RuleList rules, int from, int length)
         {
-            if (expression is ConstExpression cst && address is not null)
+            for (int i = 0; i < length; i++)
             {
-                if (cst.Type.Name == "Int")
-                {
-                    var value = int.Parse(cst.Value);
-                    rules.AddAction($"set-goal {address} {value}");
-                }
-                else if (cst.Type.Name == "Bool")
-                {
-                    var value = bool.Parse(cst.Value);
-                    var iv = value ? 1 : 0;
-                    rules.AddAction($"set-goal {address} {iv}");
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (expression is VariableExpression vr && address is not null)
-            {
-                MemCopy(rules, vr.Variable.Address, address.Value, vr.Variable.Type.Size, false, false);
-            }
-            else if (expression is CallExpression cl)
-            {
-                if (cl.Function is Intrinsic intr)
-                {
-                    intr.Compile(rules, cl, address);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
+                rules.AddAction($"set-goal {from + i} 0");
             }
         }
 
-        public static void MemCopy(RuleList rules, int from, int to, int length, bool ref_from, bool ref_to,
-            int from_offset = 0, int to_offset = 0)
+        public static void MemCopy(RuleList rules, int from, int to, int length, 
+            bool ref_from = false, bool ref_to = false, int from_offset = 0, int to_offset = 0)
         {
             rules.AddAction($"set-goal sp0 {length}");
 
             if (ref_from)
             {
-                rules.AddAction($"up-get-indirect-goal g: {from} sp1");
+                rules.AddAction($"up-modify-goal sp1 g:= {from}");
             }
             else
             {
@@ -74,7 +40,7 @@ namespace Compiler.Compilation
 
             if (ref_to)
             {
-                rules.AddAction($"up-get-indirect-goal g: {to} sp2");
+                rules.AddAction($"up-modify-goal sp2 g:= {to}");
             }
             else
             {

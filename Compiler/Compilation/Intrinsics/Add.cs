@@ -13,7 +13,7 @@ namespace Compiler.Compilation.Intrinsics
         public Add(Script script) : base(script)
         {
             Name = "Add";
-            ReturnType = Primitives.Types.Single(x => x.Name == "Int");
+            ReturnType = script.Types["Int"];
             Parameters.Add(new() { Name = "a", Type = ReturnType });
             Parameters.Add(new() { Name = "b", Type = ReturnType });
         }

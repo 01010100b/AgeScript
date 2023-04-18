@@ -44,6 +44,13 @@ namespace Compiler.Parsing
                 function.Parameters.Add(parameter);
             }
 
+            if (script.Functions.Contains(function))
+            {
+                throw new Exception("Function already defined.");
+            }
+
+            script.Functions.Add(function);
+
             return function;
         }
 
@@ -78,12 +85,6 @@ namespace Compiler.Parsing
                 }
             }
 
-            if (script.Functions.Contains(function))
-            {
-                throw new Exception("Function already defined.");
-            }
-
-            script.Functions.Add(function);
         }
 
         private Statement ParseStatement(Script script, Function function, string line)
