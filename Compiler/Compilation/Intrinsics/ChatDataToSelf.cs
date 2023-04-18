@@ -17,7 +17,7 @@ namespace Compiler.Compilation.Intrinsics
             Parameters.Add(new() { Name = "goal", Type = script.Types["Int"] });
         }
 
-        public override void Compile(RuleList rules, CallExpression cl, int? address)
+        public override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? address)
         {
             if (cl.Arguments[0] is VariableExpression ve)
             {

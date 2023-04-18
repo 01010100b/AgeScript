@@ -1,17 +1,35 @@
-﻿Globals:
-Int ga
-Int gb
+﻿Globals
+Int Tick
 
-Function Void Main():
-Int c
-ga = 12
-gb = 6
-c = Add2(ga, gb)
-ChatDataToSelf("c = %d", c)
+Function Void Main()
+Int fib
 
-Function Int Add2(Int a, Int b):
-Int c
-Int d
-c = Add(a, b)
-d = Add(a, b)
-return Add(c, d)
+Tick = Add(Tick, 1)
+if Equals(Tick, 10)
+Tick = 0
+endif
+
+fib = Fibonacci(Tick)
+ChatDataToSelf("i = %d", Tick)
+ChatDataToSelf("f = %d", fib)
+
+Function Int Fibonacci(Int i)
+Int i0
+Int f0
+Int i1
+Int f1
+
+if Equals(i, 0)
+return 0
+endif
+
+if Equals(i, 1)
+return 1
+endif
+
+i0 = Add(i, -2)
+f0 = Fibonacci(i0)
+i1 = Add(i, -1)
+f1 = Fibonacci(i1)
+
+return Add(f0, f1)

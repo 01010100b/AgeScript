@@ -9,6 +9,8 @@ namespace Compiler.Compilation
     internal class RuleList
     {
         public Dictionary<string, int> Constants { get; } = new();
+        public int RuleCount => Rules.Count;
+        public int ElementsCount => Rules.Sum(GetElementsCount);
         public int CurrentRuleIndex => Rules.Count;
 
         private List<string> Rules { get; } = new();
@@ -64,13 +66,15 @@ namespace Compiler.Compilation
                 sb.AppendLine($"(defconst {constant.Key} {constant.Value})");
             }
 
-            foreach (var rule in Rules)
+            for (int i = 0; i < Rules.Count; i++)
             {
-                sb.AppendLine();
-                sb.AppendLine(rule);
+                sb.AppendLine($"; {i}");
+                sb.AppendLine(Rules[i]);
             }
 
             return sb.ToString();
         }
+
+        private int GetElementsCount(string rule) => rule.Count(x => x == '(') - 1;
     }
 }

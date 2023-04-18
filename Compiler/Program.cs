@@ -26,13 +26,13 @@ namespace Compiler
                 }
             }
 
-            Run(true);
+            Run();
 
             File.Delete(file);
             File.WriteAllText(file, JsonSerializer.Serialize(Settings, options));
         }
 
-        private static void Run(bool debug)
+        private static void Run()
         {
             var dirs = new List<string>() { SourceFolder };
             var lines = new List<string>();
@@ -63,10 +63,10 @@ namespace Compiler
             var per = Path.Combine(Settings.Folder, $"{Settings.Name}.per");
             File.WriteAllText(per, code);
 
-            if (debug)
-            {
-                Console.WriteLine(script.ToString());
-            }
+            File.WriteAllText(Path.Combine(Folder, "script debug.txt"), script.ToString());
+
+            Console.WriteLine($"Compiled {Settings.Name} succesfully.");
+            Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / rules.RuleCount:N0} elements per rule");
         }
     }
 }

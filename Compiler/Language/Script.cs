@@ -15,7 +15,17 @@ namespace Compiler.Language
         public Dictionary<string, Type> Types { get; } = new();
         public Dictionary<string, Variable> GlobalVariables { get; } = new();
         public List<Function> Functions { get; } = new();
+
+        internal int CondGoal { get; set; }
         internal int StackPtr { get; set; }
+        internal int Sp0 { get; set; }
+        internal int Sp1 { get; set; }
+        internal int Sp2 { get; set; }
+        internal int Sp3 { get; set; }
+        internal int Intr0 { get; set; }
+        internal int Intr1 { get; set; }
+        internal int Intr2 { get; set; }
+        internal int Intr3 { get; set; }
         internal int RegisterBase { get; set; }
         internal int RegisterCount { get; set; }
         internal int CallResultBase { get; set; }

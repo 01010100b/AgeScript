@@ -10,8 +10,6 @@ namespace Compiler.Compilation
 {
     internal class MemoryCompiler
     {
-        public static readonly string[] NAMED_GOALS = { "sp0", "sp1", "sp2", "sp3" };
-        
         public void Compile(Script script, RuleList rules) 
         {
             SetAddresses(script, rules);
@@ -21,13 +19,16 @@ namespace Compiler.Compilation
         private void SetAddresses(Script script, RuleList rules)
         {
             var goal = Program.Settings.MaxGoal;
-            script.StackPtr = goal;
-
-            foreach (var name in NAMED_GOALS)
-            {
-                goal--;
-                rules.Constants.Add(name, goal);
-            }
+            script.CondGoal = goal;
+            script.StackPtr = --goal;
+            script.Sp3 = --goal;
+            script.Sp2 = --goal;
+            script.Sp1 = --goal;
+            script.Sp0 = --goal;
+            script.Intr3 = --goal;
+            script.Intr2 = --goal;
+            script.Intr1 = --goal;
+            script.Intr0 = --goal;
 
             foreach (var variable in script.GlobalVariables.Values)
             {
@@ -56,6 +57,7 @@ namespace Compiler.Compilation
 
         private void InitializeMemory(Script script, RuleList rules)
         {
+            rules.AddAction($"set-goal {script.CondGoal} 0");
             rules.AddAction($"set-goal {script.StackPtr} 1");
 
             for (int i = 0; i < script.RegisterCount; i++)

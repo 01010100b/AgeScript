@@ -10,9 +10,9 @@ namespace Compiler.Parsing
 {
     internal class ScriptParser
     {
-        private static readonly Regex REGEX_GLOBALS = new("^Globals:$");
-        private static readonly Regex REGEX_TYPE = new("^Struct .*:$");
-        private static readonly Regex REGEX_FUNCTION = new("^Function .*:$");
+        private static readonly Regex REGEX_GLOBALS = new("^Globals$");
+        private static readonly Regex REGEX_TYPE = new("^Struct .*$");
+        private static readonly Regex REGEX_FUNCTION = new("^Function .*$");
 
         public Script Parse(IEnumerable<string> lines)
         {

@@ -13,7 +13,7 @@ namespace Compiler.Parsing
         {
             foreach (var line in lines)
             {
-                if (line != "Globals:")
+                if (line != "Globals")
                 {
                     var pieces = line.Split(' ');
                     var type_name = pieces[0].Trim();

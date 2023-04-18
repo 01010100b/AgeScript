@@ -102,8 +102,32 @@ namespace Compiler.Parsing
                 else
                 {
                     var expression = ParseExpression(script, function, expr);
+
                     return new ReturnStatement() { Expression = expression };
                 }
+            }
+            else if (line.StartsWith("if(") || line.StartsWith("if "))
+            {
+                // if statement
+
+                var expr = line.Replace("if", "").Trim();
+
+                if (string.IsNullOrWhiteSpace(expr))
+                {
+                    throw new Exception("If statement needs expression.");
+                }
+                else
+                {
+                    var expression = ParseExpression(script, function, expr);
+
+                    return new IfStatement() { Expression = expression };
+                }
+            }
+            else if (line == "endif")
+            {
+                // endif statement
+
+                return new EndIfStatement();
             }
             else
             {

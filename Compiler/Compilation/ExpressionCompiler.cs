@@ -20,7 +20,7 @@ namespace Compiler.Compilation
             }
             else if (expression is VariableExpression ve)
             {
-                CompileVariableExpression(rules, ve, address);
+                CompileVariableExpression(script, rules, ve, address);
             }
             else if (expression is CallExpression cl)
             {
@@ -56,14 +56,14 @@ namespace Compiler.Compilation
             }
         }
 
-        private static void CompileVariableExpression(RuleList rules, VariableExpression expression, int? address)
+        private static void CompileVariableExpression(Script script, RuleList rules, VariableExpression expression, int? address)
         {
             if (address is null)
             {
                 return;
             }
 
-            Utils.MemCopy(rules, expression.Variable.Address, address.Value, expression.Variable.Type.Size);
+            Utils.MemCopy(script, rules, expression.Variable.Address, address.Value, expression.Variable.Type.Size);
         }
 
         private static void CompileCallExpression(Script script, Function function, RuleList rules,
@@ -71,13 +71,13 @@ namespace Compiler.Compilation
         {
             if (expression.Function is Intrinsic intr)
             {
-                intr.Compile(rules, expression, address);
+                intr.CompileCall(script, function, rules, expression, address);
             }
             else
             {
                 // push registers to stack
                 
-                Utils.MemCopy(rules, script.RegisterBase, script.StackPtr, function.RegisterCount, false, true);
+                Utils.MemCopy(script, rules, script.RegisterBase, script.StackPtr, function.RegisterCount, false, true);
 
                 // set return addr and parameters
 
@@ -97,14 +97,14 @@ namespace Compiler.Compilation
                     {
                         if (script.GlobalVariables.ContainsKey(ve.Variable.Name))
                         {
-                            CompileVariableExpression(rules, ve, par.Address);
+                            CompileVariableExpression(script, rules, ve, par.Address);
                         }
                         else
                         {
                             // local variables are on stack, interpret addr as offset from stack-ptr
 
                             var offset = ve.Variable.Address - script.RegisterBase;
-                            Utils.MemCopy(rules, script.StackPtr, par.Address, ve.Variable.Type.Size,
+                            Utils.MemCopy(script, rules, script.StackPtr, par.Address, ve.Variable.Type.Size,
                                 true, false, offset, 0);
                         }
                     }
@@ -126,11 +126,11 @@ namespace Compiler.Compilation
                 // pop registers from stack
 
                 rules.AddAction($"up-modify-goal {script.StackPtr} c:- {function.RegisterCount}");
-                Utils.MemCopy(rules, script.StackPtr, script.RegisterBase, function.RegisterCount, true);
+                Utils.MemCopy(script, rules, script.StackPtr, script.RegisterBase, function.RegisterCount, true);
 
                 if (address is not null)
                 {
-                    Utils.MemCopy(rules, script.CallResultBase, address.Value, expression.Type.Size);
+                    Utils.MemCopy(script, rules, script.CallResultBase, address.Value, expression.Type.Size);
                 }
             }
         }

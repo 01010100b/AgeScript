@@ -63,13 +63,32 @@ namespace Compiler.Compilation
                     rules.StartNewRule();
                     LastReturnStatement = i;
                 }
+                else if (statement is IfStatement ifs)
+                {
+                    ExpressionCompiler.CompileExpression(script, function, rules, ifs.Expression, script.CondGoal);
+                    
+                    var jmpid = Guid.NewGuid().ToString().Replace("-", "");
+                    rules.StartNewRule($"goal {script.CondGoal} 0");
+                    rules.AddAction($"up-jump-direct c: {jmpid}");
+
+                    rules.StartNewRule();
+                    i = CompileBlock(script, function, rules, i + 1);
+
+                    rules.StartNewRule();
+                    var ji = rules.CurrentRuleIndex;
+                    rules.ReplaceStrings(jmpid, ji.ToString());
+                }
+                else if (statement is EndIfStatement)
+                {
+                    return i;
+                }
                 else
                 {
                     throw new NotImplementedException();
                 }
             }
 
-            return function.Statements.Count;
+            return function.Statements.Count - 1;
         }
     }
 }

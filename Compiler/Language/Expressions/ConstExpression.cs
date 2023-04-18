@@ -27,7 +27,7 @@ namespace Compiler.Language.Expressions
             }
             else
             {
-                throw new Exception("Invalid const.");
+                throw new Exception($"Invalid const: {value}");
             }
         }
 
