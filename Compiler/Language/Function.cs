@@ -13,11 +13,11 @@ namespace Compiler.Language
         public List<Parameter> Parameters { get; } = new();
         public List<Variable> LocalVariables { get; } = new();
         public List<Statement> Statements { get; } = new();
-        public int Address { get; set; }
-        public string AddressableName { get; } = Guid.NewGuid().ToString();
         public IEnumerable<Variable> AllVariables => Parameters.Concat(LocalVariables);
-        public int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // first register is return addr
-        public IEnumerable<Variable> GetScopedVariables(Script script) => script.GlobalVariables.Values.Concat(AllVariables);
+
+        internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // first register is return addr
+        internal int Address { get; set; }
+        internal string AddressableName { get; } = Guid.NewGuid().ToString().Replace("-", "");
 
         public bool TryGetScopedVariable(Script script, string name, out Variable? variable)
         {
@@ -46,7 +46,15 @@ namespace Compiler.Language
         {
             base.Validate();
 
-            throw new NotImplementedException();
+            foreach (var v in AllVariables)
+            {
+                v.Validate();
+            }
+
+            foreach (var s in Statements)
+            {
+                s.Validate();
+            }
         }
 
         public override bool Equals(object? obj)

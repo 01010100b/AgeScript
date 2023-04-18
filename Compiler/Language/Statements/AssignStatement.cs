@@ -16,6 +16,11 @@ namespace Compiler.Language.Statements
 
         public override void Validate()
         {
+            if (Offset < 0)
+            {
+                throw new Exception("Offset can not be smaller than 0.");
+            }
+
             Variable?.Validate();
             Type.Validate();
             Expression.Validate();

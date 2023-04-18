@@ -65,6 +65,8 @@ namespace Compiler.Parsing
                 function_parser.ParseBody(script, body.Key, body.Value);
             }
 
+            script.Validate();
+
             return script;
         }
     }

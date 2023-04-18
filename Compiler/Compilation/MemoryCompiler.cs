@@ -59,12 +59,7 @@ namespace Compiler.Compilation
         {
             rules.AddAction($"set-goal {script.CondGoal} 0");
             rules.AddAction($"set-goal {script.StackPtr} 1");
-
-            for (int i = 0; i < script.RegisterCount; i++)
-            {
-                rules.AddAction($"set-goal {script.RegisterBase + i} 0");
-            }
-
+            Utils.Clear(rules, script.RegisterBase, script.RegisterCount);
             rules.AddAction($"set-goal {script.RegisterBase} 20000");
         }
     }

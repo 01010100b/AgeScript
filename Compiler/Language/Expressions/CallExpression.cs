@@ -9,7 +9,7 @@ namespace Compiler.Language.Expressions
     internal class CallExpression : Expression
     {
         public required Function Function { get; init; }
-        public required IReadOnlyList<Expression> Arguments { get; init; }
+        public required List<Expression> Arguments { get; init; }
         public required string? Literal { get; init; }
         public override Type Type => Function.ReturnType;
 
@@ -24,6 +24,8 @@ namespace Compiler.Language.Expressions
             {
                 var a = Arguments[i];
                 var p = Function.Parameters[i];
+
+                a.Validate();
 
                 if (a.Type != p.Type)
                 {

@@ -16,19 +16,19 @@ namespace Compiler.Language
         public Dictionary<string, Variable> GlobalVariables { get; } = new();
         public List<Function> Functions { get; } = new();
 
-        internal int CondGoal { get; set; }
-        internal int StackPtr { get; set; }
-        internal int Sp0 { get; set; }
+        internal int CondGoal { get; set; } // to hold result of control-flow (if, ...) conditions
+        internal int StackPtr { get; set; } // points to next free stack goal
+        internal int Sp0 { get; set; } // special purpose registers, for memcopy and such
         internal int Sp1 { get; set; }
         internal int Sp2 { get; set; }
         internal int Sp3 { get; set; }
-        internal int Intr0 { get; set; }
+        internal int Intr0 { get; set; } // special registers for intrinsics
         internal int Intr1 { get; set; }
         internal int Intr2 { get; set; }
         internal int Intr3 { get; set; }
-        internal int RegisterBase { get; set; }
-        internal int RegisterCount { get; set; }
-        internal int CallResultBase { get; set; }
+        internal int RegisterBase { get; set; } // start of registers
+        internal int RegisterCount { get; set; } // number of registers
+        internal int CallResultBase { get; set; } // start of goals where result of a function call is stored
 
         public Script() 
         {
@@ -50,7 +50,20 @@ namespace Compiler.Language
                 throw new Exception("Must have a unique Main function.");
             }
 
-            throw new NotImplementedException();
+            foreach (var type in Types.Values)
+            {
+                type.Validate();
+            }
+
+            foreach (var global in GlobalVariables.Values)
+            {
+                global.Validate();
+            }
+
+            foreach (var function in Functions)
+            {
+                function.Validate();
+            }
         }
 
         public override string ToString()

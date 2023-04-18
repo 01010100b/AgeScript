@@ -13,10 +13,9 @@ namespace Compiler.Compilation.Intrinsics
         public Equals(Script script) : base(script)
         {
             Name = "Equals";
-            ReturnType = Primitives.Types.Single(x => x.Name == "Bool");
-            var it = Primitives.Types.Single(x => x.Name == "Int");
-            Parameters.Add(new() { Name = "a", Type = it });
-            Parameters.Add(new() { Name= "b", Type = it });
+            ReturnType = script.Types["Bool"];
+            Parameters.Add(new() { Name = "a", Type = script.Types["Int"] });
+            Parameters.Add(new() { Name= "b", Type = script.Types["Int"] });
         }
 
         public override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? address)

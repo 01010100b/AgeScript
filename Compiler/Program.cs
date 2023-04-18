@@ -28,20 +28,22 @@ namespace Compiler
 
             Run();
 
-            File.Delete(file);
-            File.WriteAllText(file, JsonSerializer.Serialize(Settings, options));
+            if (!File.Exists(file))
+            {
+                File.WriteAllText(file, JsonSerializer.Serialize(Settings, options));
+            }
         }
 
         private static void Run()
         {
             var dirs = new List<string>() { SourceFolder };
-            var lines = new List<string>();
-
 
             foreach (var dir in Directory.EnumerateDirectories(SourceFolder, "*", SearchOption.AllDirectories))
             {
                 dirs.Add(dir);
             }
+
+            var lines = new List<string>();
 
             foreach (var dir in dirs)
             {
@@ -59,14 +61,20 @@ namespace Compiler
             var code = rules.ToString();
 
             var ai = Path.Combine(Settings.Folder, $"{Settings.Name}.ai");
-            File.Create(ai);
+
+            if (!File.Exists(ai))
+            {
+                File.Create(ai);
+            }
+            
             var per = Path.Combine(Settings.Folder, $"{Settings.Name}.per");
+            File.Delete(per);
             File.WriteAllText(per, code);
 
             File.WriteAllText(Path.Combine(Folder, "script debug.txt"), script.ToString());
 
             Console.WriteLine($"Compiled {Settings.Name} succesfully.");
-            Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / rules.RuleCount:N0} elements per rule");
+            Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / rules.RuleCount:N0} elements per rule.");
         }
     }
 }

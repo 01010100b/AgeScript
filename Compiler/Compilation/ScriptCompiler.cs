@@ -11,6 +11,8 @@ namespace Compiler.Compilation
     {
         public RuleList Compile(Script script)
         {
+            script.Validate();
+
             var rules = new RuleList();
 
             var mem = new MemoryCompiler();

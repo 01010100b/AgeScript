@@ -16,12 +16,12 @@ namespace Compiler.Compilation
 
         public void Compile(Script script, Function function, RuleList rules)
         {
-            if (function.Statements.Count == 0)
+            if (function is Intrinsic)
             {
                 return;
             }
 
-            LastReturnStatement = -1;
+            LastReturnStatement = -2;
             Console.WriteLine($"Compiling function {function.Name}");
             rules.StartNewRule();
             function.Address = rules.CurrentRuleIndex;
@@ -70,8 +70,8 @@ namespace Compiler.Compilation
                     var jmpid = Guid.NewGuid().ToString().Replace("-", "");
                     rules.StartNewRule($"goal {script.CondGoal} 0");
                     rules.AddAction($"up-jump-direct c: {jmpid}");
-
                     rules.StartNewRule();
+
                     i = CompileBlock(script, function, rules, i + 1);
 
                     rules.StartNewRule();
