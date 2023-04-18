@@ -10,23 +10,7 @@ namespace Compiler.Compilation.Intrinsics
 {
     internal abstract class Intrinsic : Function
     {
-        public static IEnumerable<Intrinsic> GetIntrinsics(Script script)
-        {
-            var assembly = typeof(Intrinsic).Assembly;
-
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsAssignableTo(typeof(Intrinsic)) && !type.IsAbstract)
-                {
-                    var instance = Activator.CreateInstance(type, script);
-
-                    if (instance is not null)
-                    {
-                        yield return (Intrinsic)instance;
-                    }
-                }
-            }
-        }
+        public abstract bool HasStringLiteral { get; }
 
         public Intrinsic(Script script)
         {

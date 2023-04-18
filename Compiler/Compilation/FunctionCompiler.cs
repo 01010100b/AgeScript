@@ -29,6 +29,8 @@ namespace Compiler.Compilation
 
             if (LastReturnStatement < function.Statements.Count - 1)
             {
+                // no return statement at end of function, add one in
+
                 rules.AddAction($"up-jump-direct g: {script.RegisterBase}");
             }
 
@@ -74,11 +76,75 @@ namespace Compiler.Compilation
 
                     i = CompileBlock(script, function, rules, i + 1);
 
-                    rules.StartNewRule();
-                    var ji = rules.CurrentRuleIndex;
-                    rules.ReplaceStrings(jmpid, ji.ToString());
+                    statement = function.Statements[i];
+
+                    if (statement is ElifStatement)
+                    {
+                        var jmpidend = Guid.NewGuid().ToString().Replace("-", "");
+
+                        while (statement is ElifStatement elif)
+                        {
+                            rules.AddAction($"up-jump-direct c: {jmpidend}");
+                            rules.StartNewRule();
+                            var ji = rules.CurrentRuleIndex;
+                            rules.ReplaceStrings(jmpid, ji.ToString());
+
+                            ExpressionCompiler.CompileExpression(script, function, rules, elif.Expression, script.CondGoal);
+
+                            jmpid = Guid.NewGuid().ToString().Replace("-", "");
+                            rules.StartNewRule($"goal {script.CondGoal} 0");
+                            rules.AddAction($"up-jump-direct c: {jmpid}");
+                            rules.StartNewRule();
+
+                            i = CompileBlock(script, function, rules, i + 1);
+
+                            statement = function.Statements[i];
+                        }
+
+                        if (statement is not EndIfStatement)
+                        {
+                            throw new Exception("Else/elif without endif.");
+                        }
+
+                        rules.StartNewRule();
+                        var jiend = rules.CurrentRuleIndex;
+                        rules.ReplaceStrings(jmpidend, jiend.ToString());
+                        rules.ReplaceStrings(jmpid, jiend.ToString());
+                    }/*
+                    else if (statement is ElseStatement els)
+                    {
+                        var jmpid2 = Guid.NewGuid().ToString().Replace("-", "");
+                        rules.AddAction($"up-jump-direct c: {jmpid2}");
+                        rules.StartNewRule();
+                        var ji = rules.CurrentRuleIndex;
+                        rules.ReplaceStrings(jmpid, ji.ToString());
+
+                        i = CompileBlock(script, function, rules, i + 1);
+
+                        statement = function.Statements[i];
+
+                        if (statement is not EndIfStatement)
+                        {
+                            throw new Exception("Else without endif.");
+                        }
+
+                        rules.StartNewRule();
+                        var ji2 = rules.CurrentRuleIndex;
+                        rules.ReplaceStrings(jmpid2, ji2.ToString());
+                    }*/
+                    else if (statement is EndIfStatement eifs)
+                    {
+                        rules.StartNewRule();
+                        var ji = rules.CurrentRuleIndex;
+                        rules.ReplaceStrings(jmpid, ji.ToString());
+                    }
+                    else
+                    {
+                        throw new Exception("If without endif.");
+                    }
+                    
                 }
-                else if (statement is EndIfStatement)
+                else if (statement is ElifStatement || statement is EndIfStatement)
                 {
                     return i;
                 }

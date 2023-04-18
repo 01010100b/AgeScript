@@ -47,6 +47,7 @@ namespace Compiler.Parsing
             
             foreach (var code in globals_codes)
             {
+                code.RemoveAt(0);
                 globals_parser.Parse(script, code);
             }
 

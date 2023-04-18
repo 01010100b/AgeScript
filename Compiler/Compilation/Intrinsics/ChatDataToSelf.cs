@@ -10,6 +10,8 @@ namespace Compiler.Compilation.Intrinsics
 {
     internal class ChatDataToSelf : Intrinsic
     {
+        public override bool HasStringLiteral => true;
+
         public ChatDataToSelf(Script script) : base(script)
         {
             Name = "ChatDataToSelf";

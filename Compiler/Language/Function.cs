@@ -15,7 +15,7 @@ namespace Compiler.Language
         public List<Statement> Statements { get; } = new();
         public IEnumerable<Variable> AllVariables => Parameters.Concat(LocalVariables);
 
-        internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // first register is return addr
+        internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // add 1 because first register is return addr
         internal int Address { get; set; }
         internal string AddressableName { get; } = Guid.NewGuid().ToString().Replace("-", "");
 
@@ -54,6 +54,11 @@ namespace Compiler.Language
             foreach (var s in Statements)
             {
                 s.Validate();
+            }
+
+            if (Statements.OfType<IfStatement>().Count() != Statements.OfType<EndIfStatement>().Count())
+            {
+                throw new Exception("Mismatch between if and endif statements.");
             }
         }
 

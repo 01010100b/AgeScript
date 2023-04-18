@@ -11,7 +11,8 @@ namespace Compiler.Compilation
         public Dictionary<string, int> Constants { get; } = new();
         public int RuleCount => Rules.Count;
         public int ElementsCount => Rules.Sum(GetElementsCount);
-        public int CurrentRuleIndex => Rules.Count;
+        
+        internal int CurrentRuleIndex => Rules.Count;
 
         private List<string> Rules { get; } = new();
         private StringBuilder CurrentRule { get; } = new();

@@ -27,14 +27,14 @@ namespace Compiler.Parsing
             }
 
             var def = header[..bo_pos];
-            var args = header[(bo_pos + 1)..bc_pos];
+            var pars = header[(bo_pos + 1)..bc_pos];
             var defpieces = def.Split(' ');
-            var argspieces = args.Split(',');
+            var parspieces = pars.Split(',');
             var type = script.Types[defpieces[1].Trim()];
             var name = defpieces[2].Trim();
             var function = new Function() { Name = name, ReturnType = type };
 
-            foreach (var par in argspieces.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)))
+            foreach (var par in parspieces.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)))
             {
                 var pieces = par.Split(' ');
                 var tpar = script.Types[pieces[0].Trim()];
@@ -119,9 +119,37 @@ namespace Compiler.Parsing
                 else
                 {
                     var expression = ParseExpression(script, function, expr);
+                    expression.Validate();
 
                     return new IfStatement() { Expression = expression };
                 }
+            }
+            else if (line.StartsWith("elif(") || line.StartsWith("elif "))
+            {
+                // elif statement
+
+                var expr = line.Replace("elif", "").Trim();
+
+                if (string.IsNullOrWhiteSpace(expr))
+                {
+                    throw new Exception("Elif statement needs expression.");
+                }
+                else
+                {
+                    var expression = ParseExpression(script, function, expr);
+                    expression.Validate();
+
+                    return new ElifStatement() { Expression = expression };
+                }
+            }
+            else if (line == "else")
+            {
+                // else statement
+
+                var expression = new ConstExpression("true");
+                expression.Validate();
+
+                return new ElifStatement() { Expression = expression };
             }
             else if (line == "endif")
             {
@@ -140,7 +168,7 @@ namespace Compiler.Parsing
                     var lits = line.IndexOf('\"');
                     var lite = line.LastIndexOf('\"');
                     var literal = line[lits..(lite + 1)];
-                    var id = Guid.NewGuid().ToString();
+                    var id = Guid.NewGuid().ToString().Replace("-", "");
                     line = line.Replace(literal, id);
                     Literals.Add(id, literal);
                 }

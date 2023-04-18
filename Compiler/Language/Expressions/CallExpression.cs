@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compiler.Compilation.Intrinsics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,21 @@ namespace Compiler.Language.Expressions
                 if (a is CallExpression)
                 {
                     throw new Exception("Can not nest call expressions.");
+                }
+            }
+
+            if (Literal is not null)
+            {
+                if (Function is Intrinsic intr)
+                {
+                    if (!intr.HasStringLiteral)
+                    {
+                        throw new Exception("Intrinsic has no string literal argument.");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Only intrinsics can have string literal arguments.");
                 }
             }
         }

@@ -10,6 +10,8 @@ namespace Compiler.Compilation.Intrinsics
 {
     internal class Add : Intrinsic
     {
+        public override bool HasStringLiteral => false;
+
         public Add(Script script) : base(script)
         {
             Name = "Add";

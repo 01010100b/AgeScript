@@ -21,6 +21,8 @@ Int f1
 
 if Equals(i, 0)
 return 0
+elif Equals(i, 1)
+return 1
 endif
 
 if Equals(i, 1)

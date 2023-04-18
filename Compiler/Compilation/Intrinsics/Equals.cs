@@ -10,6 +10,8 @@ namespace Compiler.Compilation.Intrinsics
 {
     internal class Equals : Intrinsic
     {
+        public override bool HasStringLiteral => false;
+
         public Equals(Script script) : base(script)
         {
             Name = "Equals";

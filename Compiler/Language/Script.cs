@@ -37,9 +37,19 @@ namespace Compiler.Language
                 Types.Add(type.Name, type);
             }
 
-            foreach (var intrinsic in Intrinsic.GetIntrinsics(this))
+            var assembly = typeof(Intrinsic).Assembly;
+
+            foreach (var type in assembly.GetTypes())
             {
-                Functions.Add(intrinsic);
+                if (type.IsAssignableTo(typeof(Intrinsic)) && !type.IsAbstract)
+                {
+                    var instance = Activator.CreateInstance(type, this);
+
+                    if (instance is not null)
+                    {
+                        Functions.Add((Intrinsic)instance);
+                    }
+                }
             }
         }
 
@@ -48,6 +58,18 @@ namespace Compiler.Language
             if (Functions.Count(x => x.Name == "Main") != 1)
             {
                 throw new Exception("Must have a unique Main function.");
+            }
+
+            var main = Functions.Single(x => x.Name == "Main");
+
+            if (main.ReturnType != Types["Void"])
+            {
+                throw new Exception("Main function must have return type Void.");
+            }
+
+            if (main.Parameters.Count != 0)
+            {
+                throw new Exception("Main function must have 0 parameters.");
             }
 
             foreach (var type in Types.Values)
@@ -60,9 +82,17 @@ namespace Compiler.Language
                 global.Validate();
             }
 
+            var set = new HashSet<Function>();
+
             foreach (var function in Functions)
             {
+                if (set.Contains(function))
+                {
+                    throw new Exception("Function defined more than once.");
+                }
+
                 function.Validate();
+                set.Add(function);
             }
         }
 

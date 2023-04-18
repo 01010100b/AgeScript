@@ -24,6 +24,11 @@ namespace Compiler.Language.Statements
             Variable?.Validate();
             Type.Validate();
             Expression.Validate();
+
+            if (Variable is not null && !Type.Equals(Expression.Type))
+            {
+                throw new Exception("Type must match expression type.");
+            }
         }
     }
 }

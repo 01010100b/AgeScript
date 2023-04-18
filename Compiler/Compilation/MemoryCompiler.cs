@@ -18,17 +18,27 @@ namespace Compiler.Compilation
 
         private void SetAddresses(Script script, RuleList rules)
         {
+            // the stack grows upwards starting from goal 1
+            // only goals 41-508 are usable with all up functions
+            // the stack never gets used for up functions, only for copying from/to registers
+            // so let the stack grow into the unusable range 1-40
+
             var goal = Program.Settings.MaxGoal;
+
+            // special goals at the top as they won't be used with up functions
+
             script.CondGoal = goal;
             script.StackPtr = --goal;
             script.Sp3 = --goal;
             script.Sp2 = --goal;
             script.Sp1 = --goal;
             script.Sp0 = --goal;
-            script.Intr3 = --goal;
+            script.Intr3 = --goal; // first goal that could be used with up functions
             script.Intr2 = --goal;
             script.Intr1 = --goal;
             script.Intr0 = --goal;
+
+            // globals below that as they are used with up functions
 
             foreach (var variable in script.GlobalVariables.Values)
             {
@@ -36,13 +46,15 @@ namespace Compiler.Compilation
                 variable.Address = goal;
             }
 
+            // registers below that as they are used with up functions
+
             script.RegisterCount = script.Functions.Max(x => x.RegisterCount);
             goal -= script.RegisterCount;
             script.RegisterBase = goal;
 
             foreach (var function in script.Functions)
             {
-                var offset = 1; // first register is return addr
+                var offset = 1; // first register (offset 0) is return addr
 
                 foreach (var variable in function.AllVariables)
                 {
@@ -50,6 +62,8 @@ namespace Compiler.Compilation
                     offset += variable.Type.Size;
                 }
             }
+
+            // call result below that as it used with up functions
 
             goal -= script.Functions.Max(x => x.ReturnType.Size);
             script.CallResultBase = goal;

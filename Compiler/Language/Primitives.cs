@@ -10,7 +10,8 @@ namespace Compiler.Language
     {
         public static IEnumerable<string> Keywords { get; } = new List<string>()
         {
-            "Struct", "Globals", "Function", "return", "if", "endif"
+            "Struct", "Globals", "Function", "Lookup", "return", "break", "continue", "true", "false",
+            "if", "else", "elif", "endif", "for", "endfor", "while", "endwhile", "switch", "case", "endswitch"
         };
 
         public static IEnumerable<Type> Types { get; }  = new List<Type>()
