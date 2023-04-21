@@ -20,11 +20,11 @@ namespace Compiler.Parsing
                 var bo = expression.IndexOf('(');
                 var bc = expression.LastIndexOf(')');
                 var name = expression[..bo].Trim();
-                var args = expression[(bo + 1)..bc].Trim().Split(',');
+                var args = expression[(bo + 1)..bc].Trim().Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                 var arguments = new List<Expression>();
                 string? literal = null;
 
-                for (int i = 0; i < args.Length; i++)
+                for (int i = 0; i < args.Count; i++)
                 {
                     var arg = args[i].Trim();
 
@@ -54,39 +54,23 @@ namespace Compiler.Parsing
                     }
                 }
 
-                var f = script.Functions.Single(x =>
+                if (script.TryGetFunction(name, arguments, literal, out var f))
                 {
-                    if (x.Name != name || x.Parameters.Count != arguments.Count)
+                    var cex = new CallExpression()
                     {
-                        return false;
-                    }
-                    else
-                    {
-                        for (int i = 0; i < arguments.Count; i++)
-                        {
-                            var a = arguments[i];
-                            var p = x.Parameters[i];
+                        Function = f!,
+                        Arguments = arguments,
+                        Literal = literal
+                    };
 
-                            if (a.Type != p.Type)
-                            {
-                                return false;
-                            }
-                        }
+                    cex.Validate();
 
-                        return true;
-                    }
-                });
-
-                var cex = new CallExpression()
+                    return cex;
+                }
+                else
                 {
-                    Function = f,
-                    Arguments = arguments,
-                    Literal = literal
-                };
-
-                cex.Validate();
-
-                return cex;
+                    throw new Exception("Can not find function.");
+                }
             }
             else if (function.TryGetScopedVariable(script, expression, out var variable))
             {

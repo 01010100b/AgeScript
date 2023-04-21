@@ -1,6 +1,5 @@
 ﻿Globals:
 Int Tick
-Int[20] Data  
 
 Function Void Main():
 Int fib
@@ -9,6 +8,8 @@ Tick = Add(Tick, 1)
 if Equals(Tick, 10)
 Tick = 0
 endif
+
+DisplayPrimaryUnit()
 
 fib = Fibonacci(Tick)
 ChatDataToSelf("i = %d", Tick)
@@ -32,3 +33,36 @@ i1 = Add(i, -1)
 f1 = Fibonacci(i1)
 
 return Add(f0, f1)
+
+Globals:
+Int PrimaryUnit
+
+Function Void DisplayPrimaryUnit():
+
+
+if Equals(Tick, 0)
+
+PrimaryUnit = Lookup("StratScouts", 0)
+
+elif Equals(Tick, 5)
+Int i
+i = 0
+PrimaryUnit = Lookup("StratArchers", i)
+
+endif
+
+ChatDataToSelf("Primary = %d", PrimaryUnit)
+
+Table StratScouts:
+448
+70
+15
+10
+5
+
+Table StratArchers:
+4
+50
+25
+20
+5

@@ -13,6 +13,8 @@ namespace Compiler.Compilation.Intrinsics
     {
         public abstract bool HasStringLiteral { get; }
 
+        protected ExpressionCompiler ExpressionCompiler { get; } = new();
+
         internal abstract void CompileCall(Script script, Function function, RuleList rules, 
             CallExpression cl, int? result_address, bool ref_result_address = false);
     }

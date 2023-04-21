@@ -76,7 +76,7 @@ namespace Compiler.Language
                     var t1 = Parameters[i].Type;
                     var t2 = f.Parameters[i].Type;
 
-                    if (!t1.Equals(t2))
+                    if (t1 != t2)
                     {
                         return false;
                     }

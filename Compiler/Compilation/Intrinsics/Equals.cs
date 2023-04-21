@@ -29,8 +29,8 @@ namespace Compiler.Compilation.Intrinsics
                 return;
             }
 
-            ExpressionCompiler.CompileExpressionOld(script, function, rules, cl.Arguments[0], script.Intr0);
-            ExpressionCompiler.CompileExpressionOld(script, function, rules, cl.Arguments[1], script.Intr1);
+            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
+            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr1);
             rules.AddAction($"set-goal {address} 0");
             rules.StartNewRule($"up-compare-goal {script.Intr0} g:== {script.Intr1}");
             rules.AddAction($"set-goal {address} 1");

@@ -9,17 +9,37 @@ namespace Compiler.Compilation
 {
     internal class ScriptCompiler
     {
-        public RuleList Compile(Script script)
+        internal static Settings Settings { get; private set; } = new();
+
+        private static readonly object Lock = new();
+
+        public RuleList Compile(Script script, Settings settings)
         {
             script.Validate();
-
             var rules = new RuleList();
 
-            var mem = new MemoryCompiler();
-            mem.Compile(script, rules);
+            lock (Lock)
+            {
+                Settings = settings;
+                Compile(script, rules);
+            }
 
-            var func = new FunctionCompiler();
-            script.Functions.Sort((a, b) =>
+            return rules;
+        }
+
+        private void Compile(Script script, RuleList rules)
+        {
+            // layout memory
+
+            var memory_compiler = new MemoryCompiler();
+            memory_compiler.Compile(script, rules);
+
+            // compile code
+
+            var function_compiler = new FunctionCompiler();
+
+            var functions = script.Functions.ToList();
+            functions.Sort((a, b) =>
             {
                 if (a.Name == "Main")
                 {
@@ -35,17 +55,29 @@ namespace Compiler.Compilation
                 }
             });
 
-            foreach (var function in script.Functions)
+            foreach (var function in functions)
             {
-                func.Compile(script, function, rules);
+                function_compiler.Compile(script, function, rules);
             }
 
-            foreach (var function in script.Functions)
+            var table_compiler = new TableCompiler();
+
+            foreach (var table in script.Tables)
+            {
+                table_compiler.Compile(script, rules, table);
+            }
+
+            // linker
+
+            foreach (var function in functions)
             {
                 rules.ReplaceStrings(function.AddressableName, function.Address.ToString());
             }
 
-            return rules;
+            foreach (var table in script.Tables)
+            {
+                rules.ReplaceStrings(table.AddressableName, table.Address.ToString());
+            }
         }
     }
 }

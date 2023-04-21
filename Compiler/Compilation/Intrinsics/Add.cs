@@ -33,14 +33,8 @@ namespace Compiler.Compilation.Intrinsics
 
             foreach (var arg in cl.Arguments)
             {
-                if (arg is VariableExpression ve)
-                {
-                    rules.AddAction($"up-modify-goal {script.Intr0} g:+ {ve.Variable.Address}");
-                }
-                else if (arg is ConstExpression ce)
-                {
-                    rules.AddAction($"up-modify-goal {script.Intr0} c:+ {ce.Int}");
-                }
+                ExpressionCompiler.Compile(script, function, rules, arg, script.Intr1);
+                rules.AddAction($"up-modify-goal {script.Intr0} g:+ {script.Intr1}");
             }
 
             rules.AddAction($"up-modify-goal {address} g:= {script.Intr0}");

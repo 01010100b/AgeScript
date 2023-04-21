@@ -14,7 +14,7 @@ namespace Compiler.Language
 
         public static IEnumerable<string> Keywords { get; } = new List<string>()
         {
-            "Struct", "Globals", "Function", "Lookup", "return", "break", "continue", "true", "false",
+            "Struct", "Globals", "Function", "Table", "String", "return", "break", "continue", "true", "false",
             "if", "else", "elif", "endif", "for", "endfor", "while", "endwhile", "switch", "case", "endswitch"
         };
 

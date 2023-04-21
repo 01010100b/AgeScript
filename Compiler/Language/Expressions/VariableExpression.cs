@@ -15,7 +15,13 @@ namespace Compiler.Language.Expressions
 
         public override void Validate()
         {
+            Variable.Validate();
+            ElementType.Validate();
 
+            if (Offset < 0)
+            {
+                throw new Exception("Offset can not be smaller than 0.");
+            }
         }
     }
 }

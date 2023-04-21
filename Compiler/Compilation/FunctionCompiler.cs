@@ -67,10 +67,10 @@ namespace Compiler.Compilation
                 }
                 else if (statement is IfStatement ifs)
                 {
-                    ExpressionCompiler.CompileExpressionOld(script, function, rules, ifs.Expression, script.CondGoal);
+                    ExpressionCompiler.CompileExpressionOld(script, function, rules, ifs.Expression, script.SpecialGoal);
                     
                     var jmpid = Guid.NewGuid().ToString().Replace("-", "");
-                    rules.StartNewRule($"goal {script.CondGoal} 0");
+                    rules.StartNewRule($"goal {script.SpecialGoal} 0");
                     rules.AddAction($"up-jump-direct c: {jmpid}");
                     rules.StartNewRule();
 
@@ -89,10 +89,10 @@ namespace Compiler.Compilation
                             var ji = rules.CurrentRuleIndex;
                             rules.ReplaceStrings(jmpid, ji.ToString());
 
-                            ExpressionCompiler.CompileExpressionOld(script, function, rules, elif.Expression, script.CondGoal);
+                            ExpressionCompiler.CompileExpressionOld(script, function, rules, elif.Expression, script.SpecialGoal);
 
                             jmpid = Guid.NewGuid().ToString().Replace("-", "");
-                            rules.StartNewRule($"goal {script.CondGoal} 0");
+                            rules.StartNewRule($"goal {script.SpecialGoal} 0");
                             rules.AddAction($"up-jump-direct c: {jmpid}");
                             rules.StartNewRule();
 
@@ -110,29 +110,8 @@ namespace Compiler.Compilation
                         var jiend = rules.CurrentRuleIndex;
                         rules.ReplaceStrings(jmpidend, jiend.ToString());
                         rules.ReplaceStrings(jmpid, jiend.ToString());
-                    }/*
-                    else if (statement is ElseStatement els)
-                    {
-                        var jmpid2 = Guid.NewGuid().ToString().Replace("-", "");
-                        rules.AddAction($"up-jump-direct c: {jmpid2}");
-                        rules.StartNewRule();
-                        var ji = rules.CurrentRuleIndex;
-                        rules.ReplaceStrings(jmpid, ji.ToString());
-
-                        i = CompileBlock(script, function, rules, i + 1);
-
-                        statement = function.Statements[i];
-
-                        if (statement is not EndIfStatement)
-                        {
-                            throw new Exception("Else without endif.");
-                        }
-
-                        rules.StartNewRule();
-                        var ji2 = rules.CurrentRuleIndex;
-                        rules.ReplaceStrings(jmpid2, ji2.ToString());
-                    }*/
-                    else if (statement is EndIfStatement eifs)
+                    }
+                    else if (statement is EndIfStatement)
                     {
                         rules.StartNewRule();
                         var ji = rules.CurrentRuleIndex;

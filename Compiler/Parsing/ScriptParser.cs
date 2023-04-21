@@ -14,19 +14,21 @@ namespace Compiler.Parsing
         private static readonly Regex REGEX_GLOBALS = new("^Globals:$");
         private static readonly Regex REGEX_TYPE = new("^Struct .*:$");
         private static readonly Regex REGEX_FUNCTION = new("^Function .*:$");
+        private static readonly Regex REGEX_TABLE = new("^Table .*:$");
 
         private VariableParser VariableParser { get; } = new();
         private FunctionParser FunctionParser { get; } = new();
 
         public Script Parse(List<string> lines)
         {
-            var script = new Script();
             var literals = new Dictionary<string, string>();
-            lines = PreParse(script, lines, literals);
+            lines = PreParse(lines, literals);
 
+            var script = new Script();
             var globals_codes = new List<List<string>>();
             var type_codes = new List<List<string>>();
             var function_codes = new List<List<string>>();
+            var table_codes = new List<List<string>>();
             var current = new List<string>();
 
             foreach (var line in lines.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)))
@@ -40,14 +42,29 @@ namespace Compiler.Parsing
                 {
                     current = new();
                     type_codes.Add(current);
+
+                    throw new NotImplementedException();
                 }
                 else if (REGEX_FUNCTION.IsMatch(line))
                 {
                     current = new();
                     function_codes.Add(current);
                 }
+                else if (REGEX_TABLE.IsMatch(line))
+                {
+                    current = new();
+                    table_codes.Add(current);
+                }
 
                 current.Add(line);
+            }
+
+            var table_parser = new TableParser();
+
+            foreach (var code in table_codes)
+            {
+                var table = table_parser.Parse(code);
+                script.AddTable(table);
             }
 
             foreach (var code in globals_codes)
@@ -58,7 +75,7 @@ namespace Compiler.Parsing
                 {
                     if (VariableParser.TryParseDefinition(script, c, out var v))
                     {
-                        script.GlobalVariables.Add(v!.Name, v);
+                        script.AddGlobal(v!);
                     }
                 }
             }
@@ -68,7 +85,7 @@ namespace Compiler.Parsing
             foreach (var code in function_codes)
             {
                 var function = FunctionParser.ParseHeader(script, code[0]);
-                script.Functions.Add(function);
+                script.AddFunction(function);
                 code.RemoveAt(0);
                 bodies.Add(function, code);
             }
@@ -83,7 +100,7 @@ namespace Compiler.Parsing
             return script;
         }
 
-        private List<string> PreParse(Script script, List<string> lines, Dictionary<string, string> literals)
+        private List<string> PreParse(List<string> lines, Dictionary<string, string> literals)
         {
             var res = new List<string>();
             var defines = new Dictionary<string, string>();

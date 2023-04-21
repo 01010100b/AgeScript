@@ -8,7 +8,6 @@ namespace Compiler.Compilation
 {
     internal class RuleList
     {
-        public Dictionary<string, int> Constants { get; } = new();
         public int RuleCount => Rules.Count;
         public int ElementsCount => Rules.Sum(GetElementsCount);
         
@@ -43,7 +42,7 @@ namespace Compiler.Compilation
             CurrentRule.AppendLine($"\t({action})");
             CurrentRuleElements++;
 
-            if (CurrentRuleElements >= Program.Settings.MaxElementsPerRule)
+            if (CurrentRuleElements >= ScriptCompiler.Settings.MaxElementsPerRule)
             {
                 StartNewRule();
             }
@@ -53,19 +52,13 @@ namespace Compiler.Compilation
         {
             for (int i = 0; i < Rules.Count; i++)
             {
-                var current = Rules[i];
-                Rules[i] = current.Replace(from, to);
+                Rules[i] = Rules[i].Replace(from, to);
             }
         }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-
-            foreach (var constant in Constants)
-            {
-                sb.AppendLine($"(defconst {constant.Key} {constant.Value})");
-            }
 
             for (int i = 0; i < Rules.Count; i++)
             {
