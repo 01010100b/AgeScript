@@ -75,7 +75,7 @@ namespace Compiler.Parsing
 
             foreach (var body in bodies)
             {
-                FunctionParser.ParseBody(script, body.Key, body.Value);
+                FunctionParser.ParseBody(script, body.Key, body.Value, literals);
             }
 
             script.Validate();

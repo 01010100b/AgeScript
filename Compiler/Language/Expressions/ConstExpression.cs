@@ -10,6 +10,7 @@ namespace Compiler.Language.Expressions
     {
         public static ConstExpression Zero { get; } = new("0");
         public static ConstExpression False { get; } = new("false");
+        public static ConstExpression True { get; } = new("true");
 
         public override Type Type => ConstType;
         public int Int { get; private init; } = 0;
