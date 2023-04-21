@@ -36,18 +36,34 @@ return Add(f0, f1)
 
 Globals:
 Int PrimaryUnit
+Int FoodGathererPercentage
+Int WoodGathererPercentage
+Int GoldGathererPercentage
+Int StoneGathererPercentage
 
 Function Void DisplayPrimaryUnit():
-
 
 if Equals(Tick, 0)
 
 PrimaryUnit = Lookup("StratScouts", 0)
+FoodGathererPercentage = Lookup("StratScouts", 1)
+WoodGathererPercentage = Lookup("StratScouts", 2)
+GoldGathererPercentage = Lookup("StratScouts", 3)
+StoneGathererPercentage = Lookup("StratScouts", 4)
 
 elif Equals(Tick, 5)
+
 Int i
 i = 0
 PrimaryUnit = Lookup("StratArchers", i)
+i = Add(i, 1)
+FoodGathererPercentage = Lookup("StratScouts", i)
+i = Add(i, 1)
+WoodGathererPercentage = Lookup("StratScouts", i)
+i = Add(i, 1)
+GoldGathererPercentage = Lookup("StratScouts", i)
+i = Add(i, 1)
+StoneGathererPercentage = Lookup("StratScouts", i)
 
 endif
 
