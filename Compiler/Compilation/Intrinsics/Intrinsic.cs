@@ -1,4 +1,5 @@
-﻿using Compiler.Language;
+﻿using Compiler.Compilation;
+using Compiler.Language;
 using Compiler.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,7 @@ namespace Compiler.Compilation.Intrinsics
     {
         public abstract bool HasStringLiteral { get; }
 
-        public Intrinsic(Script script)
-        {
-
-        }
-
-        public abstract void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? address);
+        internal abstract void CompileCall(Script script, Function function, RuleList rules, 
+            CallExpression cl, int? result_address, bool ref_result_address = false);
     }
 }

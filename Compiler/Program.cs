@@ -26,7 +26,14 @@ namespace Compiler
                 }
             }
 
-            Run();
+            if (Directory.Exists(Settings.Folder))
+            {
+                Run();
+            }
+            else
+            {
+                Console.WriteLine($"Output dir {Settings.Folder} not found.");
+            }
 
             if (!File.Exists(file))
             {
@@ -71,7 +78,7 @@ namespace Compiler
             File.Delete(per);
             File.WriteAllText(per, code);
 
-            File.WriteAllText(Path.Combine(Folder, "script debug.txt"), script.ToString());
+            File.WriteAllText(Path.Combine(Folder, "script debug.json"), script.ToString());
 
             Console.WriteLine($"Compiled {Settings.Name} succesfully.");
             Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / rules.RuleCount:N0} elements per rule.");

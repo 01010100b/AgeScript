@@ -12,6 +12,9 @@ namespace Compiler.Parsing
 {
     internal class FunctionParser
     {
+        private TypeParser TypeParser { get; } = new();
+        private VariableParser VariableParser { get; } = new();
+
         private Dictionary<string, string> Literals { get; } = new();
 
         public Function ParseHeader(Script script, string header)
@@ -21,35 +24,40 @@ namespace Compiler.Parsing
             var bo_pos = header.IndexOf("(");
             var bc_pos = header.IndexOf(")");
 
-            if (bo_pos == -1 || bc_pos == -1)
+            if (bo_pos == -1 || bc_pos == -1 || bc_pos <= bo_pos)
             {
                 throw new Exception("Failed to parse function header.");
             }
 
             var def = header[..bo_pos];
             var pars = header[(bo_pos + 1)..bc_pos];
-            var defpieces = def.Split(' ');
+            var defpieces = def.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             var parspieces = pars.Split(',');
-            var type = script.Types[defpieces[1].Trim()];
+
+            if (!TypeParser.TryParseType(script, defpieces[1].Trim(), out var type))
+            {
+                throw new Exception("Can not parse return type.");
+            }
+
             var name = defpieces[2].Trim();
-            var function = new Function() { Name = name, ReturnType = type };
+            var function = new Function() { Name = name, ReturnType = type! };
 
             foreach (var par in parspieces.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)))
             {
-                var pieces = par.Split(' ');
-                var tpar = script.Types[pieces[0].Trim()];
-                var npar = pieces[1].Trim();
-                var parameter = new Parameter() { Name = npar, Type = tpar };
-                parameter.Validate();
-                function.Parameters.Add(parameter);
+                if (VariableParser.TryParseDefinition(script, par, out var v))
+                {
+                    function.Parameters.Add(v!);
+                }
+                else
+                {
+                    throw new Exception("Failed to parse parameter.");
+                }
             }
 
             if (script.Functions.Contains(function))
             {
                 throw new Exception("Function already defined.");
             }
-
-            script.Functions.Add(function);
 
             return function;
         }
@@ -179,7 +187,7 @@ namespace Compiler.Parsing
 
                 Variable? variable = null;
                 int offset = 0;
-                var type = Primitives.Types.Single(x => x.Name == "Void");
+                var type = Primitives.Void;
 
                 if (!string.IsNullOrWhiteSpace(lhs))
                 {
@@ -195,6 +203,7 @@ namespace Compiler.Parsing
                 }
 
                 var expression = ParseExpression(script, function, rhs);
+
                 var statement = new AssignStatement()
                 {
                     Variable = variable,
@@ -250,7 +259,7 @@ namespace Compiler.Parsing
 
                 var f = script.Functions.Single(x =>
                 {
-                    if (x.Name != name)
+                    if (x.Name != name || x.Parameters.Count != arguments.Count)
                     {
                         return false;
                     }
@@ -258,7 +267,10 @@ namespace Compiler.Parsing
                     {
                         for (int i = 0; i < arguments.Count; i++)
                         {
-                            if (!arguments[i].Type.Equals(x.Parameters[i].Type))
+                            var a = arguments[i];
+                            var p = x.Parameters[i];
+
+                            if (a.Type != p.Type)
                             {
                                 return false;
                             }
@@ -281,7 +293,7 @@ namespace Compiler.Parsing
             {
                 // variable expression
 
-                return new VariableExpression() { Variable = variable! };
+                return new VariableExpression() { Variable = variable!, Offset = 0, ElementType = variable!.Type };
             }
             else
             {

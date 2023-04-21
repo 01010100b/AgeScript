@@ -1,30 +1,41 @@
-﻿using Compiler.Compilation.Intrinsics;
-using Compiler.Language.Expressions;
+﻿using Compiler.Language.Expressions;
 using Compiler.Language;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Compiler.Compilation.Intrinsics;
 
 namespace Compiler.Compilation
 {
-    internal static class ExpressionCompiler
+    internal class ExpressionCompiler
     {
-        public static void CompileExpression(Script script, Function function, RuleList rules,
+        public void Compile(Script script, Function function, RuleList rules,
+            Expression expression, int? result_address = null, bool ref_result_address = false)
+        {
+            if (ref_result_address)
+            {
+                throw new NotImplementedException();
+            }
+
+            CompileExpressionOld(script, function, rules, expression, result_address);
+        }
+
+        public static void CompileExpressionOld(Script script, Function function, RuleList rules,
             Expression expression, int? address)
         {
             if (expression is ConstExpression cst)
             {
-                CompileConstExpression(rules, cst, address);
+                CompileConstExpressionOld(rules, cst, address);
             }
             else if (expression is VariableExpression ve)
             {
-                CompileVariableExpression(script, rules, ve, address);
+                CompileVariableExpressionOld(script, rules, ve, address);
             }
             else if (expression is CallExpression cl)
             {
-                CompileCallExpression(script, function, rules, cl, address);
+                CompileCallExpressionOld(script, function, rules, cl, address);
             }
             else
             {
@@ -32,21 +43,21 @@ namespace Compiler.Compilation
             }
         }
 
-        private static void CompileConstExpression(RuleList rules, ConstExpression expression, int? address)
+        private static void CompileConstExpressionOld(RuleList rules, ConstExpression expression, int? address)
         {
             if (address is null)
             {
                 return;
             }
 
-            if (expression.Type.Name == "Int")
+            if (expression.Type == Primitives.Int)
             {
-                var value = int.Parse(expression.Value);
+                var value = expression.Int;
                 rules.AddAction($"set-goal {address} {value}");
             }
-            else if (expression.Type.Name == "Bool")
+            else if (expression.Type == Primitives.Bool)
             {
-                var value = bool.Parse(expression.Value);
+                var value = expression.Bool;
                 var iv = value ? 1 : 0;
                 rules.AddAction($"set-goal {address} {iv}");
             }
@@ -56,7 +67,7 @@ namespace Compiler.Compilation
             }
         }
 
-        private static void CompileVariableExpression(Script script, RuleList rules, VariableExpression expression, int? address)
+        private static void CompileVariableExpressionOld(Script script, RuleList rules, VariableExpression expression, int? address)
         {
             if (address is null)
             {
@@ -66,7 +77,7 @@ namespace Compiler.Compilation
             Utils.MemCopy(script, rules, expression.Variable.Address, address.Value, expression.Variable.Type.Size);
         }
 
-        private static void CompileCallExpression(Script script, Function function, RuleList rules,
+        private static void CompileCallExpressionOld(Script script, Function function, RuleList rules,
             CallExpression expression, int? address)
         {
             if (expression.Function is Intrinsic intr)
@@ -92,13 +103,13 @@ namespace Compiler.Compilation
 
                 if (arg is ConstExpression ce)
                 {
-                    CompileConstExpression(rules, ce, par.Address);
+                    CompileConstExpressionOld(rules, ce, par.Address);
                 }
                 else if (arg is VariableExpression ve)
                 {
                     if (script.GlobalVariables.ContainsKey(ve.Variable.Name))
                     {
-                        CompileVariableExpression(script, rules, ve, par.Address);
+                        CompileVariableExpressionOld(script, rules, ve, par.Address);
                     }
                     else
                     {

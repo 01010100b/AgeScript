@@ -8,7 +8,7 @@ namespace Compiler.Language
 {
     internal class Type : Named
     {
-        public int Size { get; set; }
+        public required int Size { get; init; }
 
         public override bool Equals(object? obj) => obj is Type t && Name == t.Name;
         public override int GetHashCode() => Name.GetHashCode();

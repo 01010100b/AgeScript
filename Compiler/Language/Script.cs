@@ -12,7 +12,7 @@ namespace Compiler.Language
 {
     internal class Script : Validated
     {
-        public Dictionary<string, Type> Types { get; } = new();
+        public IReadOnlyDictionary<string, Type> Types { get; } = new Dictionary<string, Type>();
         public Dictionary<string, Variable> GlobalVariables { get; } = new();
         public List<Function> Functions { get; } = new();
 
@@ -34,7 +34,7 @@ namespace Compiler.Language
         {
             foreach (var type in Primitives.Types)
             {
-                Types.Add(type.Name, type);
+                AddType(type);
             }
 
             var assembly = typeof(Intrinsic).Assembly;
@@ -43,7 +43,7 @@ namespace Compiler.Language
             {
                 if (type.IsAssignableTo(typeof(Intrinsic)) && !type.IsAbstract)
                 {
-                    var instance = Activator.CreateInstance(type, this);
+                    var instance = Activator.CreateInstance(type);
 
                     if (instance is not null)
                     {
@@ -51,6 +51,11 @@ namespace Compiler.Language
                     }
                 }
             }
+        }
+
+        public void AddType(Type type)
+        {
+            ((Dictionary<string, Type>)Types).Add(type.Name, type);
         }
 
         public override void Validate()
@@ -100,7 +105,8 @@ namespace Compiler.Language
         {
             var options = new JsonSerializerOptions()
             {
-                WriteIndented = true
+                WriteIndented = true,
+                IncludeFields = true
             };
 
             return JsonSerializer.Serialize(this, options);

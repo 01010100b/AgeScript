@@ -52,13 +52,13 @@ namespace Compiler.Compilation
                         address = assign.Variable.Address + assign.Offset;
                     }
 
-                    ExpressionCompiler.CompileExpression(script, function, rules, assign.Expression, address);
+                    ExpressionCompiler.CompileExpressionOld(script, function, rules, assign.Expression, address);
                 }
                 else if (statement is ReturnStatement ret)
                 {
                     if (ret.Expression is not null)
                     {
-                        ExpressionCompiler.CompileExpression(script, function, rules, ret.Expression, script.CallResultBase);
+                        ExpressionCompiler.CompileExpressionOld(script, function, rules, ret.Expression, script.CallResultBase);
                     }
 
                     rules.AddAction($"up-jump-direct g: {script.RegisterBase}");
@@ -67,7 +67,7 @@ namespace Compiler.Compilation
                 }
                 else if (statement is IfStatement ifs)
                 {
-                    ExpressionCompiler.CompileExpression(script, function, rules, ifs.Expression, script.CondGoal);
+                    ExpressionCompiler.CompileExpressionOld(script, function, rules, ifs.Expression, script.CondGoal);
                     
                     var jmpid = Guid.NewGuid().ToString().Replace("-", "");
                     rules.StartNewRule($"goal {script.CondGoal} 0");
@@ -89,7 +89,7 @@ namespace Compiler.Compilation
                             var ji = rules.CurrentRuleIndex;
                             rules.ReplaceStrings(jmpid, ji.ToString());
 
-                            ExpressionCompiler.CompileExpression(script, function, rules, elif.Expression, script.CondGoal);
+                            ExpressionCompiler.CompileExpressionOld(script, function, rules, elif.Expression, script.CondGoal);
 
                             jmpid = Guid.NewGuid().ToString().Replace("-", "");
                             rules.StartNewRule($"goal {script.CondGoal} 0");

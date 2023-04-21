@@ -1,4 +1,5 @@
-﻿using Compiler.Language;
+﻿using Compiler.Compilation;
+using Compiler.Language;
 using Compiler.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,16 @@ namespace Compiler.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => false;
 
-        public Add(Script script) : base(script)
+        public Add()
         {
             Name = "Add";
-            ReturnType = script.Types["Int"];
-            Parameters.Add(new() { Name = "a", Type = ReturnType });
-            Parameters.Add(new() { Name = "b", Type = ReturnType });
+            ReturnType = Primitives.Int;
+            Parameters.Add(new() { Name = "a", Type = Primitives.Int });
+            Parameters.Add(new() { Name = "b", Type = Primitives.Int });
         }
 
-        public override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? address)
+        internal override void CompileCall(Script script, Function function, RuleList rules
+            , CallExpression cl, int? address, bool ref_result_address)
         {
             if (address is null)
             {
@@ -37,7 +39,7 @@ namespace Compiler.Compilation.Intrinsics
                 }
                 else if (arg is ConstExpression ce)
                 {
-                    rules.AddAction($"up-modify-goal {script.Intr0} c:+ {int.Parse(ce.Value)}");
+                    rules.AddAction($"up-modify-goal {script.Intr0} c:+ {ce.Int}");
                 }
             }
 

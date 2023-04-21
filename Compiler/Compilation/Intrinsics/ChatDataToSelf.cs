@@ -1,4 +1,5 @@
-﻿using Compiler.Language;
+﻿using Compiler.Compilation;
+using Compiler.Language;
 using Compiler.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,15 @@ namespace Compiler.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => true;
 
-        public ChatDataToSelf(Script script) : base(script)
+        public ChatDataToSelf()
         {
             Name = "ChatDataToSelf";
-            ReturnType = script.Types["Void"];
-            Parameters.Add(new() { Name = "goal", Type = script.Types["Int"] });
+            ReturnType = Primitives.Void;
+            Parameters.Add(new() { Name = "goal", Type = Primitives.Int });
         }
 
-        public override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? address)
+        internal override void CompileCall(Script script, Function function, RuleList rules, 
+            CallExpression cl, int? address, bool ref_result_address)
         {
             if (cl.Arguments[0] is VariableExpression ve)
             {

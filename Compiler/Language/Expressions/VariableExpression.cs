@@ -9,7 +9,9 @@ namespace Compiler.Language.Expressions
     internal class VariableExpression : Expression
     {
         public required Variable Variable { get; init; }
-        public override Type Type => Variable.Type;
+        public required int Offset { get; init; }
+        public required Type ElementType { get; init; }
+        public override Type Type => ElementType;
 
         public override void Validate()
         {

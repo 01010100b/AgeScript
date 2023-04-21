@@ -1,7 +1,8 @@
-﻿Globals
+﻿Globals:
 Int Tick
+Int[20] Data  
 
-Function Void Main()
+Function Void Main():
 Int fib
 
 Tick = Add(Tick, 1)
@@ -13,7 +14,7 @@ fib = Fibonacci(Tick)
 ChatDataToSelf("i = %d", Tick)
 ChatDataToSelf("f = %d", fib)
 
-Function Int Fibonacci(Int i)
+Function Int Fibonacci(Int i):
 Int i0
 Int f0
 Int i1
@@ -22,10 +23,6 @@ Int f1
 if Equals(i, 0)
 return 0
 elif Equals(i, 1)
-return 1
-endif
-
-if Equals(i, 1)
 return 1
 endif
 

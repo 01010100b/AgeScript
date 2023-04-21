@@ -9,8 +9,8 @@ namespace Compiler.Language
 {
     internal class Function : Named
     {
-        public Type ReturnType { get; set; } = Primitives.Types.Single(x => x.Name == "Void");
-        public List<Parameter> Parameters { get; } = new();
+        public Type ReturnType { get; set; } = Primitives.Void;
+        public List<Variable> Parameters { get; } = new();
         public List<Variable> LocalVariables { get; } = new();
         public List<Statement> Statements { get; } = new();
         public IEnumerable<Variable> AllVariables => Parameters.Concat(LocalVariables);

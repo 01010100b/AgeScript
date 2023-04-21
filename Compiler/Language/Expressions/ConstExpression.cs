@@ -8,22 +8,26 @@ namespace Compiler.Language.Expressions
 {
     internal class ConstExpression : Expression
     {
-        public string Value { get; private init; }
+        public static ConstExpression Zero { get; } = new("0");
+        public static ConstExpression False { get; } = new("false");
+
         public override Type Type => ConstType;
+        public int Int { get; private init; } = 0;
+        public bool Bool { get; private init; } = false;
 
         private Type ConstType { get; init; }
 
         public ConstExpression(string value) 
         {
-            Value = value;
-
-            if (int.TryParse(value, out _))
+            if (int.TryParse(value, out var i))
             {
-                ConstType = Primitives.Types.Single(x => x.Name == "Int");
+                ConstType = Primitives.Int;
+                Int = i;
             }
-            else if (bool.TryParse(value, out _))
+            else if (bool.TryParse(value, out var b))
             {
-                ConstType = Primitives.Types.Single(x => x.Name == "Bool");
+                ConstType = Primitives.Bool;
+                Bool = b;
             }
             else
             {

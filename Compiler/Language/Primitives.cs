@@ -8,6 +8,10 @@ namespace Compiler.Language
 {
     internal static class Primitives
     {
+        public static Type Int => Types.Single(x => x.Name == "Int");
+        public static Type Bool => Types.Single(x => x.Name == "Bool");
+        public static Type Void => Types.Single(x => x.Name == "Void");
+
         public static IEnumerable<string> Keywords { get; } = new List<string>()
         {
             "Struct", "Globals", "Function", "Lookup", "return", "break", "continue", "true", "false",

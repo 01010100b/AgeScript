@@ -9,13 +9,13 @@ namespace Compiler.Language
 {
     internal abstract class Named : Validated
     {
-        private const string RegexString = @"^[a-zA-Z][a-zA-Z_0-9]*$";
+        private const string NameRegex = @"^[a-zA-Z][a-zA-Z_0-9]*$";
 
         public required string Name { get; init; }
 
         public override void Validate()
         {
-            var regex = RegexString;
+            var regex = NameRegex;
 
             if (!Regex.IsMatch(Name, regex))
             {

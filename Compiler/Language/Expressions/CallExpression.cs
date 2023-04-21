@@ -10,7 +10,7 @@ namespace Compiler.Language.Expressions
     internal class CallExpression : Expression
     {
         public required Function Function { get; init; }
-        public required List<Expression> Arguments { get; init; }
+        public required IReadOnlyList<Expression> Arguments { get; init; }
         public required string? Literal { get; init; }
         public override Type Type => Function.ReturnType;
 
@@ -28,14 +28,14 @@ namespace Compiler.Language.Expressions
 
                 a.Validate();
 
-                if (a.Type != p.Type)
-                {
-                    throw new Exception("Argument type mismatch");
-                }
-
                 if (a is CallExpression)
                 {
                     throw new Exception("Can not nest call expressions.");
+                }
+
+                if (a.Type != p.Type)
+                {
+                    throw new Exception("Argument type mismatch");
                 }
             }
 
