@@ -1,6 +1,6 @@
-﻿using Compiler.Compilation;
-using Compiler.Language;
-using Compiler.Parsing;
+﻿using AgeScript;
+using AgeScript.Compilation;
+using AgeScript.Parsing;
 using System.Text.Json;
 
 namespace Compiler
@@ -12,7 +12,7 @@ namespace Compiler
         static void Main(string[] args)
         {
             var settings = new Settings();
-            var file = Path.Combine(Folder, "Settings.json");
+            var file = Path.Combine(Folder, "CompilerSettings.json");
             var options = new JsonSerializerOptions() { WriteIndented = true };
 
             if (File.Exists(file))
