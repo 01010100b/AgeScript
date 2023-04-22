@@ -36,7 +36,7 @@ namespace Compiler.Compilation.Intrinsics
 
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
             rules.AddAction($"up-modify-goal {script.Intr1} g:= {script.Intr0}");
-            rules.AddAction($"up-modify-goal {script.Intr1} c:z/ {ScriptCompiler.Settings.MaxElementsPerRule - 2}");
+            rules.AddAction($"up-modify-goal {script.Intr1} c:z/ {TableCompiler.Modulus}");
             rules.AddAction($"up-modify-goal {script.Intr1} c:+ {lookup.AddressableName}");
             rules.AddAction($"set-goal {script.SpecialGoal} {ret_id}");
             rules.AddAction($"up-jump-direct g: {script.Intr1}");
@@ -44,7 +44,7 @@ namespace Compiler.Compilation.Intrinsics
             rules.StartNewRule();
             rules.ReplaceStrings(ret_id, rules.CurrentRuleIndex.ToString());
             rules.AddAction($"up-modify-goal {script.Intr1} g:= {script.Intr0}");
-            rules.AddAction($"up-modify-goal {script.Intr1} c:mod {ScriptCompiler.Settings.MaxElementsPerRule - 2}");
+            rules.AddAction($"up-modify-goal {script.Intr1} c:mod {TableCompiler.Modulus}");
             Utils.MemCopy(script, rules, script.TableResultBase, result_address.Value, Primitives.Int.Size, false, ref_result_address,
                 script.Intr1, 0, true, false);
         }

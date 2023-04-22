@@ -32,7 +32,7 @@ namespace Compiler.Compilation
 
             // table lookup result below that as it doesn't get used with up functions
 
-            goal -= ScriptCompiler.Settings.MaxElementsPerRule - 2;
+            goal -= TableCompiler.Modulus;
             script.TableResultBase = goal;
 
             // special registers

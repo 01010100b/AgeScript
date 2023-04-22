@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.Language
 {
-    internal abstract class Validated
+    public abstract class Validated
     {
         public abstract void Validate();
     }
