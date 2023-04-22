@@ -20,7 +20,7 @@ namespace AgeScript.Compilation.Intrinsics
         }
 
         internal override void CompileCall(Script script, Function function, RuleList rules,
-            CallExpression cl, int? address, bool ref_result_address)
+            CallExpression cl, int? result_address, bool ref_result_address)
         {
             if (cl.Literal is null)
             {

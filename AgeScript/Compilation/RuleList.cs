@@ -59,6 +59,8 @@ namespace AgeScript.Compilation
         public override string ToString()
         {
             var sb = new StringBuilder();
+            sb.AppendLine($"; Compiled with AgeScript v{GetType().Assembly.GetName().Version}");
+            sb.AppendLine();
 
             for (int i = 0; i < Rules.Count; i++)
             {

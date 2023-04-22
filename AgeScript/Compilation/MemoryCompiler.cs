@@ -10,6 +10,8 @@ namespace AgeScript.Compilation
 {
     internal class MemoryCompiler
     {
+        private const int JUMP_END = 20000;
+
         public void Compile(Script script, RuleList rules)
         {
             SetAddresses(script);
@@ -79,13 +81,33 @@ namespace AgeScript.Compilation
 
         private void InitializeMemory(Script script, RuleList rules)
         {
-            // initialize memory each tick
-            // TODO initialize globals once (disable-self or something)
+            // initialize globals once
+
+            rules.AddAction($"set-goal {script.SpecialGoal} 0");
+            rules.StartNewRule();
+            rules.AddAction($"set-goal {script.SpecialGoal} 1");
+            rules.AddAction("disable-self");
+
+            var jmpid = Guid.NewGuid().ToString().Replace("-", "");
+            rules.StartNewRule($"goal {script.SpecialGoal} 0");
+            rules.AddAction($"up-jump-direct c: {jmpid}");
+            rules.StartNewRule();
+
+            foreach (var global in script.GlobalVariables.Values)
+            {
+                Utils.Clear(rules, global.Address, global.Type.Size);
+            }
+
+            rules.StartNewRule();
+            var id = rules.CurrentRuleIndex;
+            rules.ReplaceStrings(jmpid, id.ToString());
+
+            // initialize registers each tick
 
             rules.AddAction($"set-goal {script.SpecialGoal} 0");
             rules.AddAction($"set-goal {script.StackPtr} 1");
             Utils.Clear(rules, script.RegisterBase, script.RegisterCount);
-            rules.AddAction($"set-goal {script.RegisterBase} 20000");
+            rules.AddAction($"set-goal {script.RegisterBase} {JUMP_END}");
         }
     }
 }

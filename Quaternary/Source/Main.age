@@ -1,0 +1,19 @@
+﻿Globals:
+
+Int Tick
+
+Function Void Main():
+
+if Equals(Tick, 0)
+Initialize()
+endif
+
+Economy()
+
+Tick = Add(Tick, 1)
+
+Function Void Initialize():
+
+SetSn(SN_CAP_CIVILIAN_BUILDERS, 200)
+SetSn(SN_CONSECUTIVE_IDLE_UNIT_LIMIT, 0)
+SetSn(SN_DO_NOT_SCALE_FOR_DIFFICULTY_LEVEL, 1)

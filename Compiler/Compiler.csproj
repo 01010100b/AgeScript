@@ -10,6 +10,13 @@
 
   <ItemGroup>
     <None Remove="example.txt" />
+    <None Remove="Source\example.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Source\example.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

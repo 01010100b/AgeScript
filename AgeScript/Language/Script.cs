@@ -18,7 +18,7 @@ namespace AgeScript.Language
         public IEnumerable<Function> Functions { get; } = new List<Function>();
         public IEnumerable<Table> Tables { get; } = new List<Table>();
 
-        internal int SpecialGoal { get; set; } // used for control-flow (if, ...) conditions and lookup return addresses
+        internal int SpecialGoal { get; set; } // used for control-flow (if, ...) conditions and table lookup return addresses
         internal int StackPtr { get; set; } // points to next free stack goal
         internal int Sp0 { get; set; } // special purpose registers, for memcopy and such
         internal int Sp1 { get; set; }

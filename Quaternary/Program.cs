@@ -1,9 +1,8 @@
 ﻿using AgeScript;
 using AgeScript.Compilation;
 using AgeScript.Parsing;
-using System.Text.Json;
 
-namespace Compiler
+namespace Quaternary
 {
     internal class Program
     {
@@ -11,24 +10,17 @@ namespace Compiler
 
         static void Main(string[] args)
         {
-            var settings = new Settings();
-            var file = Path.Combine(Folder, "Settings.json");
-            var options = new JsonSerializerOptions() { WriteIndented = true };
-
-            if (File.Exists(file))
+            var settings = new Settings()
             {
-                var s = JsonSerializer.Deserialize<Settings>(File.ReadAllText(file));
-
-                if (s is not null)
-                {
-                    settings = s;
-                }
-            }
+                Name = "Quaternary",
+                SourceFolder = @"F:\Repos\AgeScript\Quaternary\Source",
+                DestinationFolder = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai",
+                MaxElementsPerRule = 16,
+                MaxGoal = 512,
+                OptimizeMemCopy = true
+            };
 
             Run(settings);
-
-            File.Delete(file);
-            File.WriteAllText(file, JsonSerializer.Serialize(settings, options));
         }
 
         private static void Run(Settings settings)
@@ -71,7 +63,7 @@ namespace Compiler
             {
                 File.Create(ai);
             }
-            
+
             var per = Path.Combine(settings.DestinationFolder, $"{settings.Name}.per");
             File.Delete(per);
             File.WriteAllText(per, code);

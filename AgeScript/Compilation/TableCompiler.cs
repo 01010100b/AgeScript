@@ -15,22 +15,22 @@ namespace AgeScript.Compilation
         {
             rules.StartNewRule();
             table.Address = rules.CurrentRuleIndex;
-            var els = 0;
+            var elements = 0;
 
             foreach (var value in table.Values)
             {
-                rules.AddAction($"set-goal {script.TableResultBase + els} {value}");
-                els++;
+                rules.AddAction($"set-goal {script.TableResultBase + elements} {value}");
+                elements++;
 
-                if (els >= Modulus)
+                if (elements >= Modulus)
                 {
                     rules.AddAction($"up-jump-direct g: {script.SpecialGoal}");
                     rules.StartNewRule();
-                    els = 0;
+                    elements = 0;
                 }
             }
 
-            if (els > 0)
+            if (elements > 0)
             {
                 rules.AddAction($"up-jump-direct g: {script.SpecialGoal}");
                 rules.StartNewRule();

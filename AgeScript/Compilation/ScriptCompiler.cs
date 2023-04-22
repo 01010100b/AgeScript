@@ -51,7 +51,7 @@ namespace AgeScript.Compilation
                 }
                 else
                 {
-                    return 0;
+                    return a.Name.CompareTo(b.Name);
                 }
             });
 

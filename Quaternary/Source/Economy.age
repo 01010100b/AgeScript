@@ -1,0 +1,56 @@
+﻿Globals:
+
+Int MinFoodGatherers
+Int MinWoodGatherers
+Int MinStoneGatherers
+Int MinGoldGatherers
+Int ExtraFoodGathererPercentage
+Int ExtraWoodGathererPercentage
+Int ExtraStoneGathererPercentage
+Int ExtraGoldGathererPercentage
+
+Function Void Economy():
+
+Economy_GathererPercentageUpdate()
+
+Function Void Economy_GathererPercentageUpdate():
+
+Int player
+Int remaining_gatherers
+Int food_gatherers
+Int wood_gatherers
+Int stone_gatherers
+Int gold_gatherers
+
+player = GetPlayerNumber()
+remaining_gatherers = GetPlayerFact(player, FACT_CIVILIAN_POPULATION, 0)
+remaining_gatherers = Sub(remaining_gatherers, MinFoodGatherers)
+remaining_gatherers = Sub(remaining_gatherers, MinWoodGatherers)
+remaining_gatherers = Sub(remaining_gatherers, MinStoneGatherers)
+remaining_gatherers = Sub(remaining_gatherers, MinGoldGatherers)
+remaining_gatherers = Max(remaining_gatherers, 0)
+
+food_gatherers = ExtraFoodGathererPercentage
+food_gatherers = Mul(food_gatherers, remaining_gatherers)
+food_gatherers = Div(food_gatherers, 100)
+food_gatherers = Add(food_gatherers, MinFoodGatherers)
+
+wood_gatherers = ExtraWoodGathererPercentage
+wood_gatherers = Mul(wood_gatherers, remaining_gatherers)
+wood_gatherers = Div(wood_gatherers, 100)
+wood_gatherers = Add(wood_gatherers, MinWoodGatherers)
+
+stone_gatherers = ExtraStoneGathererPercentage
+stone_gatherers = Mul(stone_gatherers, remaining_gatherers)
+stone_gatherers = Div(stone_gatherers, 100)
+stone_gatherers = Add(stone_gatherers, MinStoneGatherers)
+
+gold_gatherers = ExtraGoldGathererPercentage
+gold_gatherers = Mul(gold_gatherers, remaining_gatherers)
+gold_gatherers = Div(gold_gatherers, 100)
+gold_gatherers = Add(gold_gatherers, MinGoldGatherers)
+
+SetSn(SN_FOOD_GATHERER_PERCENTAGE, food_gatherers)
+SetSn(SN_WOOD_GATHERER_PERCENTAGE, wood_gatherers)
+SetSn(SN_STONE_GATHERER_PERCENTAGE, stone_gatherers)
+SetSn(SN_GOLD_GATHERER_PERCENTAGE, gold_gatherers)
