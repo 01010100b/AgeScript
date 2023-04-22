@@ -7,8 +7,7 @@ namespace Compiler
 {
     internal class Program
     {
-        public static string Folder => AppDomain.CurrentDomain.BaseDirectory;
-        public static string SourceFolder => Path.Combine(Folder, "Source");
+        private static string Folder => AppDomain.CurrentDomain.BaseDirectory;
 
         static void Main(string[] args)
         {
@@ -26,14 +25,7 @@ namespace Compiler
                 }
             }
 
-            if (Directory.Exists(settings.Folder))
-            {
-                Run(settings);
-            }
-            else
-            {
-                Console.WriteLine($"Output dir {settings.Folder} not found.");
-            }
+            Run(settings);
 
             File.Delete(file);
             File.WriteAllText(file, JsonSerializer.Serialize(settings, options));
@@ -41,9 +33,18 @@ namespace Compiler
 
         private static void Run(Settings settings)
         {
-            var dirs = new List<string>() { SourceFolder };
+            if (!Directory.Exists(settings.SourceFolder))
+            {
+                Console.WriteLine($"Can not find source folder.");
+            }
+            else if (!Directory.Exists(settings.DestinationFolder))
+            {
+                Console.WriteLine($"Can not find destination folder.");
+            }
 
-            foreach (var dir in Directory.EnumerateDirectories(SourceFolder, "*", SearchOption.AllDirectories))
+            var dirs = new List<string>() { settings.SourceFolder };
+
+            foreach (var dir in Directory.EnumerateDirectories(settings.SourceFolder, "*", SearchOption.AllDirectories))
             {
                 dirs.Add(dir);
             }
@@ -65,21 +66,20 @@ namespace Compiler
             var rules = compiler.Compile(script, settings);
             var code = rules.ToString();
 
-            var ai = Path.Combine(settings.Folder, $"{settings.Name}.ai");
-
+            var ai = Path.Combine(settings.DestinationFolder, $"{settings.Name}.ai");
             if (!File.Exists(ai))
             {
                 File.Create(ai);
             }
             
-            var per = Path.Combine(settings.Folder, $"{settings.Name}.per");
+            var per = Path.Combine(settings.DestinationFolder, $"{settings.Name}.per");
             File.Delete(per);
             File.WriteAllText(per, code);
 
             File.WriteAllText(Path.Combine(Folder, "script debug.json"), script.ToString());
 
             Console.WriteLine($"Compiled {settings.Name} succesfully.");
-            Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / rules.RuleCount:N0} elements per rule.");
+            Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / (double)rules.RuleCount:N2} elements per rule.");
         }
     }
 }
