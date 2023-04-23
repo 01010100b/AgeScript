@@ -31,7 +31,7 @@ namespace AgeScript.Parsing
                     return new ReturnStatement() { Expression = expression };
                 }
             }
-            else if (line.StartsWith("if(") || line.StartsWith("if "))
+            else if (line.StartsWith("if "))
             {
                 var expr = line.Replace("if", "").Trim();
 
@@ -43,10 +43,10 @@ namespace AgeScript.Parsing
                 {
                     var expression = ExpressionParser.Parse(script, function, expr, literals);
 
-                    return new IfStatement() { Expression = expression };
+                    return new IfStatement() { Condition = expression };
                 }
             }
-            else if (line.StartsWith("elif(") || line.StartsWith("elif "))
+            else if (line.StartsWith("elif "))
             {
                 var expr = line.Replace("elif", "").Trim();
 
@@ -58,16 +58,35 @@ namespace AgeScript.Parsing
                 {
                     var expression = ExpressionParser.Parse(script, function, expr, literals);
 
-                    return new ElifStatement() { Expression = expression };
+                    return new ElifStatement() { Condition = expression };
                 }
             }
             else if (line == "else")
             {
-                return new ElifStatement() { Expression = ConstExpression.True };
+                return new ElifStatement() { Condition = ConstExpression.True };
             }
             else if (line == "endif")
             {
                 return new EndIfStatement();
+            }
+            else if (line.StartsWith("while "))
+            {
+                var expr = line.Replace("while", string.Empty).Trim();
+
+                if (string.IsNullOrWhiteSpace(expr))
+                {
+                    throw new Exception("While statement needs expression.");
+                }
+                else
+                {
+                    var expression = ExpressionParser.Parse(script, function, expr, literals);
+
+                    return new WhileStatement() { Condition = expression };
+                }
+            }
+            else if (line == "endwhile")
+            {
+                return new EndWhileStatement();
             }
             else
             {

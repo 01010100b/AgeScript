@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Language.Statements
 {
-    public class ElifStatement : Statement
+    public class WhileStatement : Statement
     {
         public required Expression Condition { get; init; }
 
@@ -17,7 +17,7 @@ namespace AgeScript.Language.Statements
 
             if (Condition.Type != Primitives.Bool)
             {
-                throw new Exception("Elif statement needs expression of type Bool.");
+                throw new Exception("While statement takes expression of type Bool.");
             }
         }
     }

@@ -9,11 +9,13 @@ namespace AgeScript.Language.Statements
 {
     public class IfStatement : Statement
     {
-        public required Expression Expression { get; init; }
+        public required Expression Condition { get; init; }
 
         public override void Validate()
         {
-            if (Expression.Type.Name != "Bool")
+            Condition.Validate();
+
+            if (Condition.Type != Primitives.Bool)
             {
                 throw new Exception("If statement needs expression of type Bool.");
             }

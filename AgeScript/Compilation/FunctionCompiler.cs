@@ -78,11 +78,11 @@ namespace AgeScript.Compilation
                 }
                 else if (statement is IfStatement ifs)
                 {
-                    ExpressionCompiler.Compile(script, function, rules, ifs.Expression, script.SpecialGoal);
+                    ExpressionCompiler.Compile(script, function, rules, ifs.Condition, script.SpecialGoal);
 
-                    var jmpid = Script.GetUniqueId();
+                    var jmpidnext = Script.GetUniqueId();
                     rules.StartNewRule($"goal {script.SpecialGoal} 0");
-                    rules.AddAction($"up-jump-direct c: {jmpid}");
+                    rules.AddAction($"up-jump-direct c: {jmpidnext}");
                     rules.StartNewRule();
 
                     i = CompileBlock(script, function, rules, i + 1);
@@ -97,14 +97,14 @@ namespace AgeScript.Compilation
                         {
                             rules.AddAction($"up-jump-direct c: {jmpidend}");
                             rules.StartNewRule();
-                            var ji = rules.CurrentRuleIndex;
-                            rules.ReplaceStrings(jmpid, ji.ToString());
+                            var jinext = rules.CurrentRuleIndex;
+                            rules.ReplaceStrings(jmpidnext, jinext.ToString());
 
-                            ExpressionCompiler.Compile(script, function, rules, elif.Expression, script.SpecialGoal);
+                            ExpressionCompiler.Compile(script, function, rules, elif.Condition, script.SpecialGoal);
 
-                            jmpid = Script.GetUniqueId();
+                            jmpidnext = Script.GetUniqueId();
                             rules.StartNewRule($"goal {script.SpecialGoal} 0");
-                            rules.AddAction($"up-jump-direct c: {jmpid}");
+                            rules.AddAction($"up-jump-direct c: {jmpidnext}");
                             rules.StartNewRule();
 
                             i = CompileBlock(script, function, rules, i + 1);
@@ -120,13 +120,13 @@ namespace AgeScript.Compilation
                         rules.StartNewRule();
                         var jiend = rules.CurrentRuleIndex;
                         rules.ReplaceStrings(jmpidend, jiend.ToString());
-                        rules.ReplaceStrings(jmpid, jiend.ToString());
+                        rules.ReplaceStrings(jmpidnext, jiend.ToString());
                     }
                     else if (statement is EndIfStatement)
                     {
                         rules.StartNewRule();
-                        var ji = rules.CurrentRuleIndex;
-                        rules.ReplaceStrings(jmpid, ji.ToString());
+                        var jiend = rules.CurrentRuleIndex;
+                        rules.ReplaceStrings(jmpidnext, jiend.ToString());
                     }
                     else
                     {
@@ -134,7 +134,33 @@ namespace AgeScript.Compilation
                     }
 
                 }
-                else if (statement is ElifStatement || statement is EndIfStatement)
+                else if (statement is WhileStatement ws)
+                {
+                    rules.StartNewRule();
+                    var jiret = rules.CurrentRuleIndex;
+                    ExpressionCompiler.Compile(script, function, rules, ws.Condition, script.SpecialGoal);
+
+                    var jmpidend = Script.GetUniqueId();
+                    rules.StartNewRule($"goal {script.SpecialGoal} 0");
+                    rules.AddAction($"up-jump-direct c: {jmpidend}");
+                    rules.StartNewRule();
+
+                    i = CompileBlock(script, function, rules, i + 1);
+                    statement = function.Statements[i];
+
+                    if (statement is EndWhileStatement)
+                    {
+                        rules.AddAction($"up-jump-direct c: {jiret}");
+                        rules.StartNewRule();
+                        var jiend = rules.CurrentRuleIndex;
+                        rules.ReplaceStrings(jmpidend , jiend.ToString());
+                    }
+                    else
+                    {
+                        throw new Exception("While without endwhile.");
+                    }
+                }
+                else if (statement is ElifStatement || statement is EndIfStatement || statement is EndWhileStatement)
                 {
                     return i;
                 }
