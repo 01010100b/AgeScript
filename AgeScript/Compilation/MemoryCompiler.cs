@@ -77,6 +77,10 @@ namespace AgeScript.Compilation
 
             goal -= script.Functions.Max(x => x.ReturnType.Size);
             script.CallResultBase = goal;
+
+            // and this is the stack limit
+
+            script.StackLimit = goal;
         }
 
         private void InitializeMemory(Script script, RuleList rules)

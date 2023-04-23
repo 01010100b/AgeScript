@@ -3,10 +3,12 @@ using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 
 namespace AgeScript.Language
@@ -34,6 +36,7 @@ namespace AgeScript.Language
         internal int RegisterCount { get; set; } // number of registers
         internal int CallResultBase { get; set; } // start of goals where result of a function call is stored
         internal int TableResultBase { get; set; } // start of lookup result
+        internal int StackLimit { get; set; } // stack-ptr can not grow beyond this
 
         public Script()
         {
@@ -227,10 +230,45 @@ namespace AgeScript.Language
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true,
-                IncludeFields = true
+                IncludeFields = true,
+                TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+                {
+                    Modifiers = { AddPrivateFieldsModifier }
+                }
             };
 
             return JsonSerializer.Serialize(this, options);
+        }
+
+        private static void AddPrivateFieldsModifier(JsonTypeInfo jsonTypeInfo)
+        {
+            if (jsonTypeInfo.Kind != JsonTypeInfoKind.Object)
+            {
+                return;
+            }
+
+            foreach (FieldInfo field in jsonTypeInfo.Type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+            {
+                if (field.Name.Contains("__BackingField"))
+                {
+                    continue;
+                }
+
+                JsonPropertyInfo jsonPropertyInfo = jsonTypeInfo.CreateJsonPropertyInfo(field.FieldType, field.Name);
+                jsonPropertyInfo.Get = field.GetValue;
+                jsonPropertyInfo.Set = field.SetValue;
+
+                jsonTypeInfo.Properties.Add(jsonPropertyInfo);
+            }
+
+            foreach (var prop in jsonTypeInfo.Type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic))
+            {
+                JsonPropertyInfo jsonPropertyInfo = jsonTypeInfo.CreateJsonPropertyInfo(prop.PropertyType, prop.Name);
+                jsonPropertyInfo.Get = prop.GetValue;
+                jsonPropertyInfo.Set = prop.SetValue;
+
+                jsonTypeInfo.Properties.Add(jsonPropertyInfo);
+            }
         }
     }
 }
