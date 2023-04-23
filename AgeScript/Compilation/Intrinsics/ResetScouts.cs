@@ -8,25 +8,19 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compilation.Intrinsics
 {
-    internal class GetPlayerNumber : Intrinsic
+    internal class ResetScouts : Intrinsic
     {
         public override bool HasStringLiteral => false;
 
-        public GetPlayerNumber() 
+        public ResetScouts()
         {
-            Name = "GetPlayerNumber";
-            ReturnType = Primitives.Int;
+            Name = "ResetScouts";
+            ReturnType = Primitives.Void;
         }
 
         internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
         {
-            if (result_address is null)
-            {
-                return;
-            }
-
-            rules.AddAction($"up-get-fact player-number 0 {script.Intr0}");
-            Utils.MemCopy(script,rules, script.Intr0, result_address.Value, 1, false, ref_result_address);
+            rules.AddAction("up-reset-scouts");
         }
     }
 }

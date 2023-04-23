@@ -46,9 +46,18 @@ namespace AgeScript.Language
         {
             base.Validate();
 
+            var set = new HashSet<string>();
+
             foreach (var v in AllVariables)
             {
                 v.Validate();
+
+                if (set.Contains(v.Name))
+                {
+                    throw new Exception("Already have local variable.");
+                }
+
+                set.Add(v.Name);
             }
 
             foreach (var s in Statements)

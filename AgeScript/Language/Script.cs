@@ -160,7 +160,7 @@ namespace AgeScript.Language
 
             var main = Functions.Single(x => x.Name == "Main");
 
-            if (main.ReturnType != Types["Void"])
+            if (main.ReturnType != Primitives.Void)
             {
                 throw new Exception("Main function must have return type Void.");
             }
@@ -170,27 +170,53 @@ namespace AgeScript.Language
                 throw new Exception("Main function must have 0 parameters.");
             }
 
+            var types = new HashSet<string>();
+
             foreach (var type in Types.Values)
             {
                 type.Validate();
+
+                if (types.Contains(type.Name))
+                {
+                    throw new Exception("Already have type with this name.");
+                }
+
+                types.Add(type.Name);
             }
+
+            var globals = new HashSet<string>();
 
             foreach (var global in GlobalVariables.Values)
             {
                 global.Validate();
+
+                if (globals.Contains(global.Name))
+                {
+                    throw new Exception("Already have global name.");
+                }
+
+                globals.Add(global.Name);
             }
 
-            var set = new HashSet<Function>();
+            var functions = new HashSet<Function>();
 
             foreach (var function in Functions)
             {
-                if (set.Contains(function))
+                if (functions.Contains(function))
                 {
                     throw new Exception("Function defined more than once.");
                 }
 
                 function.Validate();
-                set.Add(function);
+                functions.Add(function);
+
+                foreach (var v in function.AllVariables)
+                {
+                    if (globals.Contains(v.Name))
+                    {
+                        throw new Exception("Have global with same name as local.");
+                    }
+                }
             }
         }
 

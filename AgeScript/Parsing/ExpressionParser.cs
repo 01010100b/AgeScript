@@ -93,5 +93,33 @@ namespace AgeScript.Parsing
 
             throw new NotImplementedException();
         }
+
+        public bool TryParseAccessor(Script script, Function function, string code, out Accessor? accessor)
+        {
+            if (!code.Contains('['))
+            {
+                if (function.TryGetScopedVariable(script, code, out var variable))
+                {
+                    accessor = new()
+                    {
+                        Variable = variable!,
+                        Offset = ConstExpression.Zero,
+                        Type = variable!.Type
+                    };
+
+                    accessor.Validate();
+
+                    return true;
+                }
+                else
+                {
+                    throw new Exception("Can not find variable for accessor.");
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

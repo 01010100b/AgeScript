@@ -1,5 +1,6 @@
 ﻿using AgeScript.Compilation.Intrinsics;
 using AgeScript.Language;
+using AgeScript.Language.Expressions;
 using AgeScript.Language.Statements;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace AgeScript.Compilation
 {
     internal class FunctionCompiler
     {
+        private ExpressionCompiler ExpressionCompiler { get; } = new();
         private int LastReturnStatement { get; set; }
 
         public void Compile(Script script, Function function, RuleList rules)
@@ -45,13 +47,22 @@ namespace AgeScript.Compilation
                 if (statement is AssignStatement assign)
                 {
                     int? address = null;
+                    var ref_address = false;
 
-                    if (assign.Variable is not null)
+                    if (assign.Accessor is not null)
                     {
-                        address = assign.Variable.Address + assign.Offset;
+                        if (assign.Accessor.Offset is ConstExpression const_offset)
+                        {
+                            address = assign.Accessor.Variable.Address + const_offset.Int;
+                            ref_address = false;
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
                     }
 
-                    ExpressionCompiler.CompileExpressionOld(script, function, rules, assign.Expression, address);
+                    ExpressionCompiler.Compile(script, function, rules, assign.Expression, address, ref_address);
                 }
                 else if (statement is ReturnStatement ret)
                 {

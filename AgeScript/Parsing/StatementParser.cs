@@ -76,21 +76,13 @@ namespace AgeScript.Parsing
                 var eq_pos = line.IndexOf('=');
                 var lhs = eq_pos != -1 ? line[..eq_pos].Trim() : string.Empty;
                 var rhs = line[(eq_pos + 1)..].Trim();
-
-                Variable? variable = null;
-                int offset = 0;
-                var type = Primitives.Void;
+                Accessor? accessor = null;
 
                 if (!string.IsNullOrWhiteSpace(lhs))
                 {
-                    if (function.TryGetScopedVariable(script, lhs, out var v))
+                    if (ExpressionParser.TryParseAccessor(script, function, lhs, out var a))
                     {
-                        variable = v!;
-                        type = variable.Type;
-                    }
-                    else
-                    {
-                        throw new Exception("Variable to assign to not found.");
+                        accessor = a;
                     }
                 }
 
@@ -98,9 +90,7 @@ namespace AgeScript.Parsing
 
                 var statement = new AssignStatement()
                 {
-                    Variable = variable,
-                    Offset = offset,
-                    Type = type,
+                    Accessor = accessor,
                     Expression = expression
                 };
 

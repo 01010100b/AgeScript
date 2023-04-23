@@ -22,13 +22,14 @@ Int wood_gatherers
 Int stone_gatherers
 Int gold_gatherers
 
-player = GetPlayerNumber()
+player = GetConstant("my-player-number")
 remaining_gatherers = GetPlayerFact(player, FACT_CIVILIAN_POPULATION, 0)
 remaining_gatherers = Sub(remaining_gatherers, MinFoodGatherers)
 remaining_gatherers = Sub(remaining_gatherers, MinWoodGatherers)
 remaining_gatherers = Sub(remaining_gatherers, MinStoneGatherers)
 remaining_gatherers = Sub(remaining_gatherers, MinGoldGatherers)
 remaining_gatherers = Max(remaining_gatherers, 0)
+//ChatDataToSelf("remaining_gatherers %d", remaining_gatherers)
 
 food_gatherers = ExtraFoodGathererPercentage
 food_gatherers = Mul(food_gatherers, remaining_gatherers)
