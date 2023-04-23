@@ -15,6 +15,7 @@ namespace AgeScript.Language.Expressions
         public override Type Type => ConstType;
         public int Int { get; private init; } = 0;
         public bool Bool { get; private init; } = false;
+        public int Precise { get; private init; } = 0;
 
         private Type ConstType { get; init; }
 
@@ -29,6 +30,11 @@ namespace AgeScript.Language.Expressions
             {
                 ConstType = Primitives.Bool;
                 Bool = b;
+            }
+            else if (float.TryParse(value, out var f))
+            {
+                ConstType = Primitives.Precise;
+                Precise = (int)Math.Round(f * 100);
             }
             else
             {

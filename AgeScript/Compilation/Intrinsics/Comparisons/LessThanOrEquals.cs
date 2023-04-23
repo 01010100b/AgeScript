@@ -10,11 +10,21 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 {
     internal class LessThanOrEquals : ComparisonIntrinsic
     {
-        public override bool HasStringLiteral => false;
+        protected override Language.Type ParameterType => Primitives.Int;
 
         internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
         {
             CompileComparison(script, function, rules, "<=", cl, result_address, ref_result_address);
+        }
+    }
+
+    internal class LessThanOrEqualsPrecise : LessThanOrEquals
+    {
+        protected override Language.Type ParameterType => Primitives.Precise;
+
+        public LessThanOrEqualsPrecise() : base()
+        {
+            Name = "LessThanOrEquals";
         }
     }
 }

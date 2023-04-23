@@ -42,10 +42,10 @@ ResetScouts()
 
 Function Void Main_Test():
 
-Int[2] point
-point[0] = 3
-point[1] = 4
+Precise[2] point
+point[0] = 3.00
+point[1] = 4.00
 
-Int a
-a = Add(point[0], point[1])
+Precise a
+a = Mul(point[0], 4.00)
 ChatDataToSelf("a = %d", a)

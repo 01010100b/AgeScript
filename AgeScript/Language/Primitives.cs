@@ -8,9 +8,12 @@ namespace AgeScript.Language
 {
     public static class Primitives
     {
-        public static Type Int => Types.Single(x => x.Name == "Int");
-        public static Type Bool => Types.Single(x => x.Name == "Bool");
         public static Type Void => Types.Single(x => x.Name == "Void");
+        public static Type Bool => Types.Single(x => x.Name == "Bool");
+        public static Type Int => Types.Single(x => x.Name == "Int");
+        public static Type Precise => Types.Single(x => x.Name == "Precise");
+        public static Array Int2 => (Array)Types.Single(x => x.Name == "Int[2]");
+        public static Array Precise2 => (Array)Types.Single(x => x.Name == "Precise[2]");
 
         public static IEnumerable<string> Keywords { get; } = new List<string>()
         {

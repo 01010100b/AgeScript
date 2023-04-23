@@ -10,12 +10,32 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 {
     internal class Equals : ComparisonIntrinsic
     {
-        public override bool HasStringLiteral => false;
+        protected override Language.Type ParameterType => Primitives.Int;
 
         internal override void CompileCall(Script script, Function function, RuleList rules,
             CallExpression cl, int? result_address, bool ref_result_address)
         {
             CompileComparison(script, function, rules, "==", cl, result_address, ref_result_address);
+        }
+    }
+
+    internal class EqualsPrecise : Equals
+    {
+        protected override Language.Type ParameterType => Primitives.Precise;
+
+        public EqualsPrecise() : base()
+        {
+            Name = "Equals";
+        }
+    }
+
+    internal class EqualsBool : Equals
+    {
+        protected override Language.Type ParameterType => Primitives.Bool;
+
+        public EqualsBool() : base()
+        {
+            Name = "Equals";
         }
     }
 }

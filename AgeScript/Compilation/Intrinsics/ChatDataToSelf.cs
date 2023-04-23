@@ -31,4 +31,13 @@ namespace AgeScript.Compilation.Intrinsics
             rules.AddAction($"up-chat-data-to-self {cl.Literal} g: {script.Intr0}");
         }
     }
+
+    internal class ChatDataToSelfPrecise : ChatDataToSelf
+    {
+        public ChatDataToSelfPrecise() : base()
+        {
+            Parameters.Clear();
+            Parameters.Add(new() { Name = "value", Type = Primitives.Precise });
+        }
+    }
 }

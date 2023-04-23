@@ -30,20 +30,20 @@ namespace AgeScript.Parsing
                 var pieces = code.Split('[');
                 var etn = pieces[0].Trim();
 
-                if (script.Types.TryGetValue(etn, out var et))
+                if (script.Types.TryGetValue(etn, out var etype))
                 {
                     var cnt = pieces[1].Replace("]", "");
 
-                    if (int.TryParse(cnt, out var lt))
+                    if (int.TryParse(cnt, out var length))
                     {
-                        if (lt > 0)
+                        if (length > 0)
                         {
                             var at = new Array()
                             {
                                 Name = code,
-                                Size = et.Size * lt,
-                                ElementType = et,
-                                Length = lt
+                                Size = etype.Size * length,
+                                ElementType = etype,
+                                Length = length
                             };
 
                             at.Validate();

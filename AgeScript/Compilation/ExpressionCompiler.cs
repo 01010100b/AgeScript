@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AgeScript.Language.Expressions;
 using AgeScript.Language;
 using AgeScript.Compilation.Intrinsics;
+using System.Net;
 
 namespace AgeScript.Compilation
 {
@@ -17,6 +18,10 @@ namespace AgeScript.Compilation
             if (expression is AccessorExpression accessor)
             {
                 CompileAccessor(script, function, rules, accessor, result_address, ref_result_address);
+            }
+            else if (expression is ConstExpression cst)
+            {
+                CompileConst(script, function, rules, cst, result_address, ref_result_address);
             }
             else
             {
@@ -53,40 +58,40 @@ namespace AgeScript.Compilation
                 false, ref_result_address, from_offset, 0, ref_from_offset);
         }
 
-        private static void CompileExpressionOld(Script script, Function function, RuleList rules,
-            Expression expression, int? address)
+        private static void CompileConst(Script script, Function function, RuleList rules,
+            ConstExpression expression, int? result_address, bool ref_result_address)
         {
-            if (expression is ConstExpression cst)
-            {
-                CompileConstExpressionOld(rules, cst, address);
-            }
-            else if (expression is CallExpression cl)
-            {
-                CompileCallExpressionOld(script, function, rules, cl, address);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        private static void CompileConstExpressionOld(RuleList rules, ConstExpression expression, int? address)
-        {
-            if (address is null)
+            if (result_address is null)
             {
                 return;
             }
 
             if (expression.Type == Primitives.Int)
             {
-                var value = expression.Int;
-                rules.AddAction($"set-goal {address} {value}");
+                rules.AddAction($"set-goal {script.SpecialGoal} {expression.Int}");
             }
             else if (expression.Type == Primitives.Bool)
             {
-                var value = expression.Bool;
-                var iv = value ? 1 : 0;
-                rules.AddAction($"set-goal {address} {iv}");
+                rules.AddAction($"set-goal {script.SpecialGoal} {(expression.Bool ? 1 : 0)}");
+            }
+            else if (expression.Type == Primitives.Precise)
+            {
+                rules.AddAction($"set-goal {script.SpecialGoal} {expression.Precise}");
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            Utils.MemCopy(script, rules, script.SpecialGoal, result_address.Value, 1, false, ref_result_address);
+        }
+
+        private static void CompileExpressionOld(Script script, Function function, RuleList rules,
+            Expression expression, int? address)
+        {
+            if (expression is CallExpression cl)
+            {
+                CompileCallExpressionOld(script, function, rules, cl, address);
             }
             else
             {
@@ -120,7 +125,7 @@ namespace AgeScript.Compilation
 
                 if (arg is ConstExpression ce)
                 {
-                    CompileConstExpressionOld(rules, ce, par.Address);
+                    CompileConst(script, function, rules, ce, par.Address, false);
                 }
                 else if (arg is AccessorExpression acc)
                 {

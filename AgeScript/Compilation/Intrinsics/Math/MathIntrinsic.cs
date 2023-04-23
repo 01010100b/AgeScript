@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Type = AgeScript.Language.Type;
 
 namespace AgeScript.Compilation.Intrinsics.Math
 {
     internal abstract class MathIntrinsic : Intrinsic
     {
+        public override bool HasStringLiteral => false;
+        protected abstract Type ParameterType { get; }
+
         public MathIntrinsic() : base()
         {
             Name = GetType().Name;
-            ReturnType = Primitives.Int;
-            Parameters.Add(new() { Name = "a", Type = Primitives.Int });
-            Parameters.Add(new() { Name = "b", Type = Primitives.Int });
+            ReturnType = ParameterType;
+            Parameters.Add(new() { Name = "a", Type = ParameterType });
+            Parameters.Add(new() { Name = "b", Type = ParameterType });
         }
 
         protected void CompileMath(Script script, Function function, RuleList rules, string op,
