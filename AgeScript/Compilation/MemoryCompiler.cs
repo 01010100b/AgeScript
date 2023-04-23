@@ -88,7 +88,7 @@ namespace AgeScript.Compilation
             rules.AddAction($"set-goal {script.SpecialGoal} 1");
             rules.AddAction("disable-self");
 
-            var jmpid = Guid.NewGuid().ToString().Replace("-", "");
+            var jmpid = Script.GetUniqueId();
             rules.StartNewRule($"goal {script.SpecialGoal} 0");
             rules.AddAction($"up-jump-direct c: {jmpid}");
             rules.StartNewRule();

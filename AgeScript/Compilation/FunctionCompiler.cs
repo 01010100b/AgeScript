@@ -24,6 +24,7 @@ namespace AgeScript.Compilation
 
             LastReturnStatement = -2;
             Console.WriteLine($"Compiling function {function.Name}");
+
             rules.StartNewRule();
             function.Address = rules.CurrentRuleIndex;
             CompileBlock(script, function, rules, 0);
@@ -68,7 +69,7 @@ namespace AgeScript.Compilation
                 {
                     if (ret.Expression is not null)
                     {
-                        ExpressionCompiler.CompileExpressionOld(script, function, rules, ret.Expression, script.CallResultBase);
+                        ExpressionCompiler.Compile(script, function, rules, ret.Expression, script.CallResultBase);
                     }
 
                     rules.AddAction($"up-jump-direct g: {script.RegisterBase}");
@@ -77,9 +78,9 @@ namespace AgeScript.Compilation
                 }
                 else if (statement is IfStatement ifs)
                 {
-                    ExpressionCompiler.CompileExpressionOld(script, function, rules, ifs.Expression, script.SpecialGoal);
+                    ExpressionCompiler.Compile(script, function, rules, ifs.Expression, script.SpecialGoal);
 
-                    var jmpid = Guid.NewGuid().ToString().Replace("-", "");
+                    var jmpid = Script.GetUniqueId();
                     rules.StartNewRule($"goal {script.SpecialGoal} 0");
                     rules.AddAction($"up-jump-direct c: {jmpid}");
                     rules.StartNewRule();
@@ -90,7 +91,7 @@ namespace AgeScript.Compilation
 
                     if (statement is ElifStatement)
                     {
-                        var jmpidend = Guid.NewGuid().ToString().Replace("-", "");
+                        var jmpidend = Script.GetUniqueId();
 
                         while (statement is ElifStatement elif)
                         {
@@ -99,9 +100,9 @@ namespace AgeScript.Compilation
                             var ji = rules.CurrentRuleIndex;
                             rules.ReplaceStrings(jmpid, ji.ToString());
 
-                            ExpressionCompiler.CompileExpressionOld(script, function, rules, elif.Expression, script.SpecialGoal);
+                            ExpressionCompiler.Compile(script, function, rules, elif.Expression, script.SpecialGoal);
 
-                            jmpid = Guid.NewGuid().ToString().Replace("-", "");
+                            jmpid = Script.GetUniqueId();
                             rules.StartNewRule($"goal {script.SpecialGoal} 0");
                             rules.AddAction($"up-jump-direct c: {jmpid}");
                             rules.StartNewRule();

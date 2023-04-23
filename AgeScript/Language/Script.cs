@@ -13,6 +13,8 @@ namespace AgeScript.Language
 {
     public class Script : Validated
     {
+        public static string GetUniqueId() => Guid.NewGuid().ToString().Replace("-", string.Empty);
+
         public IReadOnlyDictionary<string, Type> Types { get; } = new Dictionary<string, Type>();
         public IReadOnlyDictionary<string, Variable> GlobalVariables { get; } = new Dictionary<string, Variable>();
         public IEnumerable<Function> Functions { get; } = new List<Function>();

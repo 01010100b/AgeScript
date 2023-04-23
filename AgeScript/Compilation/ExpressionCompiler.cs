@@ -93,7 +93,7 @@ namespace AgeScript.Compilation
 
             // set return addr and parameters
 
-            var return_addr_id = Guid.NewGuid().ToString().Replace("-", "");
+            var return_addr_id = Script.GetUniqueId();
             rules.AddAction($"set-goal {script.RegisterBase} {return_addr_id}");
 
             for (int i = 0; i < expression.Arguments.Count; i++)

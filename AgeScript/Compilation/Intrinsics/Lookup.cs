@@ -32,7 +32,7 @@ namespace AgeScript.Compilation.Intrinsics
             }
 
             var lookup = script.Tables.Single(x => x.Name == cl.Literal.Replace("\"", ""));
-            var ret_id = Guid.NewGuid().ToString().Replace("-", "");
+            var ret_id = Script.GetUniqueId();
 
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
             rules.AddAction($"up-modify-goal {script.Intr1} g:= {script.Intr0}");

@@ -12,7 +12,7 @@ namespace AgeScript.Language
         public List<int> Values { get; } = new();
 
         internal int Address { get; set; }
-        internal string AddressableName { get; } = Guid.NewGuid().ToString().Replace("-", "");
+        internal string AddressableName { get; } = Script.GetUniqueId();
 
         public override bool Equals(object? obj) => obj is Table l && Name.Equals(l.Name);
         public override int GetHashCode() => Name.GetHashCode();

@@ -17,7 +17,7 @@ namespace AgeScript.Language
 
         internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // add 1 because first register is return addr
         internal int Address { get; set; }
-        internal string AddressableName { get; } = Guid.NewGuid().ToString().Replace("-", "");
+        internal string AddressableName { get; } = Script.GetUniqueId();
 
         public bool TryGetScopedVariable(Script script, string name, out Variable? variable)
         {
