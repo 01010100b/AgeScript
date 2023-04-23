@@ -15,9 +15,7 @@ namespace AgeScript.Language
 
         public override void Validate()
         {
-            var regex = NameRegex;
-
-            if (!Regex.IsMatch(Name, regex))
+            if (!Regex.IsMatch(Name, NameRegex))
             {
                 throw new Exception($"Name {Name} does not follow rules.");
             }

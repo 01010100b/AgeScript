@@ -88,7 +88,6 @@ namespace AgeScript.Parsing
                     function.Statements.Add(statement);
                 }
             }
-
         }
     }
 }

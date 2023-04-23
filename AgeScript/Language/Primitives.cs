@@ -18,11 +18,43 @@ namespace AgeScript.Language
             "if", "else", "elif", "endif", "for", "endfor", "while", "endwhile", "switch", "case", "endswitch"
         };
 
-        public static IEnumerable<Type> Types { get; } = new List<Type>()
+        public static IEnumerable<Type> Types { get; } = GetTypes();
+
+        private static List<Type> GetTypes()
         {
-            new() { Name = "Int", Size = 1 },
-            new() { Name = "Bool", Size = 1 },
-            new() { Name = "Void", Size = 0 }
-        };
+            var types = new List<Type>()
+            {
+                new() { Name = "Void", Size = 0 },
+                new() { Name = "Bool", Size = 1 },
+                new() { Name = "Int", Size = 1 },
+                new() { Name = "Precise", Size = 1}
+            };
+
+            types.Add(new Array()
+            {
+                Name = "Int[2]",
+                ElementType = types.Single(x => x.Name == "Int"),
+                Length = 2,
+                Size = 2
+            });
+
+            types.Add(new Array()
+            {
+                Name = "Precise[2]",
+                ElementType = types.Single(x => x.Name == "Precise"),
+                Length = 2,
+                Size = 2
+            });
+
+            types.Add(new Array()
+            {
+                Name = "Int[4]",
+                ElementType = types.Single(x => x.Name == "Int"),
+                Length = 4,
+                Size = 4
+            });
+
+            return types;
+        }
     }
 }

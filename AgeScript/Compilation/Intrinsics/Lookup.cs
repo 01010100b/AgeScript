@@ -16,7 +16,7 @@ namespace AgeScript.Compilation.Intrinsics
         {
             Name = "Lookup";
             ReturnType = Primitives.Int;
-            Parameters.Add(new() { Name = "i", Type = Primitives.Int });
+            Parameters.Add(new() { Name = "index", Type = Primitives.Int });
         }
 
         internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
@@ -31,13 +31,13 @@ namespace AgeScript.Compilation.Intrinsics
                 return;
             }
 
-            var lookup = script.Tables.Single(x => x.Name == cl.Literal.Replace("\"", ""));
+            var table = script.Tables.Single(x => x.Name == cl.Literal.Replace("\"", ""));
             var ret_id = Script.GetUniqueId();
 
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
             rules.AddAction($"up-modify-goal {script.Intr1} g:= {script.Intr0}");
             rules.AddAction($"up-modify-goal {script.Intr1} c:z/ {TableCompiler.Modulus}");
-            rules.AddAction($"up-modify-goal {script.Intr1} c:+ {lookup.AddressableName}");
+            rules.AddAction($"up-modify-goal {script.Intr1} c:+ {table.AddressableName}");
             rules.AddAction($"set-goal {script.SpecialGoal} {ret_id}");
             rules.AddAction($"up-jump-direct g: {script.Intr1}");
 

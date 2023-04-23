@@ -14,17 +14,17 @@ namespace AgeScript.Compilation
         public void Compile(Script script, Function function, RuleList rules,
             Expression expression, int? result_address = null, bool ref_result_address = false)
         {
-            if (ref_result_address)
-            {
-                throw new NotImplementedException();
-            }
-
             if (expression is AccessorExpression accessor)
             {
                 CompileAccessor(script, function, rules, accessor, result_address, ref_result_address);
             }
             else
             {
+                if (ref_result_address)
+                {
+                    throw new NotImplementedException();
+                }
+
                 CompileExpressionOld(script, function, rules, expression, result_address);
             }
         }

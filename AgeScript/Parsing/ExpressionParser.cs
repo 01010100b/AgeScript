@@ -16,8 +16,6 @@ namespace AgeScript.Parsing
         {
             if (expression.Contains('('))
             {
-                // call expression
-
                 var bo = expression.IndexOf('(');
                 var bc = expression.LastIndexOf(')');
                 var name = expression[..bo].Trim();
@@ -82,8 +80,6 @@ namespace AgeScript.Parsing
             }
             else
             {
-                // const expression
-
                 var expr = new ConstExpression(expression);
                 expr.Validate();
 
@@ -95,7 +91,7 @@ namespace AgeScript.Parsing
 
         public bool TryParseAccessor(Script script, Function function, string code, out Accessor? accessor)
         {
-            if (!code.Contains('[')  && !code.Contains('.'))
+            if (!code.Contains('['))
             {
                 if (function.TryGetScopedVariable(script, code, out var variable))
                 {
@@ -117,11 +113,7 @@ namespace AgeScript.Parsing
                     return false;
                 }
             }
-            else if (code.Contains('[') && code.Contains('.'))
-            {
-                throw new Exception("Accessor can not both use struct and array indexing.");
-            }
-            else if (code.Contains('['))
+            else
             {
                 var pieces = code.Split('[');
                 var vname = pieces[0].Trim();
@@ -151,10 +143,6 @@ namespace AgeScript.Parsing
                 {
                     throw new Exception("Can not find variable for accessor.");
                 }
-            }
-            else
-            {
-                throw new NotSupportedException();
             }
         }
     }

@@ -13,6 +13,7 @@ namespace AgeScript.Compilation
 
         public void Compile(Script script, RuleList rules, Table table)
         {
+            Console.WriteLine($"Compiling table {table.Name}");
             rules.StartNewRule();
             table.Address = rules.CurrentRuleIndex;
             var elements = 0;

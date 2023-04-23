@@ -12,7 +12,7 @@ namespace AgeScript.Parsing
     {
         private static readonly Regex REGEX_DEFINE = new("^#define .* .*$");
         private static readonly Regex REGEX_GLOBALS = new("^Globals:$");
-        private static readonly Regex REGEX_TYPE = new("^Struct .*:$");
+        private static readonly Regex REGEX_STRUCT = new("^Struct .*:$");
         private static readonly Regex REGEX_FUNCTION = new("^Function .*:$");
         private static readonly Regex REGEX_TABLE = new("^Table .*:$");
 
@@ -26,7 +26,7 @@ namespace AgeScript.Parsing
 
             var script = new Script();
             var globals_codes = new List<List<string>>();
-            var type_codes = new List<List<string>>();
+            var struct_codes = new List<List<string>>();
             var function_codes = new List<List<string>>();
             var table_codes = new List<List<string>>();
             var current = new List<string>();
@@ -38,10 +38,10 @@ namespace AgeScript.Parsing
                     current = new();
                     globals_codes.Add(current);
                 }
-                else if (REGEX_TYPE.IsMatch(line))
+                else if (REGEX_STRUCT.IsMatch(line))
                 {
                     current = new();
-                    type_codes.Add(current);
+                    struct_codes.Add(current);
 
                     throw new NotImplementedException();
                 }
@@ -119,7 +119,7 @@ namespace AgeScript.Parsing
                 var bo = line.IndexOf("\"");
                 var bc = line.LastIndexOf("\"");
 
-                if (bo >= 0 && bc >= 0)
+                if (bo >= 0)
                 {
                     var id = Script.GetUniqueId();
                     var lit = line[bo..(bc + 1)];

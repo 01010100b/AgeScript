@@ -61,8 +61,10 @@ namespace AgeScript.Compilation
             }
 
             var table_compiler = new TableCompiler();
+            var tables = script.Tables.ToList();
+            tables.Sort((a, b) => a.Name.CompareTo(b.Name));
 
-            foreach (var table in script.Tables)
+            foreach (var table in tables)
             {
                 table_compiler.Compile(script, rules, table);
             }
