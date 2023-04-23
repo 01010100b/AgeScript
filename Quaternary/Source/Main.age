@@ -5,14 +5,16 @@ Int Tick
 Function Void Main():
 
 if Equals(Tick, 0)
-Initialize()
+Main_Initialize()
 endif
 
 Economy()
 
+Main_Test()
+
 Tick = Add(Tick, 1)
 
-Function Void Initialize():
+Function Void Main_Initialize():
 
 SetSn(SN_CAP_CIVILIAN_BUILDERS, 200)
 SetSn(SN_CONSECUTIVE_IDLE_UNIT_LIMIT, 0)
@@ -36,3 +38,13 @@ SetSn(SN_PERCENT_CIVILIAN_EXPLORERS, 0)
 SetSn(SN_NUMBER_EXPLORE_GROUPS, 1)
 SetSn(SN_TOTAL_NUMBER_EXPLORERS, 1)
 ResetScouts()
+
+Function Void Main_Test():
+
+Int[2] point
+point[0] = 3
+point[1] = 4
+
+Int a
+a = Add(point[0], point[1])
+ChatDataToSelf("a = %d", a)

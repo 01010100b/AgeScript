@@ -16,6 +16,14 @@ namespace AgeScript.Language.Statements
         {
             Accessor?.Validate();
             Expression.Validate();
+
+            if (Accessor is not null)
+            {
+                if (Accessor.Type != Expression.Type)
+                {
+                    throw new Exception("Expression type must match accessor type.");
+                }
+            }
         }
     }
 }

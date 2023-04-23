@@ -68,7 +68,7 @@ namespace AgeScript.Parsing
             {
                 var pieces = line.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
-                if (pieces.Count == 2 && script.Types.TryGetValue(pieces[0].Trim(), out var type))
+                if (pieces.Count == 2 && TypeParser.TryParseType(script, pieces[0].Trim(), out var type))
                 {
                     var name = pieces[1].Trim();
 

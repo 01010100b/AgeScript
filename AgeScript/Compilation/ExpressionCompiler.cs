@@ -19,19 +19,46 @@ namespace AgeScript.Compilation
                 throw new NotImplementedException();
             }
 
-            CompileExpressionOld(script, function, rules, expression, result_address);
+            if (expression is AccessorExpression accessor)
+            {
+                CompileAccessor(script, function, rules, accessor, result_address, ref_result_address);
+            }
+            else
+            {
+                CompileExpressionOld(script, function, rules, expression, result_address);
+            }
         }
 
-        public static void CompileExpressionOld(Script script, Function function, RuleList rules,
+        private static void CompileAccessor(Script script, Function function, RuleList rules,
+            AccessorExpression expression, int? result_address, bool ref_result_address)
+        {
+            if (result_address is null)
+            {
+                return;
+            }
+
+            var from_offset = 0;
+            var ref_from_offset = false;
+
+            if (expression.Accessor.Offset is ConstExpression c)
+            {
+                from_offset = c.Int;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            Utils.MemCopy(script, rules, expression.Accessor.Variable.Address, result_address.Value, expression.Accessor.Type.Size,
+                false, ref_result_address, from_offset, 0, ref_from_offset);
+        }
+
+        private static void CompileExpressionOld(Script script, Function function, RuleList rules,
             Expression expression, int? address)
         {
             if (expression is ConstExpression cst)
             {
                 CompileConstExpressionOld(rules, cst, address);
-            }
-            else if (expression is VariableExpression ve)
-            {
-                CompileVariableExpressionOld(script, rules, ve, address);
             }
             else if (expression is CallExpression cl)
             {
@@ -67,16 +94,6 @@ namespace AgeScript.Compilation
             }
         }
 
-        private static void CompileVariableExpressionOld(Script script, RuleList rules, VariableExpression expression, int? address)
-        {
-            if (address is null)
-            {
-                return;
-            }
-
-            Utils.MemCopy(script, rules, expression.Variable.Address, address.Value, expression.Variable.Type.Size);
-        }
-
         private static void CompileCallExpressionOld(Script script, Function function, RuleList rules,
             CallExpression expression, int? address)
         {
@@ -105,18 +122,28 @@ namespace AgeScript.Compilation
                 {
                     CompileConstExpressionOld(rules, ce, par.Address);
                 }
-                else if (arg is VariableExpression ve)
+                else if (arg is AccessorExpression acc)
                 {
-                    if (script.GlobalVariables.ContainsKey(ve.Variable.Name))
+                    if (script.GlobalVariables.ContainsKey(acc.Accessor.Variable.Name))
                     {
-                        CompileVariableExpressionOld(script, rules, ve, par.Address);
+                        CompileAccessor(script, function, rules, acc, par.Address, false);
                     }
                     else
                     {
-                        // local variables are on stack, interpret addr as offset from stack-ptr
+                        // local variables are now on stack, interpret addr as offset from stack-ptr
 
-                        var offset = ve.Variable.Address - script.RegisterBase;
-                        Utils.MemCopy(script, rules, script.StackPtr, par.Address, ve.Variable.Type.Size,
+                        var offset = acc.Accessor.Variable.Address - script.RegisterBase;
+
+                        if (acc.Accessor.Offset is ConstExpression c)
+                        {
+                            offset += c.Int;
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+
+                        Utils.MemCopy(script, rules, script.StackPtr, par.Address, acc.Accessor.Variable.Type.Size,
                             true, false, offset, 0);
                     }
                 }

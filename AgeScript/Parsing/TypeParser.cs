@@ -27,8 +27,6 @@ namespace AgeScript.Parsing
             }
             else if (Regex.IsMatch(code, ARRAY_REGEX))
             {
-                throw new NotImplementedException();
-
                 var pieces = code.Split('[');
                 var etn = pieces[0].Trim();
 

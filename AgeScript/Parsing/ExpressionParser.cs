@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Array = AgeScript.Language.Array;
 
 namespace AgeScript.Parsing
 {
@@ -72,11 +73,9 @@ namespace AgeScript.Parsing
                     throw new Exception("Can not find function.");
                 }
             }
-            else if (function.TryGetScopedVariable(script, expression, out var variable))
+            else if (TryParseAccessor(script, function, expression, out var accessor))
             {
-                // variable expression
-
-                var expr = new VariableExpression() { Variable = variable!, Offset = 0, ElementType = variable!.Type };
+                var expr = new AccessorExpression() { Accessor = accessor! };
                 expr.Validate();
 
                 return expr;
@@ -91,12 +90,12 @@ namespace AgeScript.Parsing
                 return expr;
             }
 
-            throw new NotImplementedException();
+            throw new Exception("Failed to parse expression.");
         }
 
         public bool TryParseAccessor(Script script, Function function, string code, out Accessor? accessor)
         {
-            if (!code.Contains('['))
+            if (!code.Contains('[')  && !code.Contains('.'))
             {
                 if (function.TryGetScopedVariable(script, code, out var variable))
                 {
@@ -113,12 +112,49 @@ namespace AgeScript.Parsing
                 }
                 else
                 {
+                    accessor = null;
+
+                    return false;
+                }
+            }
+            else if (code.Contains('[') && code.Contains('.'))
+            {
+                throw new Exception("Accessor can not both use struct and array indexing.");
+            }
+            else if (code.Contains('['))
+            {
+                var pieces = code.Split('[');
+                var vname = pieces[0].Trim();
+                var offset = pieces[1].Replace("]", string.Empty).Trim();
+
+                if (function.TryGetScopedVariable(script, vname, out var variable))
+                {
+                    if (variable!.Type is Array atype)
+                    {
+                        accessor = new()
+                        {
+                            Variable = variable!,
+                            Offset = new ConstExpression(offset),
+                            Type = atype.ElementType
+                        };
+
+                        accessor.Validate();
+
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception("Accessor must index an array type.");
+                    }
+                }
+                else
+                {
                     throw new Exception("Can not find variable for accessor.");
                 }
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
     }

@@ -19,6 +19,11 @@ namespace AgeScript.Language
             Offset.Validate();
             Type.Validate();
 
+            if (Offset.Type != Primitives.Int)
+            {
+                throw new Exception("Offset must have type Int.");
+            }
+
             if (Offset is not ConstExpression)
             {
                 throw new NotImplementedException();
