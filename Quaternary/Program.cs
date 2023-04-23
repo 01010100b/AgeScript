@@ -12,31 +12,36 @@ namespace Quaternary
         {
             var settings = new Settings()
             {
-                Name = "Quaternary",
-                SourceFolder = @"F:\Repos\AgeScript\Quaternary\Source",
-                DestinationFolder = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai",
                 MaxElementsPerRule = 16,
                 MaxGoal = 512,
                 OptimizeMemCopy = true
             };
 
-            Run(settings);
+            var name = "Quaternary";
+            var source = @"F:\Repos\AgeScript\Quaternary\Source";
+            var destination = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai";
+
+            Run(name, source, destination, settings);
         }
 
-        private static void Run(Settings settings)
+        private static void Run(string name, string source, string destination, Settings settings)
         {
-            if (!Directory.Exists(settings.SourceFolder))
+            if (!Directory.Exists(source))
             {
                 Console.WriteLine($"Can not find source folder.");
+
+                return;
             }
-            else if (!Directory.Exists(settings.DestinationFolder))
+            else if (!Directory.Exists(destination))
             {
                 Console.WriteLine($"Can not find destination folder.");
+
+                return;
             }
 
-            var dirs = new List<string>() { settings.SourceFolder };
+            var dirs = new List<string>() { source };
 
-            foreach (var dir in Directory.EnumerateDirectories(settings.SourceFolder, "*", SearchOption.AllDirectories))
+            foreach (var dir in Directory.EnumerateDirectories(source, "*", SearchOption.AllDirectories))
             {
                 dirs.Add(dir);
             }
@@ -58,19 +63,19 @@ namespace Quaternary
             var rules = compiler.Compile(script, settings);
             var code = rules.ToString();
 
-            var ai = Path.Combine(settings.DestinationFolder, $"{settings.Name}.ai");
+            var ai = Path.Combine(destination, $"{name}.ai");
             if (!File.Exists(ai))
             {
                 File.Create(ai);
             }
 
-            var per = Path.Combine(settings.DestinationFolder, $"{settings.Name}.per");
+            var per = Path.Combine(destination, $"{name}.per");
             File.Delete(per);
             File.WriteAllText(per, code);
 
             File.WriteAllText(Path.Combine(Folder, "script debug.json"), script.ToString());
 
-            Console.WriteLine($"Compiled {settings.Name} succesfully.");
+            Console.WriteLine($"Compiled {name} succesfully.");
             Console.WriteLine($"Used {rules.RuleCount:N0} rules and {rules.ElementsCount:N0} elements for {rules.ElementsCount / (double)rules.RuleCount:N2} elements per rule.");
         }
     }

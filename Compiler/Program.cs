@@ -36,10 +36,14 @@ namespace Compiler
             if (!Directory.Exists(settings.SourceFolder))
             {
                 Console.WriteLine($"Can not find source folder.");
+
+                return;
             }
             else if (!Directory.Exists(settings.DestinationFolder))
             {
                 Console.WriteLine($"Can not find destination folder.");
+
+                return;
             }
 
             var dirs = new List<string>() { settings.SourceFolder };
@@ -63,7 +67,7 @@ namespace Compiler
             var parser = new ScriptParser();
             var script = parser.Parse(lines);
             var compiler = new ScriptCompiler();
-            var rules = compiler.Compile(script, settings);
+            var rules = compiler.Compile(script, settings.CompilerSettings);
             var code = rules.ToString();
 
             var ai = Path.Combine(settings.DestinationFolder, $"{settings.Name}.ai");

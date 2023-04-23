@@ -45,9 +45,7 @@ namespace AgeScript.Compilation
                 }
             }
 
-            // set loop variables
-
-            rules.AddAction($"set-goal {script.Sp0} {length}");
+            // set pointers
 
             if (ref_from)
             {
@@ -101,12 +99,18 @@ namespace AgeScript.Compilation
                 {
                     rules.AddAction($"up-get-indirect-goal g: {script.Sp1} {script.Sp3}");
                     rules.AddAction($"up-set-indirect-goal g: {script.Sp2} g: {script.Sp3}");
-                    rules.AddAction($"up-modify-goal {script.Sp1} c:+ 1");
-                    rules.AddAction($"up-modify-goal {script.Sp2} c:+ 1");
+
+                    if (i < length - 1)
+                    {
+                        rules.AddAction($"up-modify-goal {script.Sp1} c:+ 1");
+                        rules.AddAction($"up-modify-goal {script.Sp2} c:+ 1");
+                    }
                 }
 
                 return;
             }
+
+            rules.AddAction($"set-goal {script.Sp0} {length}");
 
             rules.StartNewRule($"up-compare-goal {script.Sp0} c:> 0");
             rules.AddAction($"up-get-indirect-goal g: {script.Sp1} {script.Sp3}");
