@@ -129,7 +129,7 @@ namespace AgeScript.Compilation
                 }
                 else if (arg is AccessorExpression acc)
                 {
-                    if (script.GlobalVariables.ContainsKey(acc.Accessor.Variable.Name))
+                    if (script.GlobalVariables.Values.Contains(acc.Accessor.Variable))
                     {
                         CompileAccessor(script, function, rules, acc, par.Address, false);
                     }
@@ -148,7 +148,7 @@ namespace AgeScript.Compilation
                             throw new NotImplementedException();
                         }
 
-                        Utils.MemCopy(script, rules, script.StackPtr, par.Address, acc.Accessor.Variable.Type.Size,
+                        Utils.MemCopy(script, rules, script.StackPtr, par.Address, acc.Accessor.Type.Size,
                             true, false, offset, 0);
                     }
                 }

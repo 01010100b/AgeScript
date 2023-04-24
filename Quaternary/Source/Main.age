@@ -42,17 +42,10 @@ ResetScouts()
 
 Function Void Main_Test():
 
-Precise[2] point
-point[0] = 3.00
-point[1] = 4.00
-
-Precise a
-a = Mul(point[0], 4.00)
-ChatDataToSelf("a = %d", a)
-
-Int i
-i = 0
-while LessThan(i, 3)
-ChatDataToSelf("i = %d", i)
-i = Add(i, 1)
-endwhile
+Bool a
+Bool b
+a = true
+b = false
+if And(a, b)
+ChatDataToSelf("and pass", 1)
+endif

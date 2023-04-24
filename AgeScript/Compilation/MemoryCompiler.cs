@@ -81,6 +81,11 @@ namespace AgeScript.Compilation
             // and this is the stack limit
 
             script.StackLimit = goal;
+
+            if (script.StackLimit < 41)
+            {
+                throw new Exception("Not enough memory.");
+            }
         }
 
         private void InitializeMemory(Script script, RuleList rules)

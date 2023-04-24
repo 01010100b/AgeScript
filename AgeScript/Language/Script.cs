@@ -45,19 +45,9 @@ namespace AgeScript.Language
                 AddType(type);
             }
 
-            var assembly = typeof(Intrinsic).Assembly;
-
-            foreach (var type in assembly.GetTypes())
+            foreach (var intrinsic in Intrinsic.Intrinsics)
             {
-                if (type.IsAssignableTo(typeof(Intrinsic)) && !type.IsAbstract)
-                {
-                    var instance = Activator.CreateInstance(type);
-
-                    if (instance is not null)
-                    {
-                        AddFunction((Intrinsic)instance);
-                    }
-                }
+                AddFunction(intrinsic);
             }
         }
 
