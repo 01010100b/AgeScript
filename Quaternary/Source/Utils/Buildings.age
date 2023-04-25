@@ -68,7 +68,7 @@ endif
 if Equals(resource, RESOURCE_WOOD)
 	
 	if LessThanOrEquals(search_state[SEARCH_REMOTE_TOTAL], 30)
-		return
+		return false
 	endif
 	
 	CleanSearch(SEARCH_REMOTE, OBJECT_DATA_DISTANCE, SEARCH_ORDER_ASC)

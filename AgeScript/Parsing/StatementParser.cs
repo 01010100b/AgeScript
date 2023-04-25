@@ -22,10 +22,20 @@ namespace AgeScript.Parsing
 
                 if (string.IsNullOrWhiteSpace(expr))
                 {
+                    if (function.ReturnType != Primitives.Void)
+                    {
+                        throw new Exception("return without value.");
+                    }
+
                     return new ReturnStatement() { Expression = null };
                 }
                 else
                 {
+                    if (function.ReturnType == Primitives.Void)
+                    {
+                        throw new Exception("Can not return anything from a function with return type Void.");
+                    }
+
                     var expression = ExpressionParser.Parse(script, function, expr, literals);
 
                     return new ReturnStatement() { Expression = expression };

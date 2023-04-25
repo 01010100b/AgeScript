@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,25 @@ namespace AgeScript.Language
             foreach (var s in Statements)
             {
                 s.Validate();
+
+                if (s is ReturnStatement rs)
+                {
+                    if (rs.Expression is null && ReturnType != Primitives.Void)
+                    {
+                        throw new Exception("return statement must return value.");
+                    }
+                    else if (rs.Expression is not null && ReturnType == Primitives.Void)
+                    {
+                        throw new Exception("can not return values from function with return type Void.");
+                    }
+                    else if (rs.Expression is not null && ReturnType != Primitives.Void)
+                    {
+                        if (rs.Expression.Type != ReturnType)
+                        {
+                            throw new Exception("The type being returned does not match the declared return type.");
+                        }
+                    }
+                }
             }
 
             if (Statements.OfType<IfStatement>().Count() != Statements.OfType<EndIfStatement>().Count())
