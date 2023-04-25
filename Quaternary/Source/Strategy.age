@@ -10,7 +10,15 @@ Function Void DoStrategy():
 Int strategy
 strategy = Strategy_Choose()
 Strategy_Set(strategy)
-ChatDataToSelf("primary unit: %d", Units[0])
+
+MinFoodGatherers = 10
+MinWoodGatherers = 0
+MinGoldGatherers = 0
+MinStoneGatherers = 0
+ExtraFoodGathererPercentage = 40
+ExtraWoodGathererPercentage = 30
+ExtraGoldGathererPercentage = 20
+ExtraStoneGathererPercentage = 10
 
 Function Int Strategy_Choose():
 

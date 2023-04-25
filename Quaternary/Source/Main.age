@@ -1,12 +1,15 @@
 ﻿Globals:
 
 Int Tick
+Int Player
 
 Function Void Main():
 
 if Equals(Tick, 0)
 Main_Initialize()
 endif
+
+CivPopPercentage = 60
 
 DoStrategy()
 DoEconomy()
@@ -17,6 +20,8 @@ Main_Test()
 Tick = Add(Tick, 1)
 
 Function Void Main_Initialize():
+
+Player = GetConstant("my-player-number")
 
 SetSn(SN_CAP_CIVILIAN_BUILDERS, 200)
 SetSn(SN_CONSECUTIVE_IDLE_UNIT_LIMIT, 0)
@@ -34,6 +39,8 @@ SetSn(SN_SCALE_MINIMUM_ATTACK_GROUP_SIZE, 0)
 SetSn(SN_TASK_UNGROUPED_SOLDIERS, 0)
 SetSn(SN_ZERO_PRIORITY_DISTANCE, 255)
 SetSn(SN_USE_BY_TYPE_MAX_GATHERING, 1)
+
+SetSn(SN_ENABLE_NEW_BUILDING_SYSTEM, 1)
 
 SetSn(SN_CAP_CIVILIAN_EXPLORERS, 0)
 SetSn(SN_PERCENT_CIVILIAN_EXPLORERS, 0)

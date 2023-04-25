@@ -6,31 +6,26 @@ Int attempt
 Int max_delta
 Int delta
 Int[2] test_point
+max_delta = Mul(distance, 2)
+max_delta = Add(max_delta, 1)
 
-while LessThan(distance, 100)
-	attempt = 0
+attempt = 0
 	
-	while LessThanOrEquals(attempt, distance)
-		max_delta = Mul(distance, 2)
-		max_delta = Add(max_delta, 1)
+while LessThan(attempt, 100)
+	delta = GetRandom(max_delta)
+	test_point[0] = Sub(point[0], distance)
+	test_point[0] = Add(test_point[0], delta)
+	delta = GetRandom(max_delta)
+	test_point[1] = Sub(point[1], distance)
+	test_point[1] = Add(test_point[1], delta)
 		
-		delta = GetRandom(max_delta)
-		test_point[0] = Sub(point[0], distance)
-		test_point[0] = Add(test_point[0], delta)
-		delta = GetRandom(max_delta)
-		test_point[1] = Sub(point[1], distance)
-		test_point[1] = Add(test_point[1], delta)
-		
-		if CanBuildLine(escrow, test_point, building_id)
-			BuildLine(test_point, building_id)
+	if CanBuildLine(escrow, test_point, building_id)
+		BuildLine(test_point, building_id)
 			
-			return true
-		endif
+		return true
+	endif
 		
-		attempt = Add(attempt, 1)
-	endwhile
-	
-	distance = Add(distance, 1)
+	attempt = Add(attempt, 1)
 endwhile
 
 return false
