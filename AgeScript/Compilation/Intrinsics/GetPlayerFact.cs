@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => false;
 
-        public GetPlayerFact()
+        public GetPlayerFact() : base()
         {
-            Name = "GetPlayerFact";
             ReturnType = Primitives.Int;
             Parameters.Add(new() { Name = "player", Type = Primitives.Int });
             Parameters.Add(new() { Name = "fact_id", Type = Primitives.Int });

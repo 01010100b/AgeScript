@@ -1,0 +1,40 @@
+﻿Function Void DoBuilding():
+
+Build_Housing()
+
+Function Void Build_Housing():
+Int player
+Int pop_headroom
+Int housing_headroom
+Bool no_pending
+Int[2] point
+Bool success
+
+player = GetConstant("my-player-number")
+pop_headroom = GetPlayerFact(player, FACT_POPULATION_HEADROOM, 0)
+housing_headroom = GetPlayerFact(player, FACT_HOUSING_HEADROOM, 0)
+
+if LessThan(pop_headroom, 1)
+ChatDataToSelf("no poproom", 1)
+return
+endif
+
+if GreaterThan(housing_headroom, 5)
+ChatDataToSelf("housing room", 1)
+return
+endif
+
+no_pending = PendingObjectsLessThan(HOUSE, 1)
+
+if Not(no_pending)
+ChatDataToSelf("pending", 1)
+return
+endif
+
+success = BuildPoint(false, point, 12, HOUSE)
+
+if success
+ChatDataToSelf("success", 1)
+else
+ChatDataToSelf("failed", 1)
+endif

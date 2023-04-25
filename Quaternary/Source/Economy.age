@@ -9,7 +9,7 @@ Int ExtraWoodGathererPercentage
 Int ExtraStoneGathererPercentage
 Int ExtraGoldGathererPercentage
 
-Function Void Economy():
+Function Void DoEconomy():
 
 Economy_GathererPercentageUpdate()
 

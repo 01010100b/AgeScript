@@ -16,7 +16,6 @@ namespace AgeScript.Compilation.Intrinsics.Math
 
         public MathIntrinsic() : base()
         {
-            Name = GetType().Name;
             ReturnType = ParameterType;
             Parameters.Add(new() { Name = "a", Type = ParameterType });
             Parameters.Add(new() { Name = "b", Type = ParameterType });

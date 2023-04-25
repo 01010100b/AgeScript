@@ -16,7 +16,6 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 
         public ComparisonIntrinsic() : base()
         {
-            Name = GetType().Name;
             ReturnType = Primitives.Bool;
             Parameters.Add(new() { Name = "a", Type = ParameterType });
             Parameters.Add(new() { Name = "b", Type = ParameterType });

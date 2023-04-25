@@ -8,8 +8,9 @@ if Equals(Tick, 0)
 Main_Initialize()
 endif
 
-Strategy()
-Economy()
+DoStrategy()
+DoEconomy()
+DoBuilding()
 
 Main_Test()
 
@@ -42,10 +43,3 @@ ResetScouts()
 
 Function Void Main_Test():
 
-Bool a
-Bool b
-a = true
-b = true
-if And(a, b)
-ChatDataToSelf("and pass", 1)
-endif

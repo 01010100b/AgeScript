@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => true;
 
-        public ChatDataToSelf()
+        public ChatDataToSelf() : base()
         {
-            Name = "ChatDataToSelf";
             ReturnType = Primitives.Void;
             Parameters.Add(new() { Name = "value", Type = Primitives.Int });
         }

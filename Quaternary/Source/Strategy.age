@@ -3,9 +3,9 @@
 Globals:
 
 Int CurrentStrategy
-Int[3] Units
+Int[STRATEGY_LENGTH] Units
 
-Function Void Strategy():
+Function Void DoStrategy():
 
 Int strategy
 strategy = Strategy_Choose()

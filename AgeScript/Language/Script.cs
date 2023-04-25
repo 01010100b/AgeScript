@@ -23,7 +23,7 @@ namespace AgeScript.Language
         public IEnumerable<Table> Tables { get; } = new List<Table>();
 
         internal int NonInlinedMemCopyReturnAddr { get; set; } // used when Settings.InlineMemCopy = false
-        internal int SpecialGoal { get; set; } // used for control-flow (if, ...) conditions, lookup return addresses, and expression compilation
+        internal int SpecialGoal { get; set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
         internal int StackPtr { get; set; } // points to next free stack goal
         internal int Sp0 { get; set; } // special purpose registers, for memcopy and such
         internal int Sp1 { get; set; }
@@ -33,6 +33,7 @@ namespace AgeScript.Language
         internal int Intr1 { get; set; }
         internal int Intr2 { get; set; }
         internal int Intr3 { get; set; }
+        internal int Intr4 { get; set; }
         internal int RegisterBase { get; set; } // start of registers
         internal int RegisterCount { get; set; } // number of registers
         internal int CallResultBase { get; set; } // start of goals where result of a function call is stored
@@ -203,9 +204,6 @@ namespace AgeScript.Language
                     throw new Exception("Function defined more than once.");
                 }
 
-                function.Validate();
-                functions.Add(function);
-
                 foreach (var v in function.AllVariables)
                 {
                     if (globals.Contains(v.Name))
@@ -213,6 +211,9 @@ namespace AgeScript.Language
                         throw new Exception("Have global with same name as local.");
                     }
                 }
+
+                function.Validate();
+                functions.Add(function);
             }
         }
 

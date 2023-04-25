@@ -30,4 +30,14 @@
 
 // Facts
 
+#define FACT_POPULATION_HEADROOM 2
+#define FACT_HOUSING_HEADROOM 3
 #define FACT_CIVILIAN_POPULATION 32
+
+// PositionType
+
+#define POSITION_SELF 9
+
+// Buildings
+
+#define HOUSE 70

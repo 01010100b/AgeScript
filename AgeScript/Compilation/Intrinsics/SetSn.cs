@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => false;
 
-        public SetSn()
+        public SetSn() : base()
         {
-            Name = "SetSn";
             ReturnType = Primitives.Void;
             Parameters.Add(new() { Name = "sn", Type = Primitives.Int });
             Parameters.Add(new() { Name = "value", Type = Primitives.Int });

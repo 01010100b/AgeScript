@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => true;
 
-        public Lookup()
+        public Lookup() : base()
         {
-            Name = "Lookup";
             ReturnType = Primitives.Int;
             Parameters.Add(new() { Name = "index", Type = Primitives.Int });
         }

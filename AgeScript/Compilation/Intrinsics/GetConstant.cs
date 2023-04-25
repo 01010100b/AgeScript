@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => true;
 
-        public GetConstant()
+        public GetConstant() : base()
         {
-            Name = "GetConstant";
             ReturnType = Primitives.Int;
         }
 

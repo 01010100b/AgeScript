@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics.Boolean
     {
         public override bool HasStringLiteral => false;
 
-        public Not()
+        public Not() : base()
         {
-            Name = "Not";
             ReturnType = Primitives.Bool;
             Parameters.Add(new() { Name = "a", Type = Primitives.Bool });
         }

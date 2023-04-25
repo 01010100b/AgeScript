@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics.Boolean
     {
         public override bool HasStringLiteral => false;
 
-        public Or()
+        public Or() : base()
         {
-            Name = "Or";
             ReturnType = Primitives.Bool;
             Parameters.Add(new() { Name = "a", Type = Primitives.Bool });
             Parameters.Add(new() { Name = "b", Type = Primitives.Bool });

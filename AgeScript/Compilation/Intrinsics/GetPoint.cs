@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compilation.Intrinsics
 {
-    internal class GetSn : Intrinsic
+    internal class GetPoint : Intrinsic
     {
         public override bool HasStringLiteral => false;
 
-        public GetSn() : base()
+        public GetPoint() : base()
         {
-            ReturnType = Primitives.Int;
-            Parameters.Add(new() { Name = "sn", Type = Primitives.Int });
+            ReturnType = Primitives.Int2;
+            Parameters.Add(new() { Name = "position_type", Type = Primitives.Int });
         }
 
         internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
@@ -27,11 +27,11 @@ namespace AgeScript.Compilation.Intrinsics
 
             if (cl.Arguments[0] is not ConstExpression ce)
             {
-                throw new Exception("sn must be const expression.");
+                throw new Exception("position_type must be const expression.");
             }
 
-            rules.AddAction($"up-modify-goal {script.Intr0} s:= {ce.Int}");
-            Utils.MemCopy(script, rules, script.Intr0, result_address.Value, 1, false, ref_result_address);
+            rules.AddAction($"up-get-point {ce.Int} {script.Intr0}");
+            Utils.MemCopy(script, rules, script.Intr0, result_address.Value, ReturnType.Size, false, ref_result_address);
         }
     }
 }

@@ -48,6 +48,7 @@ namespace AgeScript.Compilation
             script.Sp2 = --goal;
             script.Sp1 = --goal;
             script.Sp0 = --goal;
+            script.Intr4 = --goal;
             script.Intr3 = --goal;
             script.Intr2 = --goal;
             script.Intr1 = --goal;
@@ -102,8 +103,8 @@ namespace AgeScript.Compilation
             rules.AddAction($"set-goal {script.SpecialGoal} 1");
             rules.AddAction("disable-self");
 
-            var jmpid = Script.GetUniqueId();
             rules.StartNewRule($"goal {script.SpecialGoal} 0");
+            var jmpid = Script.GetUniqueId();
             rules.AddAction($"up-jump-direct c: {jmpid}");
             rules.StartNewRule();
 

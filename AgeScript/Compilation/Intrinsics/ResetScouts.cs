@@ -12,9 +12,8 @@ namespace AgeScript.Compilation.Intrinsics
     {
         public override bool HasStringLiteral => false;
 
-        public ResetScouts()
+        public ResetScouts() : base()
         {
-            Name = "ResetScouts";
             ReturnType = Primitives.Void;
         }
 

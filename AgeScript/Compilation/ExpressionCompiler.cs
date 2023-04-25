@@ -109,9 +109,10 @@ namespace AgeScript.Compilation
                 return;
             }
 
-            // push registers to stack
+            // push registers to stack && clear registers
 
             Utils.MemCopy(script, rules, script.RegisterBase, script.StackPtr, function.RegisterCount, false, true);
+            Utils.Clear(rules, script.RegisterBase, expression.Function.RegisterCount);
 
             // set return addr and parameters
 

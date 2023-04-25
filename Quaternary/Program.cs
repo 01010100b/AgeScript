@@ -14,8 +14,8 @@ namespace Quaternary
             {
                 MaxElementsPerRule = 16,
                 MaxGoal = 512,
-                OptimizeMemCopy = false,
-                InlineMemCopy = false
+                OptimizeMemCopy = true,
+                InlineMemCopy = true
             };
 
             var name = "Quaternary";
