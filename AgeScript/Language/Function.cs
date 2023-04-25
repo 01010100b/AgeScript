@@ -9,7 +9,7 @@ namespace AgeScript.Language
 {
     public class Function : Named
     {
-        public Type ReturnType { get; set; } = Primitives.Void;
+        public Type ReturnType { get; set; }
         public List<Variable> Parameters { get; } = new();
         public List<Variable> LocalVariables { get; } = new();
         public List<Statement> Statements { get; } = new();
@@ -18,6 +18,11 @@ namespace AgeScript.Language
         internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // add 1 because first register is return addr
         internal int Address { get; set; } = -1;
         internal string AddressableName { get; } = Script.GetUniqueId();
+
+        public Function()
+        {
+            ReturnType = Primitives.Void;
+        }
 
         public bool TryGetScopedVariable(Script script, string name, out Variable? variable)
         {

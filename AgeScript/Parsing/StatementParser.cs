@@ -103,6 +103,10 @@ namespace AgeScript.Parsing
                     {
                         accessor = a;
                     }
+                    else
+                    {
+                        throw new Exception("Failed to parse assign statement.");
+                    }
                 }
 
                 var expression = ExpressionParser.Parse(script, function, rhs, literals);

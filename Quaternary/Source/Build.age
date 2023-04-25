@@ -1,6 +1,7 @@
 ﻿Function Void DoBuilding():
 
 Build_Housing()
+Build_Dropsites()
 
 Function Void Build_Housing():
 Int pop_headroom
@@ -32,5 +33,21 @@ endif
 point = GetPoint(POSITION_SELF)
 success = BuildPoint(true, point, 12, HOUSE)
 
-Function Void Build_BuildDropsite(Bool escrow, Int[2] point, Int distance, Int dropsite_id, Int resource):
+Function Void Build_Dropsites():
 
+Bool seen
+Bool lack
+Int[2] point
+Bool success
+
+seen = ResourceFound(RESOURCE_WOOD)
+lack = ObjectTypeCountTotalLessThan(LUMBER_CAMP, 1)
+
+if And(seen, lack)
+	point = GetPoint(POSITION_SELF)
+	success = BuildDropsite(true, point, 20, LUMBER_CAMP, RESOURCE_WOOD)
+endif
+
+if lack
+	return
+endif

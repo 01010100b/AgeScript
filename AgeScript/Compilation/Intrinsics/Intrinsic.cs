@@ -17,7 +17,7 @@ namespace AgeScript.Compilation.Intrinsics
 
         protected ExpressionCompiler ExpressionCompiler { get; } = new();
 
-        public Intrinsic()
+        public Intrinsic() : base()
         {
             Name = GetType().Name;
         }

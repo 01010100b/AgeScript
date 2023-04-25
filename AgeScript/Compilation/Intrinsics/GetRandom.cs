@@ -26,22 +26,19 @@ namespace AgeScript.Compilation.Intrinsics
                 return;
             }
 
-            var rng = new Random(Guid.NewGuid().GetHashCode() ^ DateTime.UtcNow.Ticks.GetHashCode());
-            var consecutive = 3 + rng.Next(3);
-            var big_max = (int.MaxValue - 100000000) / consecutive;
+            var big_max = (int.MaxValue - 100000000) / 3;
 
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
             rules.AddAction($"up-get-precise-time 0 {script.Intr1}");
             rules.AddAction($"up-modify-goal {script.Intr1} g:mod {script.Intr0}");
 
-            for (int i = 0; i < consecutive; i++)
+            for (int i = 0; i < 3; i++)
             {
                 rules.AddAction($"generate-random-number {big_max}");
                 rules.AddAction($"up-get-fact 33 0 {script.Intr2}");
                 rules.AddAction($"up-modify-goal {script.Intr1} g:+ {script.Intr2}");
             }
 
-            rules.AddAction($"up-modify-goal {script.Intr1} g:+ {script.Intr2}");
             rules.AddAction($"up-modify-goal {script.Intr1} g:mod {script.Intr0}");
             Utils.MemCopy(script, rules, script.Intr1, result_address.Value, ReturnType.Size, false, ref_result_address);
         }

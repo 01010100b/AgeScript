@@ -37,13 +37,55 @@
 #define FACT_HOUSING_HEADROOM 3
 #define FACT_CIVILIAN_POPULATION 32
 
+// ObjectData
+
+#define OBJECT_DATA_INDEX -1
+#define OBJECT_DATA_DISTANCE 44
+
 // PositionType
 
 #define POSITION_SELF 9
+#define POSITION_OBJECT 12
+
+// ObjectStatus
+
+#define STATUS_READY 2
+#define STATUS_RESOURCE 3
+
+// ObjectList
+
+#define LIST_ACTIVE 0
+#define LIST_INACTIVE 1
+
+// Resource
+
+#define RESOURCE_FOOD 0
+#define RESOURCE_WOOD 1
+#define RESOURCE_STONE 2
+#define RESOURCE_GOLD 3
+
+// SearchState
+
+#define SEARCH_LOCAL_TOTAL 0
+#define SEARCH_LOCAL_LAST 1
+#define SEARCH_REMOTE_TOTAL 2
+#define SEARCH_REMOTE_LAST 3
+
+// SearchSource
+
+#define SEARCH_LOCAL 1
+#define SEARCH_REMOTE 2
+
+// SearchOrder
+
+#define SEARCH_ORDER_NONE 0
+#define SEARCH_ORDER_ASC 1
+#define SEARCH_ORDER_DESC 2
 
 // Buildings
 
 #define HOUSE 70
+#define LUMBER_CAMP 562
 
 // Units
 

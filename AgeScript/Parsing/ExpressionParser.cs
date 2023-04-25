@@ -117,7 +117,7 @@ namespace AgeScript.Parsing
             {
                 var pieces = code.Split('[');
                 var vname = pieces[0].Trim();
-                var offset = pieces[1].Replace("]", string.Empty).Trim();
+                var offset = int.Parse(pieces[1].Replace("]", string.Empty).Trim());
 
                 if (function.TryGetScopedVariable(script, vname, out var variable))
                 {
@@ -126,7 +126,7 @@ namespace AgeScript.Parsing
                         accessor = new()
                         {
                             Variable = variable!,
-                            Offset = new ConstExpression(offset),
+                            Offset = new ConstExpression((offset * atype.ElementType.Size).ToString()),
                             Type = atype.ElementType
                         };
 
