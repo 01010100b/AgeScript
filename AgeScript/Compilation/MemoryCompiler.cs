@@ -32,6 +32,11 @@ namespace AgeScript.Compilation
             script.SpecialGoal = goal;
             script.StackPtr = --goal;
 
+            if (!ScriptCompiler.Settings.InlineMemCopy)
+            {
+                script.NonInlinedMemCopyReturnAddr = --goal;
+            }
+
             // table lookup result below that as it doesn't get used with up functions
 
             goal -= TableCompiler.Modulus;

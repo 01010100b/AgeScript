@@ -69,6 +69,11 @@ namespace AgeScript.Compilation
                 table_compiler.Compile(script, rules, table);
             }
 
+            if (Settings.InlineMemCopy)
+            {
+                Utils.CompileMemCopy(script, rules);
+            }
+            
             // linker
 
             foreach (var function in functions)

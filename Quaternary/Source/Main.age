@@ -45,7 +45,7 @@ Function Void Main_Test():
 Bool a
 Bool b
 a = true
-b = false
+b = true
 if And(a, b)
 ChatDataToSelf("and pass", 1)
 endif

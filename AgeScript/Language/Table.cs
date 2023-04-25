@@ -20,6 +20,11 @@ namespace AgeScript.Language
         public override void Validate()
         {
             base.Validate();
+
+            if (Values.Count == 0)
+            {
+                throw new Exception("Table must have at least 1 value.");
+            }
         }
     }
 }

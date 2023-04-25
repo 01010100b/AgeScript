@@ -16,7 +16,7 @@ namespace AgeScript.Language
         public IEnumerable<Variable> AllVariables => Parameters.Concat(LocalVariables);
 
         internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // add 1 because first register is return addr
-        internal int Address { get; set; }
+        internal int Address { get; set; } = -1;
         internal string AddressableName { get; } = Script.GetUniqueId();
 
         public bool TryGetScopedVariable(Script script, string name, out Variable? variable)
@@ -46,18 +46,18 @@ namespace AgeScript.Language
         {
             base.Validate();
 
-            var set = new HashSet<string>();
+            var locals = new HashSet<string>();
 
             foreach (var v in AllVariables)
             {
                 v.Validate();
 
-                if (set.Contains(v.Name))
+                if (locals.Contains(v.Name))
                 {
                     throw new Exception("Already have local variable.");
                 }
 
-                set.Add(v.Name);
+                locals.Add(v.Name);
             }
 
             foreach (var s in Statements)
@@ -68,6 +68,10 @@ namespace AgeScript.Language
             if (Statements.OfType<IfStatement>().Count() != Statements.OfType<EndIfStatement>().Count())
             {
                 throw new Exception("Mismatch between if and endif statements.");
+            }
+            else if (Statements.OfType<WhileStatement>().Count() != Statements.OfType<EndWhileStatement>().Count())
+            {
+                throw new Exception("Mismatch between while and endwhile statements.");
             }
         }
 

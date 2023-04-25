@@ -14,11 +14,12 @@ namespace AgeScript.Language
         public static Type Precise => Types.Single(x => x.Name == "Precise");
         public static Array Int2 => (Array)Types.Single(x => x.Name == "Int[2]");
         public static Array Precise2 => (Array)Types.Single(x => x.Name == "Precise[2]");
+        public static Array Int4 => (Array)Types.Single(x => x.Name == "Int[4]");
 
         public static IEnumerable<string> Keywords { get; } = new List<string>()
         {
             "Struct", "Globals", "Function", "Table", "String", "return", "break", "continue", "true", "false",
-            "if", "else", "elif", "endif", "for", "endfor", "while", "endwhile", "switch", "case", "endswitch"
+            "if", "else", "elif", "endif", "for", "endfor", "while", "endwhile", "switch", "case", "default", "endswitch"
         };
 
         public static IEnumerable<Type> Types { get; } = GetTypes();

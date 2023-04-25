@@ -10,6 +10,8 @@ namespace AgeScript.Compilation
 {
     internal static class Utils
     {
+        private static string MemCopyAddressId { get; } = Script.GetUniqueId();
+
         public static void Clear(RuleList rules, int from, int length)
         {
             if (length <= 0)
@@ -112,14 +114,47 @@ namespace AgeScript.Compilation
 
             rules.AddAction($"set-goal {script.Sp0} {length}");
 
+            if (ScriptCompiler.Settings.InlineMemCopy)
+            {
+                rules.StartNewRule($"up-compare-goal {script.Sp0} c:> 0");
+                rules.AddAction($"up-get-indirect-goal g: {script.Sp1} {script.Sp3}");
+                rules.AddAction($"up-set-indirect-goal g: {script.Sp2} g: {script.Sp3}");
+                rules.AddAction($"up-modify-goal {script.Sp1} c:+ 1");
+                rules.AddAction($"up-modify-goal {script.Sp2} c:+ 1");
+                rules.AddAction($"up-modify-goal {script.Sp0} c:- 1");
+                rules.AddAction("up-jump-rule -1");
+                rules.StartNewRule();
+            }
+            else
+            {
+                var retid = Script.GetUniqueId();
+                rules.AddAction($"set-goal {script.NonInlinedMemCopyReturnAddr} {retid}");
+                rules.AddAction($"up-jump-direct c: {MemCopyAddressId}");
+                rules.StartNewRule();
+                rules.ReplaceStrings(retid, rules.CurrentRuleIndex.ToString());
+            }
+        }
+
+        public static void CompileMemCopy(Script script, RuleList rules)
+        {
+            if (ScriptCompiler.Settings.InlineMemCopy)
+            {
+                return;
+            }
+
             rules.StartNewRule($"up-compare-goal {script.Sp0} c:> 0");
+            var jmpid = rules.CurrentRuleIndex;
             rules.AddAction($"up-get-indirect-goal g: {script.Sp1} {script.Sp3}");
             rules.AddAction($"up-set-indirect-goal g: {script.Sp2} g: {script.Sp3}");
             rules.AddAction($"up-modify-goal {script.Sp1} c:+ 1");
             rules.AddAction($"up-modify-goal {script.Sp2} c:+ 1");
             rules.AddAction($"up-modify-goal {script.Sp0} c:- 1");
             rules.AddAction("up-jump-rule -1");
+
             rules.StartNewRule();
+            rules.AddAction($"up-jump-direct g: {script.NonInlinedMemCopyReturnAddr}");
+            rules.StartNewRule();
+            rules.ReplaceStrings(MemCopyAddressId, jmpid.ToString());
         }
     }
 }

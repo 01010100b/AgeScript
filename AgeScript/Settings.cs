@@ -12,5 +12,6 @@ namespace AgeScript
         public int MaxGoal { get; set; } = 512;
         public int MaxElementsPerRule { get; set; } = 16;
         public bool OptimizeMemCopy { get; set; } = true; // 291-1666 -> 43-432
+        public bool InlineMemCopy { get; set; } = true;
     }
 }

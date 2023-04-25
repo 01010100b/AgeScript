@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Type = AgeScript.Language.Type;
 
 namespace AgeScript.Compilation.Intrinsics.Math
 {
     internal class Add : MathIntrinsic
     {
-        protected override Language.Type ParameterType => Primitives.Int;
+        protected override Type ParameterType => Primitives.Int;
 
         internal override void CompileCall(Script script, Function function, RuleList rules
             , CallExpression cl, int? result_address, bool ref_result_address)
@@ -21,7 +22,7 @@ namespace AgeScript.Compilation.Intrinsics.Math
 
     internal class AddPrecise : Add
     {
-        protected override Language.Type ParameterType => Primitives.Precise;
+        protected override Type ParameterType => Primitives.Precise;
 
         public AddPrecise() : base()
         {
