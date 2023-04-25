@@ -14,6 +14,10 @@ if LessThanOrEquals(distance, 3)
 	max_attempts = 20
 endif
 
+if LessThanOrEquals(distance, 2)
+	max_attempts = 10
+endif
+
 max_delta = Mul(distance, 2)
 max_delta = Add(max_delta, 1)
 attempt = 0
@@ -72,7 +76,7 @@ if Equals(resource, RESOURCE_WOOD)
 	endif
 	
 	CleanSearch(SEARCH_REMOTE, OBJECT_DATA_DISTANCE, SEARCH_ORDER_ASC)
-	RemoveObjects("<", SEARCH_REMOTE, OBJECT_DATA_INDEX, 15)
+	RemoveObjects("<", SEARCH_REMOTE, OBJECT_DATA_INDEX, 10)
 endif
 
 attempt = 0
@@ -83,7 +87,7 @@ while LessThan(attempt, 20)
 	point = GetPoint(POSITION_OBJECT)
 	distance = 0
 	
-	while LessThanOrEquals(distance, 4)
+	while LessThanOrEquals(distance, 3)
 		
 		if BuildPoint(true, point, distance, dropsite_id)
 			return true

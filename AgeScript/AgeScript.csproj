@@ -9,4 +9,14 @@
 	<Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Parsing\notepad++ lang def.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="notepad++ lang def.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
