@@ -10,7 +10,9 @@ namespace AgeScript.Compilation
 {
     internal class MemoryCompiler
     {
-        private const int JUMP_END = 20000;
+        public const int JUMP_END = 20000;
+
+        private const int STACK_START = 1;
 
         public void Compile(Script script, RuleList rules)
         {
@@ -29,7 +31,8 @@ namespace AgeScript.Compilation
 
             // special goals at the end as they won't be used with up functions
 
-            script.SpecialGoal = goal;
+            script.Error = goal;
+            script.SpecialGoal = --goal;
             script.StackPtr = --goal;
 
             if (!ScriptCompiler.Settings.InlineMemCopy)
@@ -96,8 +99,9 @@ namespace AgeScript.Compilation
 
         private void InitializeMemory(Script script, RuleList rules)
         {
-            // initialize globals once
+            // initialize once
 
+            
             rules.AddAction($"set-goal {script.SpecialGoal} 0");
             rules.StartNewRule();
             rules.AddAction($"set-goal {script.SpecialGoal} 1");
@@ -108,6 +112,8 @@ namespace AgeScript.Compilation
             rules.AddAction($"up-jump-direct c: {jmpid}");
             rules.StartNewRule();
 
+            rules.AddAction($"set-goal {script.Error} 0");
+
             foreach (var global in script.GlobalVariables.Values)
             {
                 Utils.Clear(rules, global.Address, global.Type.Size);
@@ -117,12 +123,19 @@ namespace AgeScript.Compilation
             var id = rules.CurrentRuleIndex;
             rules.ReplaceStrings(jmpid, id.ToString());
 
-            // initialize registers each tick
+            // initialize each tick
 
             rules.AddAction($"set-goal {script.SpecialGoal} 0");
-            rules.AddAction($"set-goal {script.StackPtr} 1");
+            rules.AddAction($"set-goal {script.StackPtr} {STACK_START}");
             Utils.Clear(rules, script.RegisterBase, script.RegisterCount);
             rules.AddAction($"set-goal {script.RegisterBase} {JUMP_END}");
+
+            // don't run if error
+
+            rules.StartNewRule($"up-compare-goal {script.Error} c:> 0");
+            rules.AddAction($"up-chat-data-to-self \"Error: %d\" g: {script.Error}");
+            rules.AddAction($"up-jump-direct c: {JUMP_END}");
+            rules.StartNewRule();
         }
     }
 }

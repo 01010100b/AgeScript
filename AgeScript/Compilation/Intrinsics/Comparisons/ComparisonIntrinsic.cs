@@ -31,11 +31,21 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr1);
-            rules.AddAction($"set-goal {script.Intr2} 0");
-            rules.StartNewRule($"up-compare-goal {script.Intr0} g:{op} {script.Intr1}");
-            rules.AddAction($"set-goal {script.Intr2} 1");
-            rules.StartNewRule();
-            Utils.MemCopy(script, rules, script.Intr2, result_address.Value, 1, false, ref_result_address);
+
+            if (ScriptCompiler.Settings.OptimizeComparisons && ref_result_address == false)
+            {
+                rules.AddAction($"set-goal {result_address} 0");
+                rules.StartNewRule($"up-compare-goal {script.Intr0} g:{op} {script.Intr1}");
+                rules.AddAction($"set-goal {result_address} 1");
+            }
+            else
+            {
+                rules.AddAction($"set-goal {script.Intr2} 0");
+                rules.StartNewRule($"up-compare-goal {script.Intr0} g:{op} {script.Intr1}");
+                rules.AddAction($"set-goal {script.Intr2} 1");
+                rules.StartNewRule();
+                Utils.MemCopy(script, rules, script.Intr2, result_address.Value, 1, false, ref_result_address);
+            }
         }
     }
 }

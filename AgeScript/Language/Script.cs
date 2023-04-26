@@ -23,6 +23,7 @@ namespace AgeScript.Language
         public IEnumerable<Table> Tables { get; } = new List<Table>();
 
         internal int NonInlinedMemCopyReturnAddr { get; set; } // used when Settings.InlineMemCopy = false
+        internal int Error { get; set; } // set when run-time error occurs
         internal int SpecialGoal { get; set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
         internal int StackPtr { get; set; } // points to next free stack goal
         internal int Sp0 { get; set; } // special purpose registers, for memcopy and such

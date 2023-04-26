@@ -8,6 +8,8 @@ namespace AgeScript.Compilation
 {
     public class RuleList
     {
+        public static int GetElementsCount(string rule) => rule.Count(x => x == '(') - 1;
+
         public int RuleCount => Rules.Count;
         public int ElementsCount => Rules.Sum(GetElementsCount);
 
@@ -70,7 +72,5 @@ namespace AgeScript.Compilation
 
             return sb.ToString();
         }
-
-        private int GetElementsCount(string rule) => rule.Count(x => x == '(') - 1;
     }
 }

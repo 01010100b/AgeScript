@@ -21,7 +21,7 @@ endif
 max_delta = Mul(distance, 2)
 max_delta = Add(max_delta, 1)
 attempt = 0
-	
+
 while LessThan(attempt, max_attempts)
 	delta = GetRandom(max_delta)
 	test_point[0] = Sub(point[0], distance)
