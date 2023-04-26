@@ -40,6 +40,7 @@ namespace AgeScript.Language
         internal int CallResultBase { get; set; } // start of goals where result of a function call is stored
         internal int TableResultBase { get; set; } // start of lookup result
         internal int StackLimit { get; set; } // stack-ptr can not grow beyond this
+        internal int DebugMaxStackSpaceUsed { get; set; } // debug max stack space used
 
         public Script()
         {

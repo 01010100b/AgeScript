@@ -168,9 +168,17 @@ namespace AgeScript.Compilation
                 }
             }
 
-            // increment stack-ptr and jump
+            // increment stack-ptr
 
             rules.AddAction($"up-modify-goal {script.StackPtr} c:+ {function.RegisterCount}");
+
+            if (ScriptCompiler.Settings.Debug)
+            {
+                rules.AddAction($"up-modify-goal {script.DebugMaxStackSpaceUsed} g:max {script.StackPtr}");
+            }
+
+            // jump
+
             rules.AddAction($"up-jump-direct c: {expression.Function.AddressableName}");
             rules.StartNewRule();
 

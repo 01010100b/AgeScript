@@ -14,5 +14,6 @@ namespace AgeScript
         public bool OptimizeMemCopy { get; set; } = true; // 291-1666 -> 43-432
         public bool InlineMemCopy { get; set; } = true;
         public bool OptimizeComparisons { get; set; } = true;
+        public bool Debug { get; set; } = false;
     }
 }

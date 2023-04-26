@@ -40,6 +40,11 @@ namespace AgeScript.Compilation
                 script.NonInlinedMemCopyReturnAddr = --goal;
             }
 
+            if (ScriptCompiler.Settings.Debug)
+            {
+                script.DebugMaxStackSpaceUsed = --goal;
+            }
+
             // table lookup result below that as it doesn't get used with up functions
 
             goal -= TableCompiler.Modulus;
@@ -99,9 +104,8 @@ namespace AgeScript.Compilation
 
         private void InitializeMemory(Script script, RuleList rules)
         {
-            // initialize once
+            // initialize everything once
 
-            
             rules.AddAction($"set-goal {script.SpecialGoal} 0");
             rules.StartNewRule();
             rules.AddAction($"set-goal {script.SpecialGoal} 1");
@@ -112,12 +116,7 @@ namespace AgeScript.Compilation
             rules.AddAction($"up-jump-direct c: {jmpid}");
             rules.StartNewRule();
 
-            rules.AddAction($"set-goal {script.Error} 0");
-
-            foreach (var global in script.GlobalVariables.Values)
-            {
-                Utils.Clear(rules, global.Address, global.Type.Size);
-            }
+            Utils.Clear(rules, 1, ScriptCompiler.Settings.MaxGoal);
 
             rules.StartNewRule();
             var id = rules.CurrentRuleIndex;
@@ -133,9 +132,16 @@ namespace AgeScript.Compilation
             // don't run if error
 
             rules.StartNewRule($"up-compare-goal {script.Error} c:> 0");
-            rules.AddAction($"up-chat-data-to-self \"Error: %d\" g: {script.Error}");
+            rules.AddAction($"up-chat-data-to-self \"ERROR: %d\" g: {script.Error}");
             rules.AddAction($"up-jump-direct c: {JUMP_END}");
             rules.StartNewRule();
+
+            if (ScriptCompiler.Settings.Debug)
+            {
+                rules.AddAction($"set-goal {script.Intr0} {script.StackLimit}");
+                rules.AddAction($"up-modify-goal {script.Intr0} g:- {script.DebugMaxStackSpaceUsed}");
+                rules.AddAction($"up-chat-data-to-self \"stack remaining: %d\" g: {script.Intr0}");
+            }
         }
     }
 }
