@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Compilation\FunctionCompiler.cs~RF5e6f6a.TMP" />
     <None Remove="Parsing\notepad++ lang def.xml" />
   </ItemGroup>
 

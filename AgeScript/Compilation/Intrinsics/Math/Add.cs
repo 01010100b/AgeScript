@@ -1,11 +1,11 @@
-﻿using AgeScript.Language;
+﻿using AgeScript.Compilation;
+using AgeScript.Language;
 using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Type = AgeScript.Language.Type;
 
 namespace AgeScript.Compilation.Intrinsics.Math
 {

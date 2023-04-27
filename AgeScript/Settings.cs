@@ -15,5 +15,6 @@ namespace AgeScript
         public bool InlineMemCopy { get; set; } = true;
         public bool OptimizeComparisons { get; set; } = true;
         public bool Debug { get; set; } = false;
+        public int TableModulus => MaxElementsPerRule - 2;
     }
 }

@@ -13,7 +13,19 @@ namespace AgeScript.Compilation
     internal class FunctionCompiler
     {
         private ExpressionCompiler ExpressionCompiler { get; } = new();
+        private Script Script { get; init; }
+        private RuleList Rules { get; init; }
+        private Memory Memory { get; init; }
+        private Settings Settings { get; init; }
         private int LastReturnStatement { get; set; }
+
+        public FunctionCompiler(Script script, RuleList rules, Memory memory, Settings settings)
+        {
+            Script = script;
+            Rules = rules;
+            Memory = memory;
+            Settings = settings;
+        }
 
         public void Compile(Script script, Function function, RuleList rules)
         {

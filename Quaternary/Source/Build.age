@@ -4,6 +4,7 @@ Build_Housing()
 Build_Dropsites()
 
 Function Void Build_Housing():
+
 Int pop_headroom
 Int housing_headroom
 Bool no_pending
@@ -14,20 +15,20 @@ pop_headroom = GetPlayerFact(Player, FACT_POPULATION_HEADROOM, 0)
 housing_headroom = GetPlayerFact(Player, FACT_HOUSING_HEADROOM, 0)
 
 if LessThan(pop_headroom, 1)
-//ChatDataToSelf("no poproom", 1)
-return
+	//ChatDataToSelf("no poproom", 1)
+	return
 endif
 
 if GreaterThan(housing_headroom, 5)
-//ChatDataToSelf("housing room >= 5", 1)
-return
+	//ChatDataToSelf("housing room >= 5", 1)
+	return
 endif
 
 no_pending = PendingObjectsLessThan(HOUSE, 1)
 
 if Not(no_pending)
-//ChatDataToSelf("pending", 1)
-return
+	//ChatDataToSelf("pending", 1)
+	return
 endif
 
 point = GetPoint(POSITION_SELF)

@@ -1,4 +1,5 @@
-﻿using AgeScript.Language;
+﻿using AgeScript.Compilation;
+using AgeScript.Language;
 using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace AgeScript.Compilation.Intrinsics
             Utils.MemCopy(script, rules, script.Intr4, result_address.Value, ReturnType.Size, false, ref_result_address);
         }
     }
-    
+
     internal class GetPointDistancePrecise : GetPointDistance
     {
         public GetPointDistancePrecise() : base()
@@ -40,7 +41,7 @@ namespace AgeScript.Compilation.Intrinsics
             Name = "GetPointDistance";
             ReturnType = Primitives.Precise;
             Parameters.Clear();
-            Parameters.Add(new() { Name = "point1", Type= Primitives.Precise2 });
+            Parameters.Add(new() { Name = "point1", Type = Primitives.Precise2 });
             Parameters.Add(new() { Name = "point2", Type = Primitives.Precise2 });
         }
     }

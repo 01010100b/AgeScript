@@ -1,4 +1,5 @@
-﻿using AgeScript.Language;
+﻿using AgeScript.Compilation;
+using AgeScript.Language;
 using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AgeScript.Compilation.Intrinsics.Math
 {
     internal class Min : MathIntrinsic
     {
-        protected override Language.Type ParameterType => Primitives.Int;
+        protected override Type ParameterType => Primitives.Int;
 
         internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
         {
@@ -20,7 +21,7 @@ namespace AgeScript.Compilation.Intrinsics.Math
 
     internal class MinPrecise : Min
     {
-        protected override Language.Type ParameterType => Primitives.Precise;
+        protected override Type ParameterType => Primitives.Precise;
 
         public MinPrecise() : base()
         {

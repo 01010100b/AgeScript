@@ -1,4 +1,5 @@
-﻿using AgeScript.Language;
+﻿using AgeScript.Compilation;
+using AgeScript.Language;
 using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 {
     internal class Equals : ComparisonIntrinsic
     {
-        protected override Language.Type ParameterType => Primitives.Int;
+        protected override Type ParameterType => Primitives.Int;
 
         internal override void CompileCall(Script script, Function function, RuleList rules,
             CallExpression cl, int? result_address, bool ref_result_address)
@@ -21,7 +22,7 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 
     internal class EqualsPrecise : Equals
     {
-        protected override Language.Type ParameterType => Primitives.Precise;
+        protected override Type ParameterType => Primitives.Precise;
 
         public EqualsPrecise() : base()
         {
@@ -31,7 +32,7 @@ namespace AgeScript.Compilation.Intrinsics.Comparisons
 
     internal class EqualsBool : Equals
     {
-        protected override Language.Type ParameterType => Primitives.Bool;
+        protected override Type ParameterType => Primitives.Bool;
 
         public EqualsBool() : base()
         {

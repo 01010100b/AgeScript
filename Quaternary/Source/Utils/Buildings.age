@@ -1,5 +1,5 @@
 ﻿Function Bool BuildPoint(Bool escrow, Int[2] point, Int distance, Int building_id):
-// like up-build place-point but using build-line so no building queues getting stuck or weird stuff with target-point
+// like up-build place-control but using build-line so no building queues getting stuck or weird stuff with target-point
 
 Int attempt
 Int max_attempts

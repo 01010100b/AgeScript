@@ -1,4 +1,5 @@
-﻿using AgeScript.Language;
+﻿using AgeScript.Compilation;
+using AgeScript.Language;
 using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace AgeScript.Compilation.Intrinsics
         public CanTrain() : base()
         {
             ReturnType = Primitives.Bool;
-            Parameters.Add(new() { Name = "escrow", Type =  Primitives.Bool });
+            Parameters.Add(new() { Name = "escrow", Type = Primitives.Bool });
             Parameters.Add(new() { Name = "unit_id", Type = Primitives.Int });
         }
 

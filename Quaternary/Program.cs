@@ -1,6 +1,6 @@
-﻿using AgeScript;
-using AgeScript.Compilation;
-using AgeScript.Parsing;
+﻿using AgeScript.Compiler;
+using AgeScript.Compiler.Compilation;
+using AgeScript.Compiler.Parsing;
 
 namespace Quaternary
 {

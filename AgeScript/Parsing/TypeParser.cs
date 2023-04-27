@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Array = AgeScript.Language.Array;
-using Type = AgeScript.Language.Type;
+
 
 namespace AgeScript.Parsing
 {

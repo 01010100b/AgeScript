@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AgeScript.Language.Expressions;
 using AgeScript.Language;
-using AgeScript.Compilation.Intrinsics;
 using System.Net;
+using AgeScript.Compilation.Intrinsics;
 
 namespace AgeScript.Compilation
 {

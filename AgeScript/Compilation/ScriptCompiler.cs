@@ -21,22 +21,24 @@ namespace AgeScript.Compilation
             lock (Lock)
             {
                 Settings = settings;
-                Compile(script, rules);
+                Compile(script, rules, settings);
             }
 
             return rules;
         }
 
-        private void Compile(Script script, RuleList rules)
+        private void Compile(Script script, RuleList rules, Settings settings)
         {
             // layout memory
 
             var memory_compiler = new MemoryCompiler();
             memory_compiler.Compile(script, rules);
 
+            var memory = new Memory(script, rules, settings);
+
             // compile code
 
-            var function_compiler = new FunctionCompiler();
+            var function_compiler = new FunctionCompiler(script, rules, memory, settings);
 
             var functions = script.Functions.ToList();
             functions.Sort((a, b) =>
@@ -60,7 +62,7 @@ namespace AgeScript.Compilation
                 function_compiler.Compile(script, function, rules);
             }
 
-            var table_compiler = new TableCompiler();
+            var table_compiler = new TableCompiler(rules, memory, settings);
             var tables = script.Tables.ToList();
             tables.Sort((a, b) => a.Name.CompareTo(b.Name));
 
