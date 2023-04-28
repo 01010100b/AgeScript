@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AgeScript.Compiler.Language.Expressions;
-using AgeScript.Compiler.Language;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Data;
 
 namespace AgeScript.Compiler.Compilation.Intrinsics.Math
 {

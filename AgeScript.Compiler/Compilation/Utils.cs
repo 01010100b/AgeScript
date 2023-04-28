@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using AgeScript.Compiler.Language;
-using System.Data;
 
 namespace AgeScript.Compiler.Compilation
 {

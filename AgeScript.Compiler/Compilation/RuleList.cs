@@ -1,6 +1,6 @@
 ﻿using AgeScript.Compiler.Compilation.Intrinsics;
-using AgeScript.Compiler.Language;
-using AgeScript.Compiler.Language.Expressions;
+using AgeScript.Language;
+using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace AgeScript.Compiler.Compilation
         public RuleList(Script script, Settings settings)
         {
             Settings = settings;
-            /* intrinsics are still in Script
+
             foreach (var intrinsic in Intrinsic.Intrinsics)
             {
                 if (FunctionTargets.ContainsKey(intrinsic))
@@ -39,10 +39,9 @@ namespace AgeScript.Compiler.Compilation
                     throw new Exception("Intrinsic already exists.");
                 }
 
-                var target = CreateJumpTarget();
-                FunctionTargets.Add(intrinsic, target);
+                FunctionTargets.Add(intrinsic, string.Empty);
             }
-            */
+
             foreach (var function in script.Functions)
             {
                 if (FunctionTargets.ContainsKey(function))
@@ -52,11 +51,6 @@ namespace AgeScript.Compiler.Compilation
 
                 var target = CreateJumpTarget();
                 FunctionTargets.Add(function, target);
-
-                if (function is Intrinsic)
-                {
-                    ResolveJumpTarget(target, int.MaxValue);
-                }
             }
 
             foreach (var table in script.Tables)

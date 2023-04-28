@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AgeScript.Compiler.Language.Expressions;
-using AgeScript.Compiler.Language;
 
 namespace AgeScript.Compiler.Compilation.Intrinsics.Comparisons
 {

@@ -1,6 +1,6 @@
 ﻿using AgeScript.Compiler.Compilation.Intrinsics;
-using AgeScript.Compiler.Language;
-using AgeScript.Compiler.Language.Expressions;
+using AgeScript.Language;
+using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Data;

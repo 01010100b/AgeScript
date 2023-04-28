@@ -1,13 +1,10 @@
-﻿using AgeScript.Compiler.Language;
-using AgeScript.Compiler.Language.Expressions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
 {
