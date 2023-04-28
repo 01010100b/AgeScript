@@ -52,6 +52,8 @@ namespace AgeScript.Compiler.Compilation
             }
         }
 
+        public int GetRegisterCount(Function function) => function.AllVariables.Sum(x => x.Type.Size) + 1;
+
         private void SetAddresses(Script script, Settings settings)
         {
             // the stack grows upwards starting from goal 1
@@ -104,7 +106,7 @@ namespace AgeScript.Compiler.Compilation
 
             // registers below that
 
-            RegisterCount = script.Functions.Max(x => x.RegisterCount);
+            RegisterCount = script.Functions.Max(x => GetRegisterCount(x));
             goal -= RegisterCount;
             RegisterBase = goal;
 
@@ -148,7 +150,7 @@ namespace AgeScript.Compiler.Compilation
             rules.AddAction($"up-jump-direct c: {jump_target}");
             rules.StartNewRule();
 
-            Utils.Clear(rules, 1, settings.MaxGoal);
+            Utils.Clear2(rules, 1, settings.MaxGoal);
 
             rules.StartNewRule();
             rules.ResolveJumpTarget(jump_target);
@@ -157,7 +159,7 @@ namespace AgeScript.Compiler.Compilation
 
             rules.AddAction($"set-goal {ConditionGoal} 0");
             rules.AddAction($"set-goal {StackPtr} 1");
-            Utils.Clear(rules, RegisterBase, RegisterCount);
+            Utils.Clear2(rules, RegisterBase, RegisterCount);
             rules.AddAction($"set-goal {RegisterBase} {rules.EndTarget}");
         }
     }

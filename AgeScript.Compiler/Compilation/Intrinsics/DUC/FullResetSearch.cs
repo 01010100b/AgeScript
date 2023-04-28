@@ -17,11 +17,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
             ReturnType = Primitives.Void;
         }
 
-        internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
-        {
-            rules.AddAction("up-full-reset-search");
-        }
-
         internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             result.Rules.AddAction($"up-full-reset-search");

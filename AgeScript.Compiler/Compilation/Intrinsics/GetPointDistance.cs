@@ -21,19 +21,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             Parameters.Add(new() { Name = "point2", Type = Primitives.Int2 });
         }
 
-        internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
-        {
-            if (result_address is null)
-            {
-                return;
-            }
-
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr2);
-            rules.AddAction($"up-get-point-distance {script.Intr0} {script.Intr2} {script.Intr4}");
-            Utils.MemCopy(script, rules, script.Intr4, result_address.Value, ReturnType.Size, false, ref_result_address);
-        }
-
         internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (result_address is null)

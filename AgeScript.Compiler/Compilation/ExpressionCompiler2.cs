@@ -98,6 +98,16 @@ namespace AgeScript.Compiler.Compilation
             int? result_address, bool ref_result_address)
         {
             var called_function = result.Rules.GetFunction(expression.FunctionName, expression.Arguments, expression.Literal);
+            var register_count = result.Memory.GetRegisterCount(Function);
+            var called_register_count = result.Memory.GetRegisterCount(called_function);
+
+            if (result_address is not null)
+            {
+                if (expression.Type != called_function.ReturnType)
+                {
+                    throw new Exception("Call expression type does not match return type.");
+                }
+            }
 
             if (called_function is Intrinsic intrinsic)
             {
@@ -109,7 +119,7 @@ namespace AgeScript.Compiler.Compilation
             // check for overflow
 
             result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} g:= {result.Memory.StackPtr}");
-            result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:+ {Function.RegisterCount}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:+ {register_count}");
             result.Rules.StartNewRule($"up-compare-goal {result.Memory.ConditionGoal} c:> {result.Memory.StackLimit}");
             result.Rules.AddAction($"set-goal {result.Memory.Error} {(int)Errors.STACK_OVERFLOW}");
             result.Rules.AddAction($"up-jump-direct c: {result.Rules.EndTarget}");
@@ -117,8 +127,8 @@ namespace AgeScript.Compiler.Compilation
 
             // push registers to stack & clear registers
 
-            Utils.MemCopy2(result, result.Memory.RegisterBase, result.Memory.StackPtr, Function.RegisterCount, false, true);
-            Utils.Clear2(result, result.Memory.RegisterBase, called_function.RegisterCount);
+            Utils.MemCopy2(result, result.Memory.RegisterBase, result.Memory.StackPtr, register_count, false, true);
+            Utils.Clear2(result.Rules, result.Memory.RegisterBase, called_register_count);
 
             // set return address and parameters
 
@@ -167,7 +177,7 @@ namespace AgeScript.Compiler.Compilation
 
             // increment stack-ptr
 
-            result.Rules.AddAction($"up-modify-goal {result.Memory.StackPtr} c:+ {Function.RegisterCount}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.StackPtr} c:+ {register_count}");
 
             if (result.Settings.Debug)
             {
@@ -183,8 +193,8 @@ namespace AgeScript.Compiler.Compilation
 
             // pop registers from stack
 
-            result.Rules.AddAction($"up-modify-goal {result.Memory.StackPtr} c:- {Function.RegisterCount}");
-            Utils.MemCopy2(result, result.Memory.StackPtr, result.Memory.RegisterBase, Function.RegisterCount, true);
+            result.Rules.AddAction($"up-modify-goal {result.Memory.StackPtr} c:- {register_count}");
+            Utils.MemCopy2(result, result.Memory.StackPtr, result.Memory.RegisterBase, register_count, true);
 
             if (result_address is not null)
             {

@@ -121,7 +121,7 @@ namespace AgeScript.Compiler.Parsing
 
                 if (bo >= 0)
                 {
-                    var id = Script.GetUniqueId();
+                    var id = Guid.NewGuid().ToString().Replace("-", string.Empty);
                     var lit = line[bo..(bc + 1)];
                     literals.Add(id, lit);
                     line = line.Replace(lit, id);

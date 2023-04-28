@@ -15,32 +15,10 @@ namespace AgeScript.Compiler.Language
 {
     public class Script : Validated
     {
-        public static string GetUniqueId() => Guid.NewGuid().ToString().Replace("-", string.Empty);
-
         public IReadOnlyDictionary<string, Type> Types { get; } = new Dictionary<string, Type>();
         public IReadOnlyDictionary<string, Variable> GlobalVariables { get; } = new Dictionary<string, Variable>();
         public IEnumerable<Function> Functions { get; } = new List<Function>();
         public IEnumerable<Table> Tables { get; } = new List<Table>();
-
-        internal int NonInlinedMemCopyReturnAddr { get; set; } // used when Settings.InlineMemCopy = false
-        internal int Error { get; set; } // set when run-time error occurs
-        internal int SpecialGoal { get; set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
-        internal int StackPtr { get; set; } // points to next free stack goal
-        internal int Sp0 { get; set; } // special purpose registers, for memcopy and such
-        internal int Sp1 { get; set; }
-        internal int Sp2 { get; set; }
-        internal int Sp3 { get; set; }
-        internal int Intr0 { get; set; } // special registers for intrinsics
-        internal int Intr1 { get; set; }
-        internal int Intr2 { get; set; }
-        internal int Intr3 { get; set; }
-        internal int Intr4 { get; set; }
-        internal int RegisterBase { get; set; } // start of registers
-        internal int RegisterCount { get; set; } // number of registers
-        internal int CallResultBase { get; set; } // start of goals where result of a function call is stored
-        internal int TableResultBase { get; set; } // start of lookup result
-        internal int StackLimit { get; set; } // stack-ptr can not grow beyond this
-        internal int DebugMaxStackSpaceUsed { get; set; } // debug max stack space used
 
         public Script()
         {
@@ -101,53 +79,6 @@ namespace AgeScript.Compiler.Language
             }
 
             ((List<Function>)Functions).Add(function);
-        }
-
-        public bool TryGetFunction(string name, IReadOnlyList<Expression> arguments, string? literal, out Function? function)
-        {
-            var f = Functions.SingleOrDefault(x =>
-            {
-                if (x.Name != name || x.Parameters.Count != arguments.Count)
-                {
-                    return false;
-                }
-                else
-                {
-                    if (x is Intrinsic intr)
-                    {
-                        if (intr.HasStringLiteral == literal is null)
-                        {
-                            return false;
-                        }
-                    }
-
-                    for (int i = 0; i < arguments.Count; i++)
-                    {
-                        var a = arguments[i];
-                        var p = x.Parameters[i];
-
-                        if (a.Type != p.Type)
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                }
-            });
-
-            if (f is not null)
-            {
-                function = f;
-
-                return true;
-            }
-            else
-            {
-                function = default;
-
-                return false;
-            }
         }
 
         public override void Validate()

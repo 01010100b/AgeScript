@@ -17,7 +17,7 @@ namespace AgeScript.Compiler.Language.Statements
             Accessor?.Validate();
             Expression.Validate();
 
-            if (Accessor is not null)
+            if (Accessor is not null && Expression is not CallExpression)
             {
                 if (Accessor.Type != Expression.Type)
                 {

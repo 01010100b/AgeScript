@@ -15,7 +15,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
 
         public abstract bool HasStringLiteral { get; }
 
-        protected ExpressionCompiler ExpressionCompiler { get; } = new();
         protected ExpressionCompiler2 ExpressionCompiler2 { get; }
 
         public Intrinsic() : base()
@@ -23,9 +22,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             Name = GetType().Name;
             ExpressionCompiler2 = new(this);
         }
-
-        internal abstract void CompileCall(Script script, Function function, RuleList rules,
-            CallExpression cl, int? result_address, bool ref_result_address = false);
 
         internal abstract void CompileCall2(CompilationResult result, CallExpression cl,
             int? result_address = null, bool ref_result_address = false);

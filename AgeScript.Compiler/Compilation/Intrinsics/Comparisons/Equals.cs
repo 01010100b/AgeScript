@@ -12,12 +12,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Comparisons
     {
         protected override Type ParameterType => Primitives.Int;
 
-        internal override void CompileCall(Script script, Function function, RuleList rules,
-            CallExpression cl, int? result_address, bool ref_result_address)
-        {
-            CompileComparison(script, function, rules, "==", cl, result_address, ref_result_address);
-        }
-
         internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             CompileComparison2(result, "==", cl, result_address, ref_result_address);

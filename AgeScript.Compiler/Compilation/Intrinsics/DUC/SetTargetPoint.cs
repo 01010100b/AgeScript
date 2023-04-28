@@ -19,12 +19,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
             Parameters.Add(new() { Name = "point", Type = Primitives.Int2 });
         }
 
-        internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
-        {
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
-            rules.AddAction($"up-set-target-point {script.Intr0}");
-        }
-
         internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);

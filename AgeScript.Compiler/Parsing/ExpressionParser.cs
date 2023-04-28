@@ -11,7 +11,7 @@ namespace AgeScript.Compiler.Parsing
     internal class ExpressionParser
     {
         public Expression Parse(Script script, Function function, string expression,
-            IReadOnlyDictionary<string, string> literals)
+            IReadOnlyDictionary<string, string> literals, Type? type)
         {
             if (expression.Contains('('))
             {
@@ -39,7 +39,7 @@ namespace AgeScript.Compiler.Parsing
                     }
                     else
                     {
-                        var expr = Parse(script, function, arg, literals);
+                        var expr = Parse(script, function, arg, literals, null);
 
                         if (expr is CallExpression)
                         {
@@ -52,12 +52,12 @@ namespace AgeScript.Compiler.Parsing
                     }
                 }
 
-                if (script.TryGetFunction(name, arguments, literal, out var f))
+                if (type is not null)
                 {
                     var cex = new CallExpression()
                     {
-                        Function = f!,
-                        FunctionName = f!.Name,
+                        FunctionName = name,
+                        ReturnType = type,
                         Arguments = arguments,
                         Literal = literal
                     };
@@ -68,7 +68,7 @@ namespace AgeScript.Compiler.Parsing
                 }
                 else
                 {
-                    throw new Exception("Can not find function.");
+                    throw new Exception("No type given for call expression.");
                 }
             }
             else if (TryParseAccessor(script, function, expression, out var accessor))

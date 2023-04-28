@@ -10,8 +10,6 @@ namespace AgeScript.Compiler.Language
     {
         public required Type Type { get; init; }
 
-        internal int Address { get; set; }
-
         public override void Validate()
         {
             base.Validate();

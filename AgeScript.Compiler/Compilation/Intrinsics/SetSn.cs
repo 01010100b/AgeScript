@@ -21,17 +21,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             Parameters.Add(new() { Name = "value", Type = Primitives.Int });
         }
 
-        internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
-        {
-            if (cl.Arguments[0] is not ConstExpression sn)
-            {
-                throw new Exception("sn must be const expression.");
-            }
-
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr0);
-            rules.AddAction($"up-modify-sn {sn.Int} g:= {script.Intr0}");
-        }
-
         internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (cl.Arguments[0] is not ConstExpression sn)

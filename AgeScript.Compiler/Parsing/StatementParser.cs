@@ -36,7 +36,7 @@ namespace AgeScript.Compiler.Parsing
                         throw new Exception("Can not return anything from a function with return type Void.");
                     }
 
-                    var expression = ExpressionParser.Parse(script, function, expr, literals);
+                    var expression = ExpressionParser.Parse(script, function, expr, literals, function.ReturnType);
 
                     return new ReturnStatement() { Expression = expression };
                 }
@@ -51,7 +51,7 @@ namespace AgeScript.Compiler.Parsing
                 }
                 else
                 {
-                    var expression = ExpressionParser.Parse(script, function, expr, literals);
+                    var expression = ExpressionParser.Parse(script, function, expr, literals, Primitives.Bool);
 
                     return new IfStatement() { Condition = expression };
                 }
@@ -66,7 +66,7 @@ namespace AgeScript.Compiler.Parsing
                 }
                 else
                 {
-                    var expression = ExpressionParser.Parse(script, function, expr, literals);
+                    var expression = ExpressionParser.Parse(script, function, expr, literals, Primitives.Bool);
 
                     return new ElifStatement() { Condition = expression };
                 }
@@ -89,7 +89,7 @@ namespace AgeScript.Compiler.Parsing
                 }
                 else
                 {
-                    var expression = ExpressionParser.Parse(script, function, expr, literals);
+                    var expression = ExpressionParser.Parse(script, function, expr, literals, Primitives.Bool);
 
                     return new WhileStatement() { Condition = expression };
                 }
@@ -119,7 +119,7 @@ namespace AgeScript.Compiler.Parsing
                     }
                 }
 
-                var expression = ExpressionParser.Parse(script, function, rhs, literals);
+                var expression = ExpressionParser.Parse(script, function, rhs, literals, accessor?.Type ?? Primitives.Void);
 
                 var statement = new AssignStatement()
                 {

@@ -22,20 +22,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
             Parameters.Add(new() { Name = "b", Type = ParameterType });
         }
 
-        protected void CompileMath(Script script, Function function, RuleList rules, string op,
-            CallExpression cl, int? result_address, bool ref_result_address)
-        {
-            if (result_address is null)
-            {
-                return;
-            }
-
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr1);
-            rules.AddAction($"up-modify-goal {script.Intr0} g:{op} {script.Intr1}");
-            Utils.MemCopy(script, rules, script.Intr0, result_address.Value, 1, false, ref_result_address);
-        }
-
         protected void CompileMath2(CompilationResult result, string op, CallExpression cl,
             int? result_address, bool ref_result_address)
         {

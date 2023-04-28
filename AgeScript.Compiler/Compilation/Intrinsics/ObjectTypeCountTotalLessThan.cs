@@ -21,24 +21,6 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             Parameters.Add(new() { Name = "max", Type = Primitives.Int });
         }
 
-        internal override void CompileCall(Script script, Function function, RuleList rules, CallExpression cl, int? result_address, bool ref_result_address = false)
-        {
-            if (result_address is null)
-            {
-                return;
-            }
-
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
-            ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr1);
-            rules.AddAction($"set-goal {script.Intr2} 0");
-
-            rules.StartNewRule($"up-object-type-count-total g: {script.Intr0} g:< {script.Intr1}");
-            rules.AddAction($"set-goal {script.Intr2} 1");
-
-            rules.StartNewRule();
-            Utils.MemCopy(script, rules, script.Intr2, result_address.Value, ReturnType.Size, false, ref_result_address);
-        }
-
         internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (result_address is null)

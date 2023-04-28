@@ -16,10 +16,6 @@ namespace AgeScript.Compiler.Language
         public List<Statement> Statements { get; } = new();
         public IEnumerable<Variable> AllVariables => Parameters.Concat(LocalVariables);
 
-        internal int RegisterCount => AllVariables.Sum(x => x.Type.Size) + 1; // add 1 because first register is return addr
-        internal int Address { get; set; } = -1;
-        internal string AddressableName { get; } = Script.GetUniqueId();
-
         public Function()
         {
             ReturnType = Primitives.Void;
