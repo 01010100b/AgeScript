@@ -18,7 +18,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Boolean
             Parameters.Add(new() { Name = "a", Type = Primitives.Bool });
         }
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (result_address is null)
             {

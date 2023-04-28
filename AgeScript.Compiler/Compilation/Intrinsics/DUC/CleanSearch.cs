@@ -20,7 +20,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
             Parameters.Add(new() { Name = "search_order", Type = Primitives.Int });
         }
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (cl.Arguments[0] is not ConstExpression ce0)
             {

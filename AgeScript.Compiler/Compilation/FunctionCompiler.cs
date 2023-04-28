@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Compilation
 {
-    internal class FunctionCompiler2
+    internal class FunctionCompiler
     {
         private int LastReturnStatement { get; set; } = -2;
 
@@ -28,7 +28,7 @@ namespace AgeScript.Compiler.Compilation
             result.Rules.ResolveJumpTarget(result.Rules.GetJumpTarget(function));
             LastReturnStatement = -2;
 
-            var expression_compiler = new ExpressionCompiler2(function);
+            var expression_compiler = new ExpressionCompiler(function);
             CompileBlock(result, function, 0, expression_compiler);
 
             if (LastReturnStatement < function.Statements.Count - 1)
@@ -40,7 +40,7 @@ namespace AgeScript.Compiler.Compilation
             result.Rules.StartNewRule();
         }
 
-        private int CompileBlock(CompilationResult result, Function function, int index, ExpressionCompiler2 expression_compiler)
+        private int CompileBlock(CompilationResult result, Function function, int index, ExpressionCompiler expression_compiler)
         {
             for (int i = index; i < function.Statements.Count; i++)
             {

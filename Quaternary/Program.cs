@@ -24,13 +24,10 @@ namespace Quaternary
             var source = @"F:\Repos\AgeScript\Quaternary\Source";
             var destination = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai";
 
-            if (true)
-            {
-                Run2(name, source, destination, settings);
-            }
+            Run(name, source, destination, settings);
         }
 
-        private static void Run2(string name, string source, string destination, Settings settings)
+        private static void Run(string name, string source, string destination, Settings settings)
         {
             if (!Directory.Exists(source))
             {
@@ -66,7 +63,7 @@ namespace Quaternary
             var parser = new ScriptParser();
             var script = parser.Parse(lines);
             var compiler = new ScriptCompiler();
-            var result = compiler.Compile2(script, settings);
+            var result = compiler.Compile(script, settings);
             var linker = new Linker();
             var code = linker.Link(result.JumpTargetPer, result.JumpTargets);
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Compilation
 {
-    internal class TableCompiler2
+    internal class TableCompiler
     {
         public void Compile(CompilationResult result, Table table)
         {

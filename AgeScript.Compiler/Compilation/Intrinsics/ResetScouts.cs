@@ -17,7 +17,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             ReturnType = Primitives.Void;
         }
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             result.Rules.AddAction("up-reset-scouts");
         }

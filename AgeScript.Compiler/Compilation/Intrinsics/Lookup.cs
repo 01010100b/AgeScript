@@ -20,7 +20,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             Parameters.Add(new() { Name = "index", Type = Primitives.Int });
         }
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (cl.Literal is null)
             {

@@ -12,9 +12,9 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
     {
         protected override Type ParameterType => Primitives.Int;
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
-            CompileMath2(result, "-", cl, result_address, ref_result_address);
+            CompileMath(result, "-", cl, result_address, ref_result_address);
         }
     }
 

@@ -12,9 +12,9 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
     {
         protected override Type ParameterType => Primitives.Int;
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
-            CompileMath2(result, "*", cl, result_address, ref_result_address);
+            CompileMath(result, "*", cl, result_address, ref_result_address);
         }
     }
 
@@ -27,14 +27,14 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
             Name = "Mul";
         }
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             if (result_address is null)
             {
                 return;
             }
 
-            base.CompileCall2(result, cl, result.Memory.ConditionGoal);
+            base.CompileCall(result, cl, result.Memory.ConditionGoal);
 
             result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:z/ 100");
             Utils.MemCopy2(result, result.Memory.ConditionGoal, result_address.Value, 1, false, ref_result_address);

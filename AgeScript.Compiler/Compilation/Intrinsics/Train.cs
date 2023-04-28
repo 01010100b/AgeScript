@@ -21,7 +21,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             Parameters.Add(new() { Name = "unit_id", Type = Primitives.Int });
         }
 
-        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
             ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);

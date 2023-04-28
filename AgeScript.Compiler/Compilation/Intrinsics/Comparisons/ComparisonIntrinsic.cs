@@ -20,7 +20,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Comparisons
             Parameters.Add(new() { Name = "b", Type = ParameterType });
         }
 
-        protected void CompileComparison2(CompilationResult result, string op, CallExpression cl,
+        protected void CompileComparison(CompilationResult result, string op, CallExpression cl,
             int? result_address, bool ref_result_address)
         {
             if (result_address is null)

@@ -22,7 +22,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
             Parameters.Add(new() { Name = "b", Type = ParameterType });
         }
 
-        protected void CompileMath2(CompilationResult result, string op, CallExpression cl,
+        protected void CompileMath(CompilationResult result, string op, CallExpression cl,
             int? result_address, bool ref_result_address)
         {
             if (result_address is null)

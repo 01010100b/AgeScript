@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Compilation
 {
-    internal class ExpressionCompiler2
+    internal class ExpressionCompiler
     {
         private Function Function { get; init; }
 
-        public ExpressionCompiler2(Function function)
+        public ExpressionCompiler(Function function)
         {
             Function = function;
         }
@@ -111,7 +111,7 @@ namespace AgeScript.Compiler.Compilation
 
             if (called_function is Intrinsic intrinsic)
             {
-                intrinsic.CompileCall2(result, expression, result_address, ref_result_address);
+                intrinsic.CompileCall(result, expression, result_address, ref_result_address);
 
                 return;
             }

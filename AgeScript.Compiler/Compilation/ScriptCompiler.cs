@@ -13,7 +13,7 @@ namespace AgeScript.Compiler.Compilation
     {
         internal static Settings Settings { get; private set; } = new();
 
-        public CompilationResult Compile2(Script script, Settings settings)
+        public CompilationResult Compile(Script script, Settings settings)
         {
             script.Validate();
             settings.Validate();
@@ -48,7 +48,7 @@ namespace AgeScript.Compiler.Compilation
 
         private void CompileFunctions(CompilationResult result)
         {
-            var function_compiler = new FunctionCompiler2();
+            var function_compiler = new FunctionCompiler();
             var functions = result.Rules.GetFunctions().ToList();
             functions.Sort((a, b) =>
             {
@@ -74,7 +74,7 @@ namespace AgeScript.Compiler.Compilation
 
         private void CompileTables(CompilationResult result)
         {
-            var table_compiler = new TableCompiler2();
+            var table_compiler = new TableCompiler();
             var tables = result.Rules.GetTables().ToList();
             tables.Sort((a, b) => a.Name.CompareTo(b.Name));
 
