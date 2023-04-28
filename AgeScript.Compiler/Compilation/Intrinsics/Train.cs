@@ -2,9 +2,11 @@
 using AgeScript.Compiler.Language.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Compilation.Intrinsics
 {
@@ -26,6 +28,15 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             rules.StartNewRule($"up-can-train {script.Intr0} g: {script.Intr1}");
             rules.AddAction($"up-train {script.Intr0} g: {script.Intr1}");
             rules.StartNewRule();
+        }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            result.Rules.StartNewRule($"up-can-train {result.Memory.Intr0} g: {result.Memory.Intr1}");
+            result.Rules.AddAction($"up-train {result.Memory.Intr0} g: {result.Memory.Intr1}");
+            result.Rules.StartNewRule();
         }
     }
 }

@@ -11,19 +11,22 @@ namespace AgeScript.Compiler.Language
     {
         private const string NameRegex = @"^[a-zA-Z][a-zA-Z_0-9]*$";
 
-        public required string Name { get; init; }
-
-        public override void Validate()
+        public static void ValidateName(string name)
         {
-            if (!Regex.IsMatch(Name, NameRegex))
+            if (!Regex.IsMatch(name, NameRegex))
             {
-                throw new Exception($"Name {Name} does not follow rules.");
+                throw new Exception($"Name {name} does not follow rules.");
             }
 
-            if (Primitives.Keywords.Contains(Name))
+            if (Primitives.Keywords.Contains(name))
             {
-                throw new Exception($"Name {Name} is a reserved keyword.");
+                throw new Exception($"Name {name} is a reserved keyword.");
             }
         }
+        
+
+        public required string Name { get; init; }
+
+        public override void Validate() => ValidateName(Name);
     }
 }

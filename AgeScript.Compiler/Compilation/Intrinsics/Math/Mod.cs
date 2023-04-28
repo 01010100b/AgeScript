@@ -16,6 +16,11 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
         {
             CompileMath(script, function, rules, "mod", cl, result_address, ref_result_address);
         }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            CompileMath2(result, "mod", cl, result_address, ref_result_address);
+        }
     }
 
     internal class ModPrecise : Mod

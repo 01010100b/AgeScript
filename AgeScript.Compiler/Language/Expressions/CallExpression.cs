@@ -10,6 +10,7 @@ namespace AgeScript.Compiler.Language.Expressions
     public class CallExpression : Expression
     {
         public required Function Function { get; init; }
+        public required String FunctionName { get; init; }
         public required IReadOnlyList<Expression> Arguments { get; init; }
         public required string? Literal { get; init; }
         public override Type Type => Function.ReturnType;

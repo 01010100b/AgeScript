@@ -16,6 +16,11 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
         {
             CompileMath(script, function, rules, "z/", cl, result_address, ref_result_address);
         }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            CompileMath2(result, "z/", cl, result_address, ref_result_address);
+        }
     }
 
     internal class DivPrecise : Div
@@ -38,6 +43,19 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
 
             rules.AddAction($"up-modify-goal {script.SpecialGoal} c:* 100");
             Utils.MemCopy(script, rules, script.SpecialGoal, result_address.Value, 1, false, ref_result_address);
+        }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            if (result_address is null)
+            {
+                return;
+            }
+
+            base.CompileCall2(result, cl, result.Memory.ConditionGoal);
+
+            result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:* 100");
+            Utils.MemCopy2(result, result.Memory.ConditionGoal, result_address.Value, 1, false, ref_result_address);
         }
     }
 }

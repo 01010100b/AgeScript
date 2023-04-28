@@ -16,5 +16,10 @@ namespace AgeScript.Compiler
         public bool OptimizeComparisons { get; set; } = true;
         public bool Debug { get; set; } = false;
         public int TableModulus => MaxElementsPerRule - 2;
+
+        public void Validate()
+        {
+
+        }
     }
 }

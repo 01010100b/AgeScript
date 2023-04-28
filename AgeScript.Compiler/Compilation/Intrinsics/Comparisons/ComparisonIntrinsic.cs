@@ -36,6 +36,7 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Comparisons
                 rules.AddAction($"set-goal {result_address} 0");
                 rules.StartNewRule($"up-compare-goal {script.Intr0} g:{op} {script.Intr1}");
                 rules.AddAction($"set-goal {result_address} 1");
+                rules.StartNewRule();
             }
             else
             {
@@ -45,6 +46,23 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Comparisons
                 rules.StartNewRule();
                 Utils.MemCopy(script, rules, script.Intr2, result_address.Value, 1, false, ref_result_address);
             }
+        }
+
+        protected void CompileComparison2(CompilationResult result, string op, CallExpression cl,
+            int? result_address, bool ref_result_address)
+        {
+            if (result_address is null)
+            {
+                return;
+            }
+
+            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            result.Rules.AddAction($"set-goal {result.Memory.Intr2} 0");
+            result.Rules.StartNewRule($"up-compare-goal {result.Memory.Intr0} g:{op} {result.Memory.Intr1}");
+            result.Rules.AddAction($"set-goal {result.Memory.Intr2} 1");
+            result.Rules.StartNewRule();
+            Utils.MemCopy2(result, result.Memory.Intr2, result_address.Value, 1, false, ref_result_address);
         }
     }
 }

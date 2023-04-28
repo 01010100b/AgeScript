@@ -16,6 +16,11 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Comparisons
         {
             CompileComparison(script, function, rules, "!=", cl, result_address, ref_result_address);
         }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            CompileComparison2(result, "!=", cl, result_address, ref_result_address);
+        }
     }
 
     internal class NotEqualsPrecise : NotEquals

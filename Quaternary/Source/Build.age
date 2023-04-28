@@ -3,6 +3,7 @@
 Build_Housing()
 Build_Dropsites()
 
+
 Function Void Build_Housing():
 
 Int pop_headroom

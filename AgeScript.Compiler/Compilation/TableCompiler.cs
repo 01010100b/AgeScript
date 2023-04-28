@@ -12,17 +12,6 @@ namespace AgeScript.Compiler.Compilation
     {
         public static int Modulus => ScriptCompiler.Settings.MaxElementsPerRule - 2;
 
-        private RuleList Rules { get; init; }
-        private Memory Memory { get; init; }
-        private Settings Settings { get; init; }
-
-        public TableCompiler(RuleList rules, Memory memory, Settings settings)
-        {
-            Rules = rules;
-            Memory = memory;
-            Settings = settings;
-        }
-
         public void Compile(Script script, RuleList rules, Table table)
         {
             Console.WriteLine($"Compiling table {table.Name}");

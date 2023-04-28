@@ -16,6 +16,11 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.Math
         {
             CompileMath(script, function, rules, "max", cl, result_address, ref_result_address);
         }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            CompileMath2(result, "max", cl, result_address, ref_result_address);
+        }
     }
 
     internal class MaxPrecise : Max

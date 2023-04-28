@@ -9,6 +9,7 @@ if Equals(Tick, 0)
 Main_Initialize()
 endif
 
+
 CivPopPercentage = 60
 
 DoStrategy()

@@ -2,9 +2,11 @@
 using AgeScript.Compiler.Language.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Compilation.Intrinsics
 {
@@ -29,12 +31,24 @@ namespace AgeScript.Compiler.Compilation.Intrinsics
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[0], script.Intr0);
             rules.AddAction($"up-chat-data-to-self {cl.Literal} g: {script.Intr0}");
         }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            if (cl.Literal is null)
+            {
+                throw new Exception("Literal is null.");
+            }
+
+            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            result.Rules.AddAction($"up-chat-data-to-self {cl.Literal} g: {result.Memory.Intr0}");
+        }
     }
 
     internal class ChatDataToSelfPrecise : ChatDataToSelf
     {
         public ChatDataToSelfPrecise() : base()
         {
+            Name = "ChatDataToSelf";
             Parameters.Clear();
             Parameters.Add(new() { Name = "value", Type = Primitives.Precise });
         }

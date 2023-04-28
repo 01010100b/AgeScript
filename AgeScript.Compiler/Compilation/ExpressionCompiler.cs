@@ -114,7 +114,7 @@ namespace AgeScript.Compiler.Compilation
             rules.AddAction($"up-modify-goal {script.SpecialGoal} g:= {script.StackPtr}");
             rules.AddAction($"up-modify-goal {script.SpecialGoal} c:+ {function.RegisterCount}");
             rules.StartNewRule($"up-compare-goal {script.SpecialGoal} c:> {script.StackLimit}");
-            rules.AddAction($"set-goal {script.Error} {Errors.STACK_OVERFLOW}");
+            rules.AddAction($"set-goal {script.Error} {(int)Errors.STACK_OVERFLOW}");
             rules.AddAction($"up-jump-direct c: {MemoryCompiler.JUMP_END}");
             rules.StartNewRule();
 

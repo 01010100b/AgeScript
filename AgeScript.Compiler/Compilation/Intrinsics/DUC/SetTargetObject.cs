@@ -2,9 +2,11 @@
 using AgeScript.Compiler.Language.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
 {
@@ -27,6 +29,17 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
 
             ExpressionCompiler.Compile(script, function, rules, cl.Arguments[1], script.Intr0);
             rules.AddAction($"up-set-target-object {ce.Int} g: {script.Intr0}");
+        }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            if (cl.Arguments[0] is not ConstExpression ce)
+            {
+                throw new Exception("search_source must be const expression.");
+            }
+
+            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr0);
+            result.Rules.AddAction($"up-set-target-object {ce.Int} g: {result.Memory.Intr0}");
         }
     }
 }

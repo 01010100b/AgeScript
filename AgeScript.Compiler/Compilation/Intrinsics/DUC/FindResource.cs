@@ -31,5 +31,18 @@ namespace AgeScript.Compiler.Compilation.Intrinsics.DUC
                 Utils.MemCopy(script, rules, script.Intr0, result_address.Value, ReturnType.Size, false, ref_result_address);
             }
         }
+
+        internal override void CompileCall2(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
+        {
+            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            result.Rules.AddAction($"up-find-resource g: {result.Memory.Intr0} g: {result.Memory.Intr1}");
+
+            if (result_address is not null)
+            {
+                result.Rules.AddAction($"up-get-search-state {result.Memory.Intr0}");
+                Utils.MemCopy2(result, result.Memory.Intr0, result_address.Value, 4, false, ref_result_address);
+            }
+        }
     }
 }

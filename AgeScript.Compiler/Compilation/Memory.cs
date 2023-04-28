@@ -9,12 +9,10 @@ namespace AgeScript.Compiler.Compilation
 {
     internal class Memory
     {
-        public const int JUMP_END = 20000;
-
         // goals
         public int NonInlinedMemCopyReturnAddr { get; private set; } // used when Settings.InlineMemCopy = false
         public int Error { get; private set; } // set when run-time error occurs
-        public int SpecialGoal { get; private set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
+        public int ConditionGoal { get; private set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
         public int StackPtr { get; private set; } // points to next free stack goal
         public int Sp0 { get; private set; } // special purpose registers, for memcopy and such
         public int Sp1 { get; private set; }
@@ -34,12 +32,24 @@ namespace AgeScript.Compiler.Compilation
         public int RegisterCount { get; private set; } // number of registers
         public int StackLimit { get; private set; } // stack-ptr can not grow beyond this
 
-        public IReadOnlyDictionary<string, int> JumpTargets { get; } = new Dictionary<string, int>();
+        private Dictionary<Variable, int> VariableAddresses { get; } = new();
 
         public Memory(Script script, RuleList rules, Settings settings)
         {
             SetAddresses(script, settings);
             InitializeMemory(rules, settings);
+        }
+
+        public int GetAddress(Variable variable)
+        {
+            if (VariableAddresses.TryGetValue(variable, out var address))
+            {
+                return address;
+            }
+            else
+            {
+                throw new Exception("Variable not found.");
+            }
         }
 
         private void SetAddresses(Script script, Settings settings)
@@ -54,7 +64,7 @@ namespace AgeScript.Compiler.Compilation
             // special goals at the end as they won't be used with up functions
 
             Error = goal;
-            SpecialGoal = --goal;
+            ConditionGoal = --goal;
             StackPtr = --goal;
 
             if (!settings.InlineMemCopy)
@@ -89,7 +99,7 @@ namespace AgeScript.Compiler.Compilation
             foreach (var variable in script.GlobalVariables.Values)
             {
                 goal -= variable.Type.Size;
-                variable.Address = goal;
+                VariableAddresses.Add(variable, goal);
             }
 
             // registers below that
@@ -104,19 +114,19 @@ namespace AgeScript.Compiler.Compilation
 
                 foreach (var variable in function.AllVariables)
                 {
-                    variable.Address = RegisterBase + offset;
+                    VariableAddresses.Add(variable, RegisterBase + offset);
                     offset += variable.Type.Size;
                 }
             }
 
             // call result below that
 
-            goal -= script.Functions.Max(x => x.ReturnType.Size);
+            goal -= Math.Max(1, script.Functions.Max(x => x.ReturnType.Size));
             CallResultBase = goal;
 
-            // and this is the stack limit
+            // and this is also the stack limit
 
-            StackLimit = goal;
+            StackLimit = CallResultBase;
 
             if (StackLimit < 41)
             {
@@ -128,42 +138,27 @@ namespace AgeScript.Compiler.Compilation
         {
             // initialize everything once
 
-            rules.AddAction($"set-goal {SpecialGoal} 0");
+            rules.AddAction($"set-goal {ConditionGoal} 0");
             rules.StartNewRule();
-            rules.AddAction($"set-goal {SpecialGoal} 1");
+            rules.AddAction($"set-goal {ConditionGoal} 1");
             rules.AddAction("disable-self");
 
-            rules.StartNewRule($"goal {SpecialGoal} 0");
-            var jmpid = Script.GetUniqueId();
-            rules.AddAction($"up-jump-direct c: {jmpid}");
+            rules.StartNewRule($"goal {ConditionGoal} 0");
+            var jump_target = rules.CreateJumpTarget();
+            rules.AddAction($"up-jump-direct c: {jump_target}");
             rules.StartNewRule();
 
             Utils.Clear(rules, 1, settings.MaxGoal);
 
             rules.StartNewRule();
-            var id = rules.CurrentRuleIndex;
-            rules.ReplaceStrings(jmpid, id.ToString());
+            rules.ResolveJumpTarget(jump_target);
 
             // initialize each tick
 
-            rules.AddAction($"set-goal {SpecialGoal} 0");
+            rules.AddAction($"set-goal {ConditionGoal} 0");
             rules.AddAction($"set-goal {StackPtr} 1");
             Utils.Clear(rules, RegisterBase, RegisterCount);
-            rules.AddAction($"set-goal {RegisterBase} {JUMP_END}");
-
-            // don't run if error
-
-            rules.StartNewRule($"up-compare-goal {Error} c:> 0");
-            rules.AddAction($"up-chat-data-to-self \"ERROR: %d\" g: {Error}");
-            rules.AddAction($"up-jump-direct c: {JUMP_END}");
-            rules.StartNewRule();
-
-            if (settings.Debug)
-            {
-                rules.AddAction($"set-goal {Intr0} {StackLimit}");
-                rules.AddAction($"up-modify-goal {Intr0} g:- {DebugMaxStackSpaceUsed}");
-                rules.AddAction($"up-chat-data-to-self \"stack remaining: %d\" g: {Intr0}");
-            }
+            rules.AddAction($"set-goal {RegisterBase} {rules.EndTarget}");
         }
     }
 }

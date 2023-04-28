@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Language
 {
-    public static class Errors
+    public enum Errors
     {
-        public const int STACK_OVERFLOW = 1;
+        STACK_OVERFLOW = 1
     }
 }

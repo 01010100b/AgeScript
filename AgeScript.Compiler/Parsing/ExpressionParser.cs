@@ -57,6 +57,7 @@ namespace AgeScript.Compiler.Parsing
                     var cex = new CallExpression()
                     {
                         Function = f!,
+                        FunctionName = f!.Name,
                         Arguments = arguments,
                         Literal = literal
                     };

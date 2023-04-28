@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AgeScript.Compiler\AgeScript.Compiler.csproj" />
+    <ProjectReference Include="..\AgeScript.Linker\AgeScript.Linker.csproj" />
   </ItemGroup>
 
 </Project>
