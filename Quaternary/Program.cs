@@ -1,5 +1,4 @@
 ﻿using AgeScript.Compiler;
-using AgeScript.Compiler.Compilation;
 using AgeScript.Parser;
 using AgeScript.Linker;
 
@@ -16,7 +15,7 @@ namespace Quaternary
                 MaxElementsPerRule = 16,
                 MaxGoal = 512,
                 OptimizeMemCopy = true,
-                InlineMemCopy = true
+                InlineMemCopy = false
             };
 
             var name = "Quaternary";
