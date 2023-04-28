@@ -26,8 +26,8 @@ namespace AgeScript.Compiler.Intrinsics
                 return;
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr2);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr2);
             result.Rules.AddAction($"up-get-point-distance {result.Memory.Intr0} {result.Memory.Intr2} {result.Memory.Intr4}");
             Utils.MemCopy(result, result.Memory.Intr4, result_address.Value, ReturnType.Size, false, ref_result_address);
         }

@@ -37,7 +37,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
             }
 
             var op = cl.Literal.Replace("\"", string.Empty);
-            ExpressionCompiler2.Compile(result, cl.Arguments[2], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[2], result.Memory.Intr0);
             result.Rules.AddAction($"up-remove-objects {ce0.Int} {ce1.Int} g:{op} {result.Memory.Intr0}");
         }
     }

@@ -21,8 +21,8 @@ namespace AgeScript.Compiler.Intrinsics
 
         internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr2);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr2);
             result.Rules.StartNewRule($"up-can-build-line 0 {result.Memory.Intr0} g: {result.Memory.Intr2}");
             result.Rules.AddAction($"up-build-line {result.Memory.Intr0} {result.Memory.Intr0} g: {result.Memory.Intr2}");
             result.Rules.StartNewRule();

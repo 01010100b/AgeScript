@@ -25,7 +25,7 @@ namespace AgeScript.Compiler.Intrinsics
                 throw new Exception("Literal is null.");
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             result.Rules.AddAction($"up-chat-data-to-self {cl.Literal} g: {result.Memory.Intr0}");
         }
     }

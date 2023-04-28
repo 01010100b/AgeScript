@@ -15,7 +15,8 @@ namespace Quaternary
                 MaxElementsPerRule = 16,
                 MaxGoal = 512,
                 OptimizeMemCopy = true,
-                InlineMemCopy = false
+                InlineMemCopy = false,
+                Debug = false
             };
 
             var name = "Quaternary";
@@ -74,8 +75,6 @@ namespace Quaternary
             var per = Path.Combine(destination, $"{name}.per");
             File.Delete(per);
             File.WriteAllText(per, code);
-
-            File.WriteAllText(Path.Combine(Folder, "script debug.json"), script.ToString());
 
             Console.WriteLine($"Compiled {name} succesfully.");
             Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} elements for {result.CommandCount / (double)result.RuleCount:N2} elements per rule.");

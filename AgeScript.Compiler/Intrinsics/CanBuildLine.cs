@@ -27,9 +27,9 @@ namespace AgeScript.Compiler.Intrinsics
                 return;
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);
-            ExpressionCompiler2.Compile(result, cl.Arguments[2], result.Memory.Intr3);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            ExpressionCompiler.Compile(result, cl.Arguments[2], result.Memory.Intr3);
             result.Rules.AddAction($"set-goal {result.Memory.Intr4} 0");
 
             result.Rules.StartNewRule($"up-can-build-line {result.Memory.Intr0} {result.Memory.Intr1} g: {result.Memory.Intr3}");

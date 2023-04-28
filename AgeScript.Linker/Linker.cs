@@ -8,14 +8,14 @@ namespace AgeScript.Linker
 {
     public class Linker
     {
-        public string Link(string per, IReadOnlyDictionary<string, int> jump_targets)
+        public string Link(string jtp, IReadOnlyDictionary<string, int> jump_targets)
         {
             foreach (var jump in jump_targets)
             {
-                per = per.Replace(jump.Key, jump.Value.ToString());
+                jtp = jtp.Replace(jump.Key, jump.Value.ToString());
             }
 
-            return per;
+            return jtp;
         }
     }
 }

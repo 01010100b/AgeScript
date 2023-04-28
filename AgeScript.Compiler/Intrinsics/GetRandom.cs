@@ -27,7 +27,7 @@ namespace AgeScript.Compiler.Intrinsics
             }
             var big_max = (int.MaxValue - 100000000) / 3;
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             result.Rules.AddAction($"up-get-precise-time 0 {result.Memory.Intr1}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} g:mod {result.Memory.Intr0}");
 

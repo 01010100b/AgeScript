@@ -26,7 +26,7 @@ namespace AgeScript.Compiler.Intrinsics
                 throw new Exception("sn must be const expression.");
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr0);
             result.Rules.AddAction($"up-modify-sn {sn.Int} g:= {result.Memory.Intr0}");
         }
     }

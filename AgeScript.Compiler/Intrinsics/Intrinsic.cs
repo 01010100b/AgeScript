@@ -13,12 +13,12 @@ namespace AgeScript.Compiler.Intrinsics
 
         public abstract bool HasStringLiteral { get; }
 
-        protected ExpressionCompiler ExpressionCompiler2 { get; }
+        protected ExpressionCompiler ExpressionCompiler { get; }
 
         public Intrinsic() : base()
         {
             Name = GetType().Name;
-            ExpressionCompiler2 = new(this);
+            ExpressionCompiler = new(this);
         }
 
         internal abstract void CompileCall(CompilationResult result, CallExpression cl,

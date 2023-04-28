@@ -24,7 +24,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
                 throw new Exception("search_source must be const expression.");
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr0);
             result.Rules.AddAction($"up-set-target-object {ce.Int} g: {result.Memory.Intr0}");
         }
     }

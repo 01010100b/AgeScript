@@ -34,7 +34,7 @@ namespace AgeScript.Compiler.Intrinsics
             var table_target = result.Rules.GetJumpTarget(table);
             var return_target = result.Rules.CreateJumpTarget();
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} g:= {result.Memory.Intr0}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} c:z/ {result.Settings.TableModulus}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} c:+ {table_target}");

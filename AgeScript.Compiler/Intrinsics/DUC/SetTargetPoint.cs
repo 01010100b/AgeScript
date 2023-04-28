@@ -18,7 +18,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
 
         internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             result.Rules.AddAction($"up-set-target-point {result.Memory.Intr0}");
         }
     }

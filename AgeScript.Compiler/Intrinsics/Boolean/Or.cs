@@ -24,8 +24,8 @@ namespace AgeScript.Compiler.Intrinsics.Boolean
                 return;
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
             result.Rules.AddAction($"set-goal {result.Memory.Intr2} 0");
             result.Rules.StartNewRule($"or (goal {result.Memory.Intr0} 1) (goal {result.Memory.Intr1} 1)");
             result.Rules.AddAction($"set-goal {result.Memory.Intr2} 1");

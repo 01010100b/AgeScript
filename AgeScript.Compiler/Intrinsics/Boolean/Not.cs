@@ -23,7 +23,7 @@ namespace AgeScript.Compiler.Intrinsics.Boolean
                 return;
             }
 
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             result.Rules.AddAction($"set-goal {result.Memory.Intr1} 0");
             result.Rules.StartNewRule($"not (goal {result.Memory.Intr0} 1)");
             result.Rules.AddAction($"set-goal {result.Memory.Intr1} 1");

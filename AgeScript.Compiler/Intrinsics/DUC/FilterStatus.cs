@@ -19,8 +19,8 @@ namespace AgeScript.Compiler.Intrinsics.DUC
 
         internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
-            ExpressionCompiler2.Compile(result, cl.Arguments[0], result.Memory.Intr0);
-            ExpressionCompiler2.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
             result.Rules.AddAction($"up-filter-status g: {result.Memory.Intr0} g: {result.Memory.Intr1}");
         }
     }
