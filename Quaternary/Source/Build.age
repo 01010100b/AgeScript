@@ -10,7 +10,6 @@ Int pop_headroom
 Int housing_headroom
 Bool no_pending
 Int[2] point
-Bool success
 
 pop_headroom = GetPlayerFact(Player, FACT_POPULATION_HEADROOM, 0)
 housing_headroom = GetPlayerFact(Player, FACT_HOUSING_HEADROOM, 0)
@@ -33,7 +32,7 @@ if Not(no_pending)
 endif
 
 point = GetPoint(POSITION_SELF)
-success = BuildPoint(true, point, 12, HOUSE)
+BuildPoint(true, point, 12, HOUSE)
 
 Function Void Build_Dropsites():
 

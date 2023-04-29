@@ -31,8 +31,8 @@ namespace AgeScript.Compiler.Intrinsics
 
             result.Rules.StartNewRule($"up-object-type-count-total g: {result.Memory.Intr0} g:< {result.Memory.Intr1}");
             result.Rules.AddAction($"set-goal {result.Memory.Intr2} 1");
-
             result.Rules.StartNewRule();
+
             Utils.MemCopy(result, result.Memory.Intr2, result_address.Value, ReturnType.Size, false, ref_result_address);
         }
     }

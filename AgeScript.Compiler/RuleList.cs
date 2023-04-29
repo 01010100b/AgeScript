@@ -18,8 +18,6 @@ namespace AgeScript.Compiler
         internal string EndTarget { get; private init; }
         internal string MemCopyTarget { get; private init; }
 
-        internal int CurrentRuleIndex => Rules.Count;
-
         private List<string> Rules { get; } = new();
         private StringBuilder CurrentRule { get; } = new();
         private int CurrentRuleElements { get; set; } = 0;
@@ -27,6 +25,7 @@ namespace AgeScript.Compiler
         private Dictionary<Function, string> FunctionTargets { get; } = new();
         private Dictionary<Table, string> TableTargets { get; } = new();
         private Settings Settings { get; init; }
+        private int CurrentRuleIndex => Rules.Count;
 
         public RuleList(Script script, Settings settings)
         {
@@ -66,13 +65,14 @@ namespace AgeScript.Compiler
 
             EndTarget = CreateJumpTarget();
             ResolveJumpTarget(EndTarget, 20000);
+
             if (!Settings.InlineMemCopy)
             {
                 MemCopyTarget = CreateJumpTarget();
             }
             else
             {
-                MemCopyTarget = "UNUSED MEM COPY TARGET";
+                MemCopyTarget = string.Empty;
             }
 
             StartNewRule();
@@ -189,7 +189,7 @@ namespace AgeScript.Compiler
             }
             catch
             {
-                throw new Exception("Failed to resolve function.");
+                throw new Exception("Function not found.");
             }
         }
 
@@ -211,21 +211,6 @@ namespace AgeScript.Compiler
 
         public string GetPer()
         {
-            return ToString();
-        }
-
-        public IReadOnlyDictionary<string, int> GetJumpTargets() => JumpTargets;
-
-        public void ReplaceStrings(string from, string to)
-        {
-            for (int i = 0; i < Rules.Count; i++)
-            {
-                Rules[i] = Rules[i].Replace(from, to);
-            }
-        }
-
-        public override string ToString()
-        {
             var sb = new StringBuilder();
             sb.AppendLine($"; Compiled with AgeScript v{GetType().Assembly.GetName().Version}");
             sb.AppendLine();
@@ -238,5 +223,7 @@ namespace AgeScript.Compiler
 
             return sb.ToString();
         }
+
+        public IReadOnlyDictionary<string, int> GetJumpTargets() => JumpTargets;
     }
 }
