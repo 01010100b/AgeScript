@@ -29,9 +29,9 @@ namespace AgeScript.Compiler.Intrinsics.Economy
                 throw new Exception("resource must be const expression.");
             }
 
-            result.Rules.AddAction($"set-goal {result.Memory.Intr0} 0");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} c:= 0");
             result.Rules.StartNewRule($"resource-found {ce.Int}");
-            result.Rules.AddAction($"set-goal {result.Memory.Intr0} 1");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} c:= 1");
             result.Rules.StartNewRule();
             Utils.MemCopy(result, result.Memory.Intr0, result_address.Value, ReturnType.Size, false, ref_result_address);
         }

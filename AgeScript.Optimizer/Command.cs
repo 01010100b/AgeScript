@@ -13,11 +13,15 @@ namespace AgeScript.Optimizer
         public string Code { get; set; } = string.Empty;
         public int Elements => Code.Count(x => x == '(');
         public bool IsCompound => Elements > 1;
-        public string Id => IsCompound ? throw new Exception("Can not get id of compound command") : GetId();
-        public bool IsJump => JumpCommands.Contains(Id);
+        public bool IsJump => JumpCommands.Contains(GetId());
 
         private string GetId()
         {
+            if (IsCompound)
+            {
+                throw new Exception("Can not get id of compound command");
+            }
+
             var id = Code.Split(' ')[0].Replace("(", string.Empty).Replace(")", string.Empty).Trim();
 
             return id;

@@ -22,7 +22,13 @@ namespace AgeScript.Optimizer
                 }
 
                 var rule = ParseRule(pieces[i]);
+
                 rule.AllowOptimizations = allow;
+                if (rule.Actions.Select(x => x.Code).Contains("(disable-self)"))
+                {
+                    rule.AllowOptimizations = false;
+                }
+
                 rules.Add(rule);
             }
 

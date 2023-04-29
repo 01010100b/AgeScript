@@ -17,7 +17,7 @@ namespace AgeScript.Compiler
 
             for (int i = 0; i < length; i++)
             {
-                rules.AddAction($"set-goal {from + i} 0");
+                rules.AddAction($"up-modify-goal {from + i} c:= 0");
             }
         }
 
@@ -51,7 +51,7 @@ namespace AgeScript.Compiler
             }
             else
             {
-                result.Rules.AddAction($"set-goal {result.Memory.Sp1} {from}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.Sp1} c:= {from}");
             }
 
             if (from_offset != 0)
@@ -72,7 +72,7 @@ namespace AgeScript.Compiler
             }
             else
             {
-                result.Rules.AddAction($"set-goal {result.Memory.Sp2} {to}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.Sp2} c:= {to}");
             }
 
             if (to_offset != 0)
@@ -108,7 +108,7 @@ namespace AgeScript.Compiler
                 return;
             }
 
-            result.Rules.AddAction($"set-goal {result.Memory.Sp0} {length}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Sp0} c:= {length}");
 
             if (result.Settings.InlineMemCopy)
             {
@@ -126,7 +126,7 @@ namespace AgeScript.Compiler
             else
             {
                 var target = result.Rules.CreateJumpTarget();
-                result.Rules.AddAction($"set-goal {result.Memory.NonInlinedMemCopyReturnAddr} {target}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.NonInlinedMemCopyReturnAddr} c:= {target}");
                 result.Rules.AddAction($"up-jump-direct c: {result.Rules.MemCopyTarget}");
                 result.Rules.StartNewRule();
                 result.Rules.ResolveJumpTarget(target);

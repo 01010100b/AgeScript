@@ -38,7 +38,7 @@ namespace AgeScript.Compiler.Intrinsics
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} g:= {result.Memory.Intr0}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} c:z/ {result.Settings.TableModulus}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr1} c:+ {table_target}");
-            result.Rules.AddAction($"set-goal {result.Memory.Intr2} {return_target}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= {return_target}");
             result.Rules.AddAction($"up-jump-direct g: {result.Memory.Intr1}");
 
             result.Rules.StartNewRule();

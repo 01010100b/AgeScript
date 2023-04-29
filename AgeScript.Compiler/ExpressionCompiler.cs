@@ -51,15 +51,15 @@ namespace AgeScript.Compiler
 
             if (expression.Type == Primitives.Int)
             {
-                result.Rules.AddAction($"set-goal {result.Memory.ConditionGoal} {expression.Int}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:= {expression.Int}");
             }
             else if (expression.Type == Primitives.Bool)
             {
-                result.Rules.AddAction($"set-goal {result.Memory.ConditionGoal} {(expression.Bool ? 1 : 0)}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:= {(expression.Bool ? 1 : 0)}");
             }
             else if (expression.Type == Primitives.Precise)
             {
-                result.Rules.AddAction($"set-goal {result.Memory.ConditionGoal} {expression.Precise}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:= {expression.Precise}");
             }
             else
             {
@@ -121,7 +121,7 @@ namespace AgeScript.Compiler
             result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} g:= {result.Memory.StackPtr}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:+ {register_count}");
             result.Rules.StartNewRule($"up-compare-goal {result.Memory.ConditionGoal} c:> {result.Memory.StackLimit}");
-            result.Rules.AddAction($"set-goal {result.Memory.Error} {(int)Errors.STACK_OVERFLOW}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Error} c:= {(int)Errors.STACK_OVERFLOW}");
             result.Rules.AddAction($"up-jump-direct c: {result.Rules.EndTarget}");
             result.Rules.StartNewRule();
 
@@ -133,7 +133,7 @@ namespace AgeScript.Compiler
             // set return address and parameters
 
             var return_target = result.Rules.CreateJumpTarget();
-            result.Rules.AddAction($"set-goal {result.Memory.RegisterBase} {return_target}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.RegisterBase} c:= {return_target}");
 
             for (int i = 0; i < expression.Arguments.Count; i++)
             {

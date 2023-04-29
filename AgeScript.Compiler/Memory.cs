@@ -140,9 +140,9 @@ namespace AgeScript.Compiler
         {
             // initialize everything once
 
-            rules.AddAction($"set-goal {ConditionGoal} 0");
+            rules.AddAction($"up-modify-goal {ConditionGoal} c:= 0");
             rules.StartNewRule();
-            rules.AddAction($"set-goal {ConditionGoal} 1");
+            rules.AddAction($"up-modify-goal {ConditionGoal} c:= 1");
             rules.AddAction("disable-self");
 
             rules.StartNewRule($"goal {ConditionGoal} 0");
@@ -157,10 +157,10 @@ namespace AgeScript.Compiler
 
             // initialize each tick
 
-            rules.AddAction($"set-goal {ConditionGoal} 0");
-            rules.AddAction($"set-goal {StackPtr} 1");
+            rules.AddAction($"up-modify-goal {ConditionGoal} c:= 0");
+            rules.AddAction($"up-modify-goal {StackPtr} c:= 1");
             Utils.Clear(rules, RegisterBase, RegisterCount);
-            rules.AddAction($"set-goal {RegisterBase} {rules.EndTarget}");
+            rules.AddAction($"up-modify-goal {RegisterBase} c:= {rules.EndTarget}");
         }
     }
 }

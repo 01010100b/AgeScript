@@ -28,7 +28,7 @@ namespace AgeScript.Compiler.Intrinsics
                 throw new Exception("Literal is null.");
             }
 
-            result.Rules.AddAction($"set-goal {result.Memory.Intr0} {cl.Literal.Replace("\"", string.Empty)}");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} c:= {cl.Literal.Replace("\"", string.Empty)}");
             Utils.MemCopy(result, result.Memory.Intr0, result_address.Value, 1, false, ref_result_address);
         }
     }

@@ -17,7 +17,7 @@ namespace AgeScript.Compiler
 
             foreach (var value in table.Values)
             {
-                result.Rules.AddAction($"set-goal {result.Memory.TableResultBase + element} {value}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.TableResultBase + element} c:= {value}");
                 element++;
 
                 if (element >= result.Settings.TableModulus)

@@ -39,7 +39,7 @@ namespace AgeScript.Compiler
 
             if (result.Settings.Debug)
             {
-                result.Rules.AddAction($"set-goal {result.Memory.Intr0} {result.Memory.StackLimit}");
+                result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} c:= {result.Memory.StackLimit}");
                 result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} g:- {result.Memory.DebugMaxStackSpaceUsed}");
                 result.Rules.AddAction($"up-chat-data-to-self \"stack remaining: %d\" g: {result.Memory.Intr0}");
             }

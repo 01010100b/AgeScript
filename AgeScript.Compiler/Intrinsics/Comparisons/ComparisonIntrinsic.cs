@@ -28,9 +28,9 @@ namespace AgeScript.Compiler.Intrinsics.Comparisons
 
             ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
-            result.Rules.AddAction($"set-goal {result.Memory.Intr2} 0");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 0");
             result.Rules.StartNewRule($"up-compare-goal {result.Memory.Intr0} g:{op} {result.Memory.Intr1}");
-            result.Rules.AddAction($"set-goal {result.Memory.Intr2} 1");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 1");
             result.Rules.StartNewRule();
             Utils.MemCopy(result, result.Memory.Intr2, result_address.Value, 1, false, ref_result_address);
         }
