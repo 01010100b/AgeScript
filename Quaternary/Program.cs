@@ -1,6 +1,7 @@
 ﻿using AgeScript.Compiler;
 using AgeScript.Parser;
 using AgeScript.Linker;
+using AgeScript.Optimizer;
 
 namespace Quaternary
 {
@@ -20,7 +21,7 @@ namespace Quaternary
             };
 
             var name = "Quaternary";
-            var source = @"F:\Repos\AgeScript\Quaternary\Source";
+            var source = @"F:\Repos\01010100b\AgeScript\Quaternary\Source";
             var destination = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai";
 
             Run(name, source, destination, settings);
@@ -63,8 +64,13 @@ namespace Quaternary
             var script = parser.Parse(lines);
             var compiler = new ScriptCompiler();
             var result = compiler.Compile(script, settings);
+            var jtp = result.JumpTargetPer;
+            var targets = new Dictionary<string, int>(result.JumpTargets);
+
+            var optimizer = new Optimizer();
+            optimizer.Optimize(ref jtp, ref targets);
             var linker = new Linker();
-            var code = linker.Link(result.JumpTargetPer, result.JumpTargets);
+            var code = linker.Link(jtp, targets);
 
             var ai = Path.Combine(destination, $"{name}.ai");
             if (!File.Exists(ai))
