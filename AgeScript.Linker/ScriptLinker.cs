@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Linker
 {
-    public class Linker
+    public class ScriptLinker
     {
         public string Link(string jtp, IReadOnlyDictionary<string, int> jump_targets)
         {

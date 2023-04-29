@@ -12,7 +12,6 @@
     <ProjectReference Include="..\AgeScript.Linker\AgeScript.Linker.csproj" />
     <ProjectReference Include="..\AgeScript.Optimizer\AgeScript.Optimizer.csproj" />
     <ProjectReference Include="..\AgeScript.Parser\AgeScript.Parser.csproj" />
-    <ProjectReference Include="..\AgeScript\AgeScript.csproj" />
   </ItemGroup>
 
 </Project>
