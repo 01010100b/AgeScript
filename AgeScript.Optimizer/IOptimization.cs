@@ -8,6 +8,7 @@ namespace AgeScript.Optimizer
 {
     public interface IOptimization
     {
+        int Priority { get; }
         void Optimize(List<Rule> rules);
     }
 }

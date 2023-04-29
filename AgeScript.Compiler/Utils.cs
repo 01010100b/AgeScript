@@ -15,9 +15,21 @@ namespace AgeScript.Compiler
                 return;
             }
 
-            for (int i = 0; i < length; i++)
+            while (length > 0)
             {
-                rules.AddAction($"up-modify-goal {from + i} c:= 0");
+                if (length >= 4 && from >= 41 && from < 508)
+                {
+                    rules.AddAction($"up-reset-cost-data {from}");
+                    from += 4;
+                    length -= 4;
+                }
+                else
+                {
+                    rules.AddAction($"up-modify-goal {from} c:= 0");
+                    from++;
+                    length--;
+                }
+                
             }
         }
 

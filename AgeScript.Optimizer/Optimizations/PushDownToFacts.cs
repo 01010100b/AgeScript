@@ -7,9 +7,11 @@ using System.Transactions;
 
 namespace AgeScript.Optimizer.Optimizations
 {
-    public class PushDown : IOptimization
+    public class PushDownToFacts : IOptimization
     {
         private static readonly List<string> PushDowns = new() { "up-modify-goal" };
+
+        public int Priority => -100;
 
         private int MaxElements { get; set; }
 
@@ -17,32 +19,35 @@ namespace AgeScript.Optimizer.Optimizations
         {
             MaxElements = rules.Max(x => x.Elements);
 
-            for (int i = 0; i < rules.Count - 1; i++)
+            for (int pass = 0; pass < 3; pass++)
             {
-                var current = rules[i];
-                var next = rules[i + 1];
+                for (int i = 0; i < rules.Count - 1; i++)
+                {
+                    var current = rules[i];
+                    var next = rules[i + 1];
 
-                if (!current.AllowOptimizations || !next.AllowOptimizations)
-                {
-                    continue;
-                }
-                else if (next.JumpTargets.Count > 0)
-                {
-                    continue;
-                }
-                else if (!current.AlwaysTrue)
-                {
-                    continue;
-                }
-                else if (current.IsJump)
-                {
-                    continue;
+                    if (!current.AllowsOptimizations || !next.AllowsOptimizations)
+                    {
+                        continue;
+                    }
+                    else if (next.JumpTargets.Count > 0)
+                    {
+                        continue;
+                    }
+                    else if (!current.IsAlwaysTrue)
+                    {
+                        continue;
+                    }
+                    else if (current.IsJump)
+                    {
+                        continue;
+                    }
+
+                    Optimize(current, next);
                 }
 
-                Optimize(current, next);
+                Utils.RemoveEmptyRules(rules);
             }
-
-            Utils.RemoveEmptyRules(rules);
         }
 
         private void Optimize(Rule current, Rule next)
@@ -65,19 +70,19 @@ namespace AgeScript.Optimizer.Optimizations
                     break;
                 }
 
-                var can = false;
+                var can_push = false;
 
                 foreach (var pushdown in PushDowns)
                 {
                     if (action.Code.Contains(pushdown))
                     {
-                        can = true;
+                        can_push = true;
 
                         break;
                     }
                 }
 
-                if (!can)
+                if (!can_push)
                 {
                     break;
                 }

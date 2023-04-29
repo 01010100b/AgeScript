@@ -15,7 +15,7 @@ namespace AgeScript.Optimizer
             {
                 var current = rules[i];
 
-                if (current.Actions.Count > 0)
+                if (current.Actions.Count > 0 || !current.IsAlwaysTrue)
                 {
                     continue;
                 }

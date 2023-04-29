@@ -23,10 +23,10 @@ namespace AgeScript.Optimizer
 
                 var rule = ParseRule(pieces[i]);
 
-                rule.AllowOptimizations = allow;
+                rule.AllowsOptimizations = allow;
                 if (rule.Actions.Select(x => x.Code).Contains("(disable-self)"))
                 {
-                    rule.AllowOptimizations = false;
+                    rule.AllowsOptimizations = false;
                 }
 
                 rules.Add(rule);
@@ -38,17 +38,10 @@ namespace AgeScript.Optimizer
         public string Write(List<Rule> rules)
         {
             var sb = new StringBuilder();
-            var allowed = true;
 
             for (int i = 0; i < rules.Count; i++)
             {
                 var rule = rules[i];
-
-                if (allowed && !rule.AllowOptimizations)
-                {
-                    sb.AppendLine("; #OPTIMIZER END");
-                    allowed = false;
-                }
 
                 sb.AppendLine($"; {i}");
                 sb.AppendLine("(defrule");

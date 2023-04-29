@@ -20,13 +20,6 @@ namespace Quaternary
                 SourceFolder = @"F:\Repos\01010100b\AgeScript\Quaternary\Source",
                 DestinationFolder = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai",
                 CompilerSettings = new()
-                {
-                    MaxElementsPerRule = 16,
-                    MaxGoal = 512,
-                    OptimizeMemCopy = true,
-                    InlineMemCopy = true,
-                    Debug = false
-                }
             };
 
             File.Delete(file);

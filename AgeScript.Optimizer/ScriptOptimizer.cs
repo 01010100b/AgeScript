@@ -49,10 +49,10 @@ namespace AgeScript.Optimizer
         private void WriteState(IReadOnlyList<Rule> rules)
         {
             Console.WriteLine($"Rules: {rules.Count}");
-            Console.WriteLine($"Allowed rules: {rules.Count(x => x.AllowOptimizations)}");
+            Console.WriteLine($"Allowed rules: {rules.Count(x => x.AllowsOptimizations)}");
             Console.WriteLine($"Rules which jump: {rules.Count(x => x.IsJump)}");
-            Console.WriteLine($"Always true rules: {rules.Count(x => x.AlwaysTrue)}");
-            Console.WriteLine($"Elements: {rules.Sum(x => x.Elements)}");
+            Console.WriteLine($"Always true rules: {rules.Count(x => x.IsAlwaysTrue)}");
+            Console.WriteLine($"Elements: {rules.Sum(x => x.Elements)} with {rules.Sum(x => x.Elements) / (double)rules.Count:N2} elements per rule.");
             Console.WriteLine($"Compound commands: {rules.Sum(x => x.Commands.Count(x => x.IsCompound))}");
         }
 
@@ -73,6 +73,9 @@ namespace AgeScript.Optimizer
                     }
                 }
             }
+
+
+            optimizations.Sort((a, b) => b.Priority.CompareTo(a.Priority));
 
             return optimizations;
         }
