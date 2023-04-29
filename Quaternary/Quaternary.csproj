@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AgeScript.Compiler\AgeScript.Compiler.csproj" />
-    <ProjectReference Include="..\AgeScript.Linker\AgeScript.Linker.csproj" />
-    <ProjectReference Include="..\AgeScript.Optimizer\AgeScript.Optimizer.csproj" />
-    <ProjectReference Include="..\AgeScript.Parser\AgeScript.Parser.csproj" />
     <ProjectReference Include="..\AgeScript\AgeScript.csproj" />
   </ItemGroup>
 

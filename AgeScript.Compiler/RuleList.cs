@@ -19,6 +19,7 @@ namespace AgeScript.Compiler
         internal string MemCopyTarget { get; private init; }
 
         private List<string> Rules { get; } = new();
+        private List<KeyValuePair<int, string>> Comments { get; } = new();
         private StringBuilder CurrentRule { get; } = new();
         private int CurrentRuleElements { get; set; } = 0;
         private Dictionary<string, int> JumpTargets { get; } = new();
@@ -102,6 +103,11 @@ namespace AgeScript.Compiler
             {
                 StartNewRule();
             }
+        }
+
+        public void AddComment(string comment)
+        {
+            Comments.Add(new(CurrentRuleIndex, comment));
         }
 
         public string CreateJumpTarget()
@@ -217,6 +223,11 @@ namespace AgeScript.Compiler
 
             for (int i = 0; i < Rules.Count; i++)
             {
+                foreach (var comment in Comments.Where(x => x.Key == i).Select(x => x.Value))
+                {
+                    sb.AppendLine($"; {comment}");
+                }
+
                 sb.AppendLine($"; {i}");
                 sb.AppendLine(Rules[i]);
             }

@@ -6,8 +6,6 @@ namespace Quaternary
 {
     internal class Program
     {
-        private static string Folder => AppDomain.CurrentDomain.BaseDirectory;
-
         static void Main(string[] args)
         {
             Compile();

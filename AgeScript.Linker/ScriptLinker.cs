@@ -10,6 +10,8 @@ namespace AgeScript.Linker
     {
         public string Link(string jtp, IReadOnlyDictionary<string, int> jump_targets)
         {
+            Console.WriteLine("Linking");
+
             foreach (var jump in jump_targets)
             {
                 jtp = jtp.Replace(jump.Key, jump.Value.ToString());

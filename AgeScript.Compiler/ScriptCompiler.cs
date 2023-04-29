@@ -19,6 +19,7 @@ namespace AgeScript.Compiler
 
             PreCompile(result);
             CompileFunctions(result);
+            result.Rules.AddComment("#OPTIMIZER END");
             CompileTables(result);
             PostCompile(result);
 

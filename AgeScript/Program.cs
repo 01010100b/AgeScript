@@ -62,9 +62,11 @@ namespace AgeScript
             var script = parser.Parse(lines);
             var compiler = new ScriptCompiler();
             var result = compiler.Compile(script, settings.CompilerSettings);
+            Console.WriteLine($"Compiled {settings.Name} succesfully.");
+            Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} elements for {result.CommandCount / (double)result.RuleCount:N2} elements per rule.");
+
             var jtp = result.JumpTargetPer;
             var targets = new Dictionary<string, int>(result.JumpTargets);
-
             var optimizer = new ScriptOptimizer();
             optimizer.Optimize(ref jtp, ref targets);
             var linker = new ScriptLinker();
@@ -79,9 +81,6 @@ namespace AgeScript
             var per = Path.Combine(settings.DestinationFolder, $"{settings.Name}.per");
             File.Delete(per);
             File.WriteAllText(per, code);
-
-            Console.WriteLine($"Compiled {settings.Name} succesfully.");
-            Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} elements for {result.CommandCount / (double)result.RuleCount:N2} elements per rule.");
         }
 
         private static Settings LoadSettings()
