@@ -30,7 +30,9 @@ namespace AgeScript.Optimizer
 
             foreach (var optimization in GetOptimizations())
             {
+                Console.WriteLine($"Applying optimization {optimization.GetType().Name}");
                 optimization.Optimize(rules);
+                Console.WriteLine($"Rules down to {rules.Count}");
             }
 
             for (int i = 0; i < rules.Count; i++)

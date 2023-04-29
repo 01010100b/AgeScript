@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace AgeScript.Optimizer.Optimizations
 {
-    public class PushDownToFacts : IOptimization
+    public class PushDownToActions : IOptimization
     {
-        private static readonly List<string> PushDowns = new() { "up-modify-goal", "up-modify-sn", "up-get-focus-fact" };
-
-        public int Priority => -100;
+        public int Priority => 0;
 
         private int MaxElements { get; set; }
 
@@ -34,7 +31,7 @@ namespace AgeScript.Optimizer.Optimizations
                     {
                         continue;
                     }
-                    else if (!current.IsAlwaysTrue)
+                    else if (!current.IsAlwaysTrue || !next.IsAlwaysTrue)
                     {
                         continue;
                     }
@@ -70,29 +67,7 @@ namespace AgeScript.Optimizer.Optimizations
                     break;
                 }
 
-                var can_push = false;
-
-                foreach (var pushdown in PushDowns)
-                {
-                    if (action.Code.Contains(pushdown))
-                    {
-                        can_push = true;
-
-                        break;
-                    }
-                }
-
-                if (!can_push)
-                {
-                    break;
-                }
-
-                if (next.Facts.Count == 1 && next.Facts[0].Code == "(true)")
-                {
-                    next.Facts.RemoveAt(0);
-                }
-
-                next.Facts.Insert(0, current.Actions[^1]);
+                next.Actions.Insert(0, current.Actions[^1]);
                 current.Actions.RemoveAt(current.Actions.Count - 1);
             }
         }
