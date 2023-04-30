@@ -18,6 +18,7 @@ namespace Quaternary
             {
                 Name = "Quaternary",
                 SourceFolder = @"F:\Repos\01010100b\AgeScript\Quaternary\Source",
+                WorkingFolder = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai",
                 DestinationFolder = @"F:\SteamLibrary\steamapps\common\AoE2DE\resources\_common\ai",
                 CompilerSettings = new()
             };

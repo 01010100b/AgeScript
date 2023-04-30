@@ -37,7 +37,7 @@ namespace AgeScript.Compiler
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
 
@@ -63,7 +63,7 @@ namespace AgeScript.Compiler
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             Utils.MemCopy(result, result.Memory.ConditionGoal, result_address.Value, expression.Type.Size, false, ref_result_address);
@@ -88,7 +88,7 @@ namespace AgeScript.Compiler
             {
                 if (acc.Accessor.Offset is not ConstExpression accc)
                 {
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
                 }
 
                 from_offset = result.Memory.ExpressionGoal;
@@ -100,7 +100,7 @@ namespace AgeScript.Compiler
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             var addr = result.Memory.GetAddress(expression.Accessor.Variable);
@@ -185,7 +185,7 @@ namespace AgeScript.Compiler
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
                 }
             }
 

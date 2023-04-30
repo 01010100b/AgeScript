@@ -12,8 +12,8 @@ namespace AgeScript.Compiler
 {
     public class RuleList
     {
-        public int RuleCount => Rules.Count;
-        public int ElementsCount => Rules.Sum(x => x.Count(y => y == '(') - 1);
+        public int TotalRules => Rules.Count;
+        public int TotalElements => Rules.Sum(x => x.Count(y => y == '(') - 1);
 
         internal string EndTarget { get; private init; }
         internal string MemCopyTarget { get; private init; }
@@ -105,7 +105,7 @@ namespace AgeScript.Compiler
             }
         }
 
-        public void AddComment(string comment)
+        public void InsertComment(string comment)
         {
             Comments.Add(new(CurrentRuleIndex, comment));
         }

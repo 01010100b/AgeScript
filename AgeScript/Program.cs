@@ -22,7 +22,54 @@ namespace AgeScript
 
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(settings.SourceFolder) || !Directory.Exists(settings.SourceFolder))
+
+            if (args.Length > 0)
+            {
+                if (args[0].Trim() == "-compile")
+                {
+                    RunCompile(settings);
+                }
+                else if (args[0].Trim() == "-optimize")
+                {
+                    RunOptimize(settings);
+                }
+                else if (args[0].Trim() == "-link")
+                {
+                    RunLink(settings);
+                }
+                else if (args[0].Trim() == "-full")
+                {
+                    RunFull(settings);
+                }
+                else
+                {
+                    throw new Exception("Argument not recognized.");
+                }
+            }
+            else
+            {
+                RunFull(settings);
+            }
+        }
+
+        private static void RunCompile(Settings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void RunOptimize(Settings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void RunLink(Settings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void RunFull(Settings settings)
+        {
+            if (string.IsNullOrWhiteSpace(settings.SourceFolder) || !Directory.Exists(settings.SourceFolder))
             {
                 Console.WriteLine($"Can not find source folder.");
 
@@ -35,11 +82,6 @@ namespace AgeScript
                 return;
             }
 
-            RunFull(settings);
-        }
-
-        private static void RunFull(Settings settings)
-        {
             var dirs = new List<string>() { settings.SourceFolder };
 
             foreach (var dir in Directory.EnumerateDirectories(settings.SourceFolder, "*", SearchOption.AllDirectories))

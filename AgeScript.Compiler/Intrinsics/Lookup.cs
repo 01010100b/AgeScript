@@ -30,7 +30,7 @@ namespace AgeScript.Compiler.Intrinsics
                 return;
             }
 
-            var table = result.Rules.GetTable(cl.Literal.Replace("\"", ""));
+            var table = result.Rules.GetTable(cl.Literal.Replace("\"", string.Empty));
             var table_target = result.Rules.GetJumpTarget(table);
             var return_target = result.Rules.CreateJumpTarget();
 

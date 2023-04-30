@@ -41,11 +41,10 @@ namespace AgeScript.Parser
 
                         if (expr is CallExpression)
                         {
-                            throw new Exception("Can not nest call expressions.");
+                            throw new NotImplementedException();
                         }
 
                         expr.Validate();
-
                         arguments.Add(expr);
                     }
                 }

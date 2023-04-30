@@ -183,7 +183,7 @@ namespace AgeScript.Compiler
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
                 }
             }
 
