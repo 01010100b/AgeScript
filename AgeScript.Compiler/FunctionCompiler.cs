@@ -95,7 +95,11 @@ namespace AgeScript.Compiler
                         }
                         else
                         {
-                            throw new NotImplementedException();
+                            expression_compiler.Compile(result, assign.Accessor.Offset, result.Memory.AssignGoal);
+                            result.Rules.AddAction($"up-modify-goal {result.Memory.AssignGoal} c:* {((Array)assign.Accessor.Variable.Type).ElementType.Size}");
+                            result.Rules.AddAction($"up-modify-goal {result.Memory.AssignGoal} c:+ {result.Memory.GetAddress(assign.Accessor.Variable)}");
+                            address = result.Memory.AssignGoal;
+                            ref_address = true;
                         }
                     }
 

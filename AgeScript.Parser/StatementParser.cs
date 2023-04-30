@@ -114,7 +114,7 @@ namespace AgeScript.Parser
 
                 if (!string.IsNullOrWhiteSpace(lhs))
                 {
-                    if (ExpressionParser.TryParseAccessor(script, function, lhs, out var a))
+                    if (ExpressionParser.TryParseAccessor(script, function, lhs, literals, out var a))
                     {
                         accessor = a;
                     }

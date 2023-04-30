@@ -9,6 +9,8 @@ namespace AgeScript.Optimizer
 {
     public class ScriptOptimizer
     {
+        private const int PASSES = 3;
+
         public void Optimize(ref string jtp, ref Dictionary<string, int> jump_targets)
         {
             Console.WriteLine("Optimizing...");
@@ -28,11 +30,12 @@ namespace AgeScript.Optimizer
 
             WriteState(rules);
 
-            foreach (var optimization in GetOptimizations())
+            for (int pass = 0; pass < PASSES; pass++)
             {
-                Console.WriteLine($"Applying optimization {optimization.GetType().Name}");
-                optimization.Optimize(rules);
-                Console.WriteLine($"Rules down to {rules.Count}");
+                foreach (var optimization in GetOptimizations())
+                {
+                    optimization.Optimize(rules);
+                }
             }
 
             for (int i = 0; i < rules.Count; i++)
@@ -75,9 +78,6 @@ namespace AgeScript.Optimizer
                     }
                 }
             }
-
-
-            optimizations.Sort((a, b) => b.Priority.CompareTo(a.Priority));
 
             return optimizations;
         }

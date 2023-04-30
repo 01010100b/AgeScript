@@ -26,7 +26,10 @@ namespace AgeScript.Language
 
             if (Offset is not ConstExpression)
             {
-                throw new NotImplementedException();
+                if (Offset is not AccessorExpression acc || acc.Accessor.Offset is not ConstExpression)
+                {
+                    throw new NotImplementedException();
+                }
             }
         }
     }

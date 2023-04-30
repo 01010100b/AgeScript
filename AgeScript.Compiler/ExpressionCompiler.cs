@@ -84,6 +84,20 @@ namespace AgeScript.Compiler
             {
                 from_offset = c.Int;
             }
+            else if (expression.Accessor.Offset is AccessorExpression acc)
+            {
+                if (acc.Accessor.Offset is not ConstExpression accc)
+                {
+                    throw new NotImplementedException();
+                }
+
+                from_offset = result.Memory.ExpressionGoal;
+                ref_from_offset = true;
+
+                Compile(result, expression.Accessor.Offset, from_offset);
+                result.Rules.AddAction($"up-modify-goal {from_offset} c:* {((Array)expression.Accessor.Variable.Type).ElementType.Size}");
+                result.Rules.AddAction($"up-modify-goal {from_offset} c:+ {accc.Int}");
+            }
             else
             {
                 throw new NotImplementedException();

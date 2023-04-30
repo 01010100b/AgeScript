@@ -12,8 +12,10 @@ namespace AgeScript.Compiler
         // goals
         public int NonInlinedMemCopyReturnAddr { get; private set; } // used when Settings.InlineMemCopy = false
         public int Error { get; private set; } // set when run-time error occurs
-        public int ConditionGoal { get; private set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
         public int StackPtr { get; private set; } // points to next free stack goal
+        public int ConditionGoal { get; private set; } // used for control-flow (if, ...) conditions, lookup return addresses, and such
+        public int AssignGoal { get; private set; } // for assign statements
+        public int ExpressionGoal { get; private set; } // for expressions
         public int Sp0 { get; private set; } // special purpose registers, for memcopy and such
         public int Sp1 { get; private set; }
         public int Sp2 { get; private set; }
@@ -66,8 +68,10 @@ namespace AgeScript.Compiler
             // special goals at the end as they won't be used with up functions
 
             Error = goal;
-            ConditionGoal = --goal;
             StackPtr = --goal;
+            ConditionGoal = --goal;
+            AssignGoal = --goal;
+            ExpressionGoal = --goal;
 
             if (!settings.InlineMemCopy)
             {

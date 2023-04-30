@@ -69,7 +69,7 @@ namespace AgeScript.Parser
                     throw new Exception("No type given for call expression.");
                 }
             }
-            else if (TryParseAccessor(script, function, expression, out var accessor))
+            else if (TryParseAccessor(script, function, expression, literals, out var accessor))
             {
                 var expr = new AccessorExpression() { Accessor = accessor! };
                 expr.Validate();
@@ -87,7 +87,8 @@ namespace AgeScript.Parser
             throw new Exception("Failed to parse expression.");
         }
 
-        public bool TryParseAccessor(Script script, Function function, string code, out Accessor? accessor)
+        public bool TryParseAccessor(Script script, Function function, string code,
+            IReadOnlyDictionary<string, string> literals, out Accessor? accessor)
         {
             if (!code.Contains('['))
             {
@@ -114,17 +115,35 @@ namespace AgeScript.Parser
             else
             {
                 var pieces = code.Split('[');
+
+                if (pieces.Length != 2)
+                {
+                    throw new Exception("Accessor not parsed.");
+                }
+
                 var vname = pieces[0].Trim();
-                var offset = int.Parse(pieces[1].Replace("]", string.Empty).Trim());
 
                 if (function.TryGetScopedVariable(script, vname, out var variable))
                 {
                     if (variable!.Type is Array atype)
                     {
+                        var oname = pieces[1].Replace("]", string.Empty).Trim();
+                        var offset = Parse(script, function, oname, literals, Primitives.Int);
+
+                        if (offset.Type != Primitives.Int)
+                        {
+                            throw new Exception("Offset must have type Int.");
+                        }
+
+                        if (offset is ConstExpression oc)
+                        {
+                            offset = new ConstExpression((oc.Int * atype.ElementType.Size).ToString());
+                        }
+
                         accessor = new()
                         {
                             Variable = variable!,
-                            Offset = new ConstExpression((offset * atype.ElementType.Size).ToString()),
+                            Offset = offset,
                             Type = atype.ElementType
                         };
 

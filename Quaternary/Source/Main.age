@@ -50,16 +50,18 @@ ResetScouts()
 
 Function Void Main_Test():
 
-Int a
-a = 0
+Int[3] a
+Int[5] b
+Int i
 
-while LessThan(a, 10)
-	
-	if Equals(a, 5)
-		break
-	endif
-	
-	a = Add(a, 1)
+b[0] = 10
+b[1] = 11
+b[2] = 12
+i = 0
+
+while LessThan(i, 3)
+	a[i] = b[i]
+	i = Add(i, 1)
 endwhile
 
-ChatDataToSelf("a = %d", a)
+ChatDataToSelf("a1 = %d", a[1])
