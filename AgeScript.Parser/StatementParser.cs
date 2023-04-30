@@ -38,6 +38,14 @@ namespace AgeScript.Parser
                     return new ReturnStatement() { Expression = expression };
                 }
             }
+            else if (line == "break")
+            {
+                return new BreakStatement();
+            }
+            else if (line == "continue")
+            {
+                return new ContinueStatement();
+            }
             else if (line.StartsWith("if "))
             {
                 var expr = line.Replace("if", "").Trim();

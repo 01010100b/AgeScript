@@ -6,7 +6,7 @@ Int Player
 Function Void Main():
 
 if Equals(Tick, 0)
-Main_Initialize()
+	Main_Initialize()
 endif
 
 CivPopPercentage = 60
@@ -50,3 +50,16 @@ ResetScouts()
 
 Function Void Main_Test():
 
+Int a
+a = 0
+
+while LessThan(a, 10)
+	
+	if Equals(a, 5)
+		break
+	endif
+	
+	a = Add(a, 1)
+endwhile
+
+ChatDataToSelf("a = %d", a)

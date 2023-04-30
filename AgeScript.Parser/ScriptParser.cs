@@ -20,6 +20,8 @@ namespace AgeScript.Parser
 
         public Script Parse(List<string> lines)
         {
+            Console.WriteLine("Parsing...");
+
             var literals = new Dictionary<string, string>();
             lines = PreParse(lines, literals);
 

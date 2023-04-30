@@ -28,7 +28,7 @@ namespace AgeScript.Compiler
             LastReturnStatement = -2;
 
             var expression_compiler = new ExpressionCompiler(function);
-            CompileBlock(result, function, 0, expression_compiler);
+            CompileBlock(result, function, 0, expression_compiler, null, null);
 
             if (LastReturnStatement < function.Statements.Count - 1)
             {
@@ -39,7 +39,8 @@ namespace AgeScript.Compiler
             result.Rules.StartNewRule();
         }
 
-        private int CompileBlock(CompilationResult result, Function function, int index, ExpressionCompiler expression_compiler)
+        private int CompileBlock(CompilationResult result, Function function, int index, 
+            ExpressionCompiler expression_compiler, string? target_loop_repeat, string? target_loop_end)
         {
             for (int i = index; i < function.Statements.Count; i++)
             {
@@ -59,6 +60,26 @@ namespace AgeScript.Compiler
                     result.Rules.AddAction($"up-jump-direct g: {result.Memory.RegisterBase}");
                     result.Rules.StartNewRule();
                     LastReturnStatement = i;
+                }
+                else if (statement is BreakStatement)
+                {
+                    if (target_loop_end is null)
+                    {
+                        throw new Exception("Break statement without loop end target.");
+                    }
+
+                    result.Rules.AddAction($"up-jump-direct c: {target_loop_end}");
+                    result.Rules.StartNewRule();
+                }
+                else if (statement is ContinueStatement)
+                {
+                    if (target_loop_repeat is null)
+                    {
+                        throw new Exception("Continue statement without loop repeat target.");
+                    }
+
+                    result.Rules.AddAction($"up-jump-direct c: {target_loop_repeat}");
+                    result.Rules.StartNewRule();
                 }
                 else if (statement is AssignStatement assign)
                 {
@@ -88,7 +109,7 @@ namespace AgeScript.Compiler
                     result.Rules.AddAction($"up-jump-direct c: {target_next}");
                     result.Rules.StartNewRule();
 
-                    i = CompileBlock(result, function, i + 1, expression_compiler);
+                    i = CompileBlock(result, function, i + 1, expression_compiler, target_loop_repeat, target_loop_end);
                     statement = function.Statements[i];
 
                     if (statement is ElifStatement)
@@ -107,7 +128,7 @@ namespace AgeScript.Compiler
                             result.Rules.AddAction($"up-jump-direct c: {target_end}");
                             result.Rules.StartNewRule();
 
-                            i = CompileBlock(result, function, i + 1, expression_compiler);
+                            i = CompileBlock(result, function, i + 1, expression_compiler, target_loop_repeat, target_loop_end);
                             statement = function.Statements[i];
                         }
 
@@ -133,8 +154,8 @@ namespace AgeScript.Compiler
                 else if (statement is WhileStatement ws)
                 {
                     result.Rules.StartNewRule();
-                    var target_return = result.Rules.CreateJumpTarget();
-                    result.Rules.ResolveJumpTarget(target_return);
+                    var target_repeat = result.Rules.CreateJumpTarget();
+                    result.Rules.ResolveJumpTarget(target_repeat);
 
                     expression_compiler.Compile(result, ws.Condition, result.Memory.ConditionGoal);
                     var target_end = result.Rules.CreateJumpTarget();
@@ -142,12 +163,12 @@ namespace AgeScript.Compiler
                     result.Rules.AddAction($"up-jump-direct c: {target_end}");
                     result.Rules.StartNewRule();
 
-                    i = CompileBlock(result, function, i + 1, expression_compiler);
+                    i = CompileBlock(result, function, i + 1, expression_compiler, target_repeat, target_end);
                     statement = function.Statements[i];
 
                     if (statement is EndWhileStatement)
                     {
-                        result.Rules.AddAction($"up-jump-direct c: {target_return}");
+                        result.Rules.AddAction($"up-jump-direct c: {target_repeat}");
                         result.Rules.StartNewRule();
                         result.Rules.ResolveJumpTarget(target_end);
                     }

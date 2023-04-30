@@ -13,6 +13,8 @@ namespace AgeScript.Compiler
 
         public CompilationResult Compile(Script script, Settings settings)
         {
+            Console.WriteLine("Compiling...");
+
             script.Validate();
             settings.Validate();
             var result = new CompilationResult(script, settings);

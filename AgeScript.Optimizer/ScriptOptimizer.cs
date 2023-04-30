@@ -11,7 +11,7 @@ namespace AgeScript.Optimizer
     {
         public void Optimize(ref string jtp, ref Dictionary<string, int> jump_targets)
         {
-            Console.WriteLine("Optimizing");
+            Console.WriteLine("Optimizing...");
 
             var parser = new PerParser();
             var rules = parser.Parse(jtp);
