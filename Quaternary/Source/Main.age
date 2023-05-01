@@ -57,11 +57,15 @@ Int i
 b[0] = 10
 b[1] = 11
 b[2] = 12
-i = 0
 
-while LessThan(i, 3)
+for i 0..3
 	a[i] = b[i]
-	i = Add(i, 1)
-endwhile
+	
+	if Equals(i, 1)
+		break
+	endif
+	
+endfor
 
 ChatDataToSelf("a1 = %d", a[1])
+ChatDataToSelf("a2 = %d", a[2])

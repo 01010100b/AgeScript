@@ -103,6 +103,48 @@ namespace AgeScript.Parser
             {
                 return new EndWhileStatement();
             }
+            else if (line.StartsWith("for "))
+            {
+                var pieces = line.Split(' ').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+                if (pieces.Count != 3)
+                {
+                    throw new Exception("Invalid for statement.");
+                }
+
+                var variable = script.GlobalVariables.Values.Concat(function.AllVariables)
+                    .SingleOrDefault(x => x.Name == pieces[1]);
+
+                if (variable is null)
+                {
+                    throw new Exception("Can not find for loop variable.");
+                }
+
+                var range = pieces[2].Split("..").Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+                if (range.Count != 2)
+                {
+                    throw new Exception("Invalid for range.");
+                }
+
+                var from = ExpressionParser.Parse(script, function, range[0], literals, Primitives.Int);
+                var to = ExpressionParser.Parse(script, function, range[1], literals, Primitives.Int);
+
+                var fs = new ForStatement()
+                {
+                    Variable = variable,
+                    From = from,
+                    To = to
+                };
+
+                fs.Validate();
+
+                return fs;
+            }
+            else if (line == "endfor")
+            {
+                return new EndForStatement();
+            }
             else
             {
                 // assign statement

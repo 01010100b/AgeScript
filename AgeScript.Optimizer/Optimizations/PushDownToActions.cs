@@ -8,11 +8,10 @@ namespace AgeScript.Optimizer.Optimizations
 {
     public class PushDownToActions : IOptimization
     {
-        private int MaxElements { get; set; }
 
         public void Optimize(List<Rule> rules)
         {
-            MaxElements = rules.Max(x => x.Elements);
+            var max_elements = rules.Max(x => x.Elements);
 
             for (int i = 0; i < rules.Count - 1; i++)
             {
@@ -36,13 +35,13 @@ namespace AgeScript.Optimizer.Optimizations
                     continue;
                 }
 
-                Optimize(current, next);
+                Optimize(current, next, max_elements);
             }
 
             Utils.RemoveEmptyRules(rules);
         }
 
-        private void Optimize(Rule current, Rule next)
+        private void Optimize(Rule current, Rule next, int max_elements)
         {
             while (true)
             {
@@ -50,7 +49,7 @@ namespace AgeScript.Optimizer.Optimizations
                 {
                     break;
                 }
-                else if (next.Elements >= MaxElements)
+                else if (next.Elements >= max_elements)
                 {
                     break;
                 }

@@ -46,7 +46,7 @@ namespace AgeScript.Compiler
             {
                 var statement = function.Statements[i];
 
-                if (statement is ElifStatement || statement is EndIfStatement || statement is EndWhileStatement)
+                if (statement is ElifStatement || statement is EndIfStatement || statement is EndWhileStatement || statement is EndForStatement)
                 {
                     return i;
                 }
@@ -179,6 +179,37 @@ namespace AgeScript.Compiler
                     else
                     {
                         throw new Exception("While without endwhile.");
+                    }
+                }
+                else if (statement is ForStatement fs)
+                {
+                    var var_addr = result.Memory.GetAddress(fs.Variable);
+                    expression_compiler.Compile(result, fs.From, var_addr);
+                    result.Rules.AddAction($"up-modify-goal {var_addr} c:- 1");
+
+                    var target_repeat = result.Rules.CreateJumpTarget();
+                    result.Rules.StartNewRule();
+                    result.Rules.ResolveJumpTarget(target_repeat);
+                    result.Rules.AddAction($"up-modify-goal {var_addr} c:+ 1");
+                    expression_compiler.Compile(result, fs.To, result.Memory.ConditionGoal);
+
+                    var target_end = result.Rules.CreateJumpTarget();
+                    result.Rules.StartNewRule($"up-compare-goal {var_addr} g:>= {result.Memory.ConditionGoal}");
+                    result.Rules.AddAction($"up-jump-direct c: {target_end}");
+                    result.Rules.StartNewRule();
+
+                    i = CompileBlock(result, function, i + 1, expression_compiler, target_repeat, target_end);
+                    statement = function.Statements[i];
+
+                    if (statement is EndForStatement)
+                    {
+                        result.Rules.AddAction($"up-jump-direct c: {target_repeat}");
+                        result.Rules.StartNewRule();
+                        result.Rules.ResolveJumpTarget(target_end);
+                    }
+                    else
+                    {
+                        throw new Exception("For without endfor.");
                     }
                 }
                 else
