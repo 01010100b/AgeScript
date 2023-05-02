@@ -18,7 +18,7 @@ namespace AgeScript.Language
 
         public static IEnumerable<string> Keywords { get; } = new List<string>()
         {
-            "Struct", "Globals", "Function", "Table", "String", "return", "break", "continue", "true", "false",
+            "Struct", "Globals", "Function", "Table", "Map", "String", "return", "break", "continue", "true", "false",
             "if", "else", "elif", "endif", "for", "endfor", "while", "endwhile", "switch", "case", "default", "endswitch"
         };
 

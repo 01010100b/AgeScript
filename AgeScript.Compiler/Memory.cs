@@ -83,11 +83,6 @@ namespace AgeScript.Compiler
                 DebugMaxStackSpaceUsed = --goal;
             }
 
-            // table lookup result below that as it doesn't get used with up functions
-
-            goal -= settings.TableModulus;
-            TableResultBase = goal;
-
             // special registers
 
             Sp3 = --goal;
@@ -127,8 +122,12 @@ namespace AgeScript.Compiler
 
             // call result below that
 
-            goal -= Math.Max(1, script.Functions.Max(x => x.ReturnType.Size));
+            var call_result_size = 1;
+            call_result_size = Math.Max(call_result_size, script.Functions.Max(x => x.ReturnType.Size));
+            call_result_size = Math.Max(call_result_size, settings.TableModulus);
+            goal -= call_result_size;
             CallResultBase = goal;
+            TableResultBase = goal;
 
             // and this is also the stack limit
 

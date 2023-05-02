@@ -68,5 +68,5 @@ max_pop = Div(max_pop, 100)
 current_pop = GetPlayerFact(Player, FACT_CIVILIAN_POPULATION, 0)
 
 if LessThan(current_pop, max_pop)
-Train(false, VILLAGER)
+	Train(false, VILLAGER)
 endif

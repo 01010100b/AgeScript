@@ -14,15 +14,10 @@ if LessThanOrEquals(distance, 3)
 	max_attempts = 20
 endif
 
-if LessThanOrEquals(distance, 2)
-	max_attempts = 10
-endif
-
 max_delta = Mul(distance, 2)
 max_delta = Add(max_delta, 1)
-attempt = 0
 
-while LessThan(attempt, max_attempts)
+for attempt 0..max_attempts
 	delta = GetRandom(max_delta)
 	test_point[0] = Sub(point[0], distance)
 	test_point[0] = Add(test_point[0], delta)
@@ -32,15 +27,16 @@ while LessThan(attempt, max_attempts)
 	test_distance = GetPointDistance(point, test_point)
 	
 	if LessThanOrEquals(test_distance, distance)
+	
 		if CanBuildLine(escrow, test_point, building_id)
 			BuildLine(test_point, building_id)
 			
 			return true
 		endif
+		
 	endif
 		
-	attempt = Add(attempt, 1)
-endwhile
+endfor
 
 ChatDataToSelf("failed placement %d", building_id)
 
@@ -79,25 +75,20 @@ if Equals(resource, RESOURCE_WOOD)
 	RemoveObjects("<", SEARCH_REMOTE, OBJECT_DATA_INDEX, 10)
 endif
 
-attempt = 0
-
-while LessThan(attempt, 20)
+for attempt 0..20
 	index = GetRandom(search_state[SEARCH_REMOTE_TOTAL])
 	SetTargetObject(SEARCH_REMOTE, index)
 	point = GetPoint(POSITION_OBJECT)
-	distance = 0
 	
-	while LessThanOrEquals(distance, 3)
+	for distance 0..4
 		
 		if BuildPoint(true, point, distance, dropsite_id)
 			return true
 		endif
 		
-		distance = Add(distance, 1)
-	endwhile
+	endfor
 	
-	attempt = Add(attempt, 1)
-endwhile
+endfor
 
 ChatDataToSelf("failed placement %d", dropsite_id)
 

@@ -28,14 +28,14 @@ Function Void Strategy_Set(Int strategy):
 
 Int offset
 Int i
+Int index
 offset = Mul(strategy, STRATEGY_LENGTH)
 
-i = Add(offset, 0)
-Units[0] = Lookup("Strategies", i)
-i = Add(offset, 1)
-Units[1] = Lookup("Strategies", i)
-i = Add(offset, 2)
-Units[2] = Lookup("Strategies", i)
+for i 0..3
+	index = Add(offset, i)
+	Units[i] = Lookup("Strategies", index)
+endfor
+
 CurrentStrategy = strategy
 
 Table Strategies:
