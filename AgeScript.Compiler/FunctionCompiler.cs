@@ -16,7 +16,7 @@ namespace AgeScript.Compiler
 
         public void Compile(CompilationResult result, Function function)
         {
-            if (function is Intrinsic)
+            if (function is Inlined)
             {
                 return;
             }
@@ -109,7 +109,7 @@ namespace AgeScript.Compiler
                 {
                     expression_compiler.Compile(result, ifs.Condition, result.Memory.ConditionGoal);
                     var target_next = result.Rules.CreateJumpTarget();
-                    result.Rules.StartNewRule($"goal {result.Memory.ConditionGoal} 0");
+                    result.Rules.StartNewRule($"up-compare-goal {result.Memory.ConditionGoal} c:== 0");
                     result.Rules.AddAction($"up-jump-direct c: {target_next}");
                     result.Rules.StartNewRule();
 
@@ -128,7 +128,7 @@ namespace AgeScript.Compiler
                             target_next = result.Rules.CreateJumpTarget();
 
                             expression_compiler.Compile(result, elif.Condition, result.Memory.ConditionGoal);
-                            result.Rules.StartNewRule($"goal {result.Memory.ConditionGoal} 0");
+                            result.Rules.StartNewRule($"up-compare-goal {result.Memory.ConditionGoal} c:== 0");
                             result.Rules.AddAction($"up-jump-direct c: {target_end}");
                             result.Rules.StartNewRule();
 
@@ -163,7 +163,7 @@ namespace AgeScript.Compiler
 
                     expression_compiler.Compile(result, ws.Condition, result.Memory.ConditionGoal);
                     var target_end = result.Rules.CreateJumpTarget();
-                    result.Rules.StartNewRule($"goal {result.Memory.ConditionGoal} 0");
+                    result.Rules.StartNewRule($"up-compare-goal  {result.Memory.ConditionGoal}  c:== 0");
                     result.Rules.AddAction($"up-jump-direct c: {target_end}");
                     result.Rules.StartNewRule();
 

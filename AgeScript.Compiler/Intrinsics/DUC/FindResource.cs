@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.DUC
 {
-    internal class FindResource : Intrinsic
+    internal class FindResource : Inlined
     {
         public override bool HasStringLiteral => false;
 

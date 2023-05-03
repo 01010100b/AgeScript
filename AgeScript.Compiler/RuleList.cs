@@ -39,7 +39,14 @@ namespace AgeScript.Compiler
                     throw new Exception("Intrinsic already exists.");
                 }
 
-                FunctionTargets.Add(intrinsic, string.Empty);
+                var target = string.Empty;
+
+                if (intrinsic is not Inlined)
+                {
+                    target = CreateJumpTarget();
+                }
+
+                FunctionTargets.Add(intrinsic, target);
             }
 
             foreach (var function in script.Functions)
@@ -91,13 +98,13 @@ namespace AgeScript.Compiler
             CurrentRule.AppendLine("(defrule");
             CurrentRule.AppendLine($"\t({condition})");
             CurrentRule.AppendLine("=>");
-            CurrentRuleElements = 1;
+            CurrentRuleElements = 1 + condition.Count(x => x == '(');
         }
 
         public void AddAction(string action)
         {
             CurrentRule.AppendLine($"\t({action})");
-            CurrentRuleElements++;
+            CurrentRuleElements += 1 + action.Count(x => x == '(');
 
             if (CurrentRuleElements >= Settings.MaxElementsPerRule)
             {
@@ -120,13 +127,13 @@ namespace AgeScript.Compiler
 
         public string GetJumpTarget(Function function)
         {
-            if (FunctionTargets.TryGetValue(function, out var target))
+            if (FunctionTargets.TryGetValue(function, out var target) && !string.IsNullOrWhiteSpace(target))
             {
                 return target;
             }
             else
             {
-                throw new Exception("Function not found.");
+                throw new Exception("Function target not found.");
             }
         }
 
@@ -138,7 +145,7 @@ namespace AgeScript.Compiler
             }
             else
             {
-                throw new Exception("Table not found.");
+                throw new Exception("Table target not found.");
             }
         }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.DUC
 {
-    internal class RemoveObjects : Intrinsic
+    internal class RemoveObjects : Inlined
     {
         public override bool HasStringLiteral => true;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.Comparisons
 {
-    internal abstract class ComparisonIntrinsic : Intrinsic
+    internal abstract class ComparisonIntrinsic : Inlined
     {
         public override bool HasStringLiteral => false;
         protected abstract Type ParameterType { get; }
@@ -33,6 +33,16 @@ namespace AgeScript.Compiler.Intrinsics.Comparisons
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 1");
             result.Rules.StartNewRule();
             Utils.MemCopy(result, result.Memory.Intr2, result_address.Value, 1, false, ref_result_address);
+        }
+
+        public override void Validate()
+        {
+            base.Validate();
+
+            if (ParameterType.Size != 1)
+            {
+                throw new Exception("Parameter type must be 1.");
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class ObjectTypeCountTotalLessThan : Intrinsic
+    internal class ObjectTypeCountTotalLessThan : Inlined
     {
         public override bool HasStringLiteral => false;
 

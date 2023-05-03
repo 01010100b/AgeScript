@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.Economy
 {
-    internal class ResourceFound : Intrinsic
+    internal class ResourceFound : Inlined
     {
         public override bool HasStringLiteral => false;
 

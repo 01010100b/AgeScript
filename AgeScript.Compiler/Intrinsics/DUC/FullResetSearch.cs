@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.DUC
 {
-    internal class FullResetSearch : Intrinsic
+    internal class FullResetSearch : Inlined
     {
         public override bool HasStringLiteral => false;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.DUC
 {
-    internal class FilterDistance : Intrinsic
+    internal class FilterDistance : Inlined
     {
         public override bool HasStringLiteral => false;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class Train : Intrinsic
+    internal class Train : Inlined
     {
         public override bool HasStringLiteral => false;
 

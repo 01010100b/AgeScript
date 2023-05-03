@@ -8,7 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class Lookup : Intrinsic
+    internal class Lookup : Inlined
     {
         public override bool HasStringLiteral => true;
 

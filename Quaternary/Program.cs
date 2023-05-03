@@ -28,7 +28,7 @@ namespace Quaternary
             File.WriteAllText(file, JsonSerializer.Serialize(settings, options));
 
             var tool = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AgeScript.exe");
-            var process = Process.Start(tool, "-link");
+            var process = Process.Start(tool, "-full");
             process.WaitForExit();
         }
     }

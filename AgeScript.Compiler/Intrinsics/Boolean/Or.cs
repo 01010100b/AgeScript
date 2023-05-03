@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.Boolean
 {
-    internal class Or : Intrinsic
+    internal class Or : Inlined
     {
         public override bool HasStringLiteral => false;
 

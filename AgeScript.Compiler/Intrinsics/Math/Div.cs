@@ -32,10 +32,11 @@ namespace AgeScript.Compiler.Intrinsics.Math
                 return;
             }
 
-            base.CompileCall(result, cl, result.Memory.ConditionGoal);
-
-            result.Rules.AddAction($"up-modify-goal {result.Memory.ConditionGoal} c:* 100");
-            Utils.MemCopy(result, result.Memory.ConditionGoal, result_address.Value, 1, false, ref_result_address);
+            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} c:* 100");
+            result.Rules.AddAction($"up-modify-goal {result.Memory.Intr0} g:z/ {result.Memory.Intr1}");
+            Utils.MemCopy(result, result.Memory.Intr0, result_address.Value, 1, false, ref_result_address);
         }
     }
 }

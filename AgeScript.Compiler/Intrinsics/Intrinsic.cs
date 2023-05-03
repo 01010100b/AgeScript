@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ namespace AgeScript.Compiler.Intrinsics
         public static IEnumerable<Intrinsic> Intrinsics { get; } = GetIntrinsics();
 
         public abstract bool HasStringLiteral { get; }
-
         protected ExpressionCompiler ExpressionCompiler { get; }
 
         public Intrinsic() : base()
@@ -21,13 +19,10 @@ namespace AgeScript.Compiler.Intrinsics
             ExpressionCompiler = new(this);
         }
 
-        internal abstract void CompileCall(CompilationResult result, CallExpression cl,
-            int? result_address = null, bool ref_result_address = false);
-
         private static List<Intrinsic> GetIntrinsics()
         {
             var intrinsics = new List<Intrinsic>();
-            var assembly = typeof(Intrinsic).Assembly;
+            var assembly = typeof(Inlined).Assembly;
 
             foreach (var type in assembly.GetTypes())
             {

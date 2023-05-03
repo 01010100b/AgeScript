@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class ResetScouts : Intrinsic
+    internal class ResetScouts : Inlined
     {
         public override bool HasStringLiteral => false;
 

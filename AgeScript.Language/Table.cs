@@ -10,6 +10,7 @@ namespace AgeScript.Language
     public class Table : Named
     {
         public List<int> Values { get; } = new();
+        public int Length => Values.Count;
 
         public override bool Equals(object? obj) => obj is Table l && Name.Equals(l.Name);
         public override int GetHashCode() => Name.GetHashCode();

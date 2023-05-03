@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.DUC
 {
-    internal class FilterStatus : Intrinsic
+    internal class FilterStatus : Inlined
     {
         public override bool HasStringLiteral => false;
 

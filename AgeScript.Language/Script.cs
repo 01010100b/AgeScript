@@ -93,32 +93,30 @@ namespace AgeScript.Language
                 throw new Exception("Main function must have 0 parameters.");
             }
 
-            var types = new HashSet<string>();
+            var names = new HashSet<string>();
 
             foreach (var type in Types.Values)
             {
                 type.Validate();
 
-                if (types.Contains(type.Name))
+                if (names.Contains(type.Name))
                 {
-                    throw new Exception("Already have type with this name.");
+                    throw new Exception("Type name already used.");
                 }
 
-                types.Add(type.Name);
+                names.Add(type.Name);
             }
-
-            var globals = new HashSet<string>();
 
             foreach (var global in GlobalVariables.Values)
             {
                 global.Validate();
 
-                if (globals.Contains(global.Name))
+                if (names.Contains(global.Name))
                 {
-                    throw new Exception("Already have global name.");
+                    throw new Exception("Global name already used.");
                 }
 
-                globals.Add(global.Name);
+                names.Add(global.Name);
             }
 
             var functions = new HashSet<Function>();
@@ -129,12 +127,16 @@ namespace AgeScript.Language
                 {
                     throw new Exception("Function defined more than once.");
                 }
+                else if (names.Contains(function.Name))
+                {
+                    throw new Exception("Function name already used.");
+                }
 
                 foreach (var v in function.AllVariables)
                 {
-                    if (globals.Contains(v.Name))
+                    if (names.Contains(v.Name))
                     {
-                        throw new Exception("Have global with same name as local.");
+                        throw new Exception("Local variable name already used.");
                     }
                 }
 

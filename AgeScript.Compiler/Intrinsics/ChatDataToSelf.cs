@@ -8,7 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class ChatDataToSelf : Intrinsic
+    internal class ChatDataToSelf : Inlined
     {
         public override bool HasStringLiteral => true;
 

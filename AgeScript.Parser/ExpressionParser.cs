@@ -11,12 +11,14 @@ namespace AgeScript.Parser
         public Expression Parse(Script script, Function function, string expression,
             IReadOnlyDictionary<string, string> literals, Type? type)
         {
+            Expression? expr = null;
+
             if (expression.Contains('('))
             {
                 var bo = expression.IndexOf('(');
                 var bc = expression.LastIndexOf(')');
                 var name = expression[..bo].Trim();
-                var args = expression[(bo + 1)..bc].Trim().Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                var args = expression[(bo + 1)..bc].SplitFull(",");
                 var arguments = new List<Expression>();
                 string? literal = null;
 
@@ -37,31 +39,27 @@ namespace AgeScript.Parser
                     }
                     else
                     {
-                        var expr = Parse(script, function, arg, literals, null);
+                        var argexpr = Parse(script, function, arg, literals, null);
 
-                        if (expr is CallExpression)
+                        if (argexpr is CallExpression)
                         {
-                            throw new NotImplementedException();
+                            throw new Exception("Can not nest call expressions.");
                         }
 
-                        expr.Validate();
-                        arguments.Add(expr);
+                        argexpr.Validate();
+                        arguments.Add(argexpr);
                     }
                 }
 
                 if (type is not null)
                 {
-                    var cex = new CallExpression()
+                    expr = new CallExpression()
                     {
                         FunctionName = name,
                         ReturnType = type,
                         Arguments = arguments,
                         Literal = literal
                     };
-
-                    cex.Validate();
-
-                    return cex;
                 }
                 else
                 {
@@ -70,20 +68,78 @@ namespace AgeScript.Parser
             }
             else if (TryParseAccessor(script, function, expression, literals, out var accessor))
             {
-                var expr = new AccessorExpression() { Accessor = accessor! };
-                expr.Validate();
-
-                return expr;
+                expr = new AccessorExpression() { Accessor = accessor! };
             }
-            else
+            else if (expression.Contains('.'))
             {
-                var expr = new ConstExpression(expression);
-                expr.Validate();
+                if (float.TryParse(expression, out var f))
+                {
+                    expr = ConstExpression.FromPrecise(f);
+                }
+                else
+                {
+                    var pieces = expression.SplitFull(".");
 
-                return expr;
+                    if (pieces.Count != 2)
+                    {
+                        throw new Exception("Failed to parse property.");
+                    }
+
+                    var table = script.Tables.SingleOrDefault(x => x.Name == pieces[0]);
+
+                    if (table is not null)
+                    {
+                        if (pieces[1] == "Length")
+                        {
+                            expr = ConstExpression.FromInt(table.Length);
+                        }
+                        else
+                        {
+                            throw new Exception("Property not recognized.");
+                        }
+                    }
+
+                    if (function.TryGetScopedVariable(script, pieces[0], out var variable))
+                    {
+                        if (pieces[1] == "Length")
+                        {
+                            if (variable!.Type is Array array)
+                            {
+                                expr = ConstExpression.FromInt(array.Length);
+                            }
+                            else
+                            {
+                                throw new Exception("Only array variables have Length property.");
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Property not recognized.");
+                        }
+                    }
+                }
+            }
+            else if (int.TryParse(expression, out var i))
+            {
+                expr = ConstExpression.FromInt(i);
+            }
+            else if (bool.TryParse(expression, out var b))
+            {
+                expr = ConstExpression.FromBool(b);
+            }
+            else if (float.TryParse(expression, out var f))
+            {
+                expr = ConstExpression.FromPrecise(f);
             }
 
-            throw new Exception("Failed to parse expression.");
+            if (expr is null)
+            {
+                throw new Exception("Failed to parse expression.");
+            }
+
+            expr.Validate();
+
+            return expr;
         }
 
         public bool TryParseAccessor(Script script, Function function, string code,
@@ -113,9 +169,9 @@ namespace AgeScript.Parser
             }
             else
             {
-                var pieces = code.Split('[');
+                var pieces = code.SplitFull("[");
 
-                if (pieces.Length != 2)
+                if (pieces.Count != 2)
                 {
                     throw new Exception("Accessor not parsed.");
                 }
@@ -136,7 +192,7 @@ namespace AgeScript.Parser
 
                         if (offset is ConstExpression oc)
                         {
-                            offset = new ConstExpression((oc.Int * atype.ElementType.Size).ToString());
+                            offset = ConstExpression.FromInt(oc.Int * atype.ElementType.Size);
                         }
 
                         accessor = new()

@@ -1,5 +1,4 @@
 ﻿using AgeScript.Compiler.Intrinsics;
-using AgeScript.Language;
 using AgeScript.Language.Expressions;
 using System;
 using System.Collections.Generic;
@@ -112,9 +111,7 @@ namespace AgeScript.Compiler
             int? result_address, bool ref_result_address)
         {
             var called_function = result.Rules.GetFunction(expression.FunctionName, expression.Arguments, expression.Literal);
-            var register_count = result.Memory.GetRegisterCount(Function);
-            var called_register_count = result.Memory.GetRegisterCount(called_function);
-
+            
             if (result_address is not null)
             {
                 if (expression.Type != called_function.ReturnType)
@@ -123,12 +120,15 @@ namespace AgeScript.Compiler
                 }
             }
 
-            if (called_function is Intrinsic intrinsic)
+            if (called_function is Inlined inlined)
             {
-                intrinsic.CompileCall(result, expression, result_address, ref_result_address);
+                inlined.CompileCall(result, expression, result_address, ref_result_address);
 
                 return;
             }
+
+            var register_count = result.Memory.GetRegisterCount(Function);
+            var called_register_count = result.Memory.GetRegisterCount(called_function);
 
             // check for overflow
 

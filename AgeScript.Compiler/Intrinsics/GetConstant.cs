@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class GetConstant : Intrinsic
+    internal class GetConstant : Inlined
     {
         public override bool HasStringLiteral => true;
 

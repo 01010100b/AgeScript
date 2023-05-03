@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class GetRandom : Intrinsic
+    internal class GetRandom : Inlined
     {
         public override bool HasStringLiteral => false;
 

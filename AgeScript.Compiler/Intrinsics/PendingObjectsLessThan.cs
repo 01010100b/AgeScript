@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class PendingObjectsLessThan : Intrinsic
+    internal class PendingObjectsLessThan : Inlined
     {
         public override bool HasStringLiteral => false;
 

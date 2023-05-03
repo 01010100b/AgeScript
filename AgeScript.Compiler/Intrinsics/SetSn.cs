@@ -8,7 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class SetSn : Intrinsic
+    internal class SetSn : Inlined
     {
         public override bool HasStringLiteral => false;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgeScript.Compiler.Intrinsics.DUC
 {
-    internal class SetTargetObject : Intrinsic
+    internal class SetTargetObject : Inlined
     {
         public override bool HasStringLiteral => false;
 

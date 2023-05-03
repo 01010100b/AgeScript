@@ -108,13 +108,8 @@ namespace AgeScript
             var file_jtp = Path.Combine(settings.WorkingFolder, $"{settings.Name}.jtp");
             var file_jt = Path.Combine(settings.WorkingFolder, $"{settings.Name}.jt");
             var jtp = File.ReadAllText(file_jtp);
-            var jt = LoadJson<Dictionary<string, int>>(file_jt);
+            var jt = LoadJson<Dictionary<string, int>>(file_jt) ?? throw new Exception("Failed to load files.");
             
-            if (jt is null)
-            {
-                throw new Exception("Failed to load files.");
-            }
-
             var optimizer = new ScriptOptimizer();
             optimizer.Optimize(ref jtp, ref jt);
 
@@ -130,7 +125,7 @@ namespace AgeScript
             var file_per = Path.Combine(settings.DestinationFolder, $"{settings.Name}.per");
 
             var jtp = File.ReadAllText(file_jtp);
-            var jt = LoadJson<Dictionary<string, int>>(file_jt);
+            var jt = LoadJson<Dictionary<string, int>>(file_jt) ?? throw new Exception("Files not found.");
 
             foreach (var jump in jt)
             {
@@ -139,6 +134,12 @@ namespace AgeScript
 
             File.Delete(file_per);
             File.WriteAllText(file_per, jtp);
+
+            var ai = Path.Combine(settings.DestinationFolder, $"{settings.Name}.ai");
+            if (!File.Exists(ai))
+            {
+                File.Create(ai);
+            }
         }
 
         private static void RunFull(Settings settings)

@@ -94,6 +94,10 @@ namespace AgeScript.Language
             {
                 throw new Exception("Mismatch between while and endwhile statements.");
             }
+            else if (Statements.OfType<ForStatement>().Count() != Statements.OfType<EndForStatement>().Count())
+            {
+                throw new Exception("Mismatch between for and endfor statements.");
+            }
         }
 
         public override bool Equals(object? obj)

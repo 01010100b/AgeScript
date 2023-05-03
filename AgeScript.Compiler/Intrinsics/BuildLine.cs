@@ -8,7 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AgeScript.Compiler.Intrinsics
 {
-    internal class BuildLine : Intrinsic
+    internal class BuildLine : Inlined
     {
         public override bool HasStringLiteral => false;
 

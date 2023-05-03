@@ -9,8 +9,6 @@ namespace AgeScript.Compiler
 {
     public class ScriptCompiler
     {
-        internal static Settings Settings { get; private set; } = new();
-
         public CompilationResult Compile(Script script, Settings settings)
         {
             Console.WriteLine("Compiling...");

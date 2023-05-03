@@ -58,7 +58,7 @@ b[0] = 10
 b[1] = 11
 b[2] = 12
 
-for i 0..3
+for i 0..a.Length
 	a[i] = b[i]
 	
 	if Equals(i, 1)

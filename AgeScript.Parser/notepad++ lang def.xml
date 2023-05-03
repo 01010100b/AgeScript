@@ -24,7 +24,7 @@
             <Keywords name="Folders in comment, open"></Keywords>
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
-            <Keywords name="Keywords1">Globals , Function , Struct , Table , String , #define</Keywords>
+            <Keywords name="Keywords1">Globals , Function , Struct , Table , Map , String , #define</Keywords>
             <Keywords name="Keywords2">if , elif , else , endif , return , break , continue , for , endfor , while , endwhile , switch , case , endswitch</Keywords>
             <Keywords name="Keywords3">true , false ,</Keywords>
             <Keywords name="Keywords4"></Keywords>
