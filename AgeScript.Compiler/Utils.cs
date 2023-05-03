@@ -8,7 +8,7 @@ namespace AgeScript.Compiler
 {
     internal static class Utils
     {
-        public static void Clear(RuleList rules, int from, int length)
+        public static void Clear(RuleList rules, int from, int length, int value = 0)
         {
             if (length <= 0)
             {
@@ -17,7 +17,7 @@ namespace AgeScript.Compiler
 
             while (length > 0)
             {
-                if (length >= 4 && from >= 41 && from < 508)
+                if (length >= 4 && from >= 41 && from < 508 && value == 0)
                 {
                     rules.AddAction($"up-reset-cost-data {from}");
                     from += 4;
@@ -25,7 +25,7 @@ namespace AgeScript.Compiler
                 }
                 else
                 {
-                    rules.AddAction($"up-modify-goal {from} c:= 0");
+                    rules.AddAction($"up-modify-goal {from} c:= {value}");
                     from++;
                     length--;
                 }

@@ -40,7 +40,28 @@
 // ObjectData
 
 #define OBJECT_DATA_INDEX -1
+#define OBJECT_DATA_ID 0
+#define OBJECT_DATA_POINT_X 8
+#define OBJECT_DATA_POINT_Y 9
+#define OBJECT_DATA_TARGET_ID 23
 #define OBJECT_DATA_DISTANCE 44
+#define OBJECT_DATA_RELOAD_TIME 54
+#define OBJECT_DATA_NEXT_ATTACK 55
+#define OBJECT_DATA_GROUP_FLAG 73
+
+// DUCAction
+
+#define ACTION_DEFAULT 0
+
+// Formation
+
+#define FORMATION_NONE -1
+
+// Stance
+
+#define STANCE_NONE -1
+#define STANCE_STAND_GROUND 2
+#define STANCE_NO_ATTACK 3
 
 // PositionType
 

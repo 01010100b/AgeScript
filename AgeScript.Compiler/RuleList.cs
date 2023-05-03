@@ -202,7 +202,7 @@ namespace AgeScript.Compiler
             }
             catch
             {
-                throw new Exception("Function not found.");
+                throw new Exception($"Function {name} not found.");
             }
         }
 
@@ -216,7 +216,7 @@ namespace AgeScript.Compiler
             }
             catch
             {
-                throw new Exception("Table not found.");
+                throw new Exception($"Table {name} not found.");
             }
         }
 
@@ -225,8 +225,6 @@ namespace AgeScript.Compiler
         public string GetPer()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"; Compiled with AgeScript v{GetType().Assembly.GetName().Version}");
-            sb.AppendLine();
 
             for (int i = 0; i < Rules.Count; i++)
             {

@@ -20,8 +20,6 @@ ExtraWoodGathererPercentage = 30
 ExtraGoldGathererPercentage = 20
 ExtraStoneGathererPercentage = 10
 
-ChatDataToSelf("strat table length: %d", Strategies.Length)
-
 Function Int Strategy_Choose():
 
 return 1

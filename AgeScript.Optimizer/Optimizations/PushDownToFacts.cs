@@ -9,7 +9,7 @@ namespace AgeScript.Optimizer.Optimizations
 {
     public class PushDownToFacts : IOptimization
     {
-        private static readonly List<string> PushDowns = new() { "up-modify-goal", "up-modify-sn", "up-get-focus-fact" };
+        private static readonly List<string> PushDowns = new() { "up-modify-goal", "up-get-fact", "up-get-focus-fact" };
 
         public void Optimize(List<Rule> rules)
         {

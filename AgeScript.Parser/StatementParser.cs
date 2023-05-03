@@ -15,7 +15,7 @@ namespace AgeScript.Parser
         {
             if (line == "return" || line.StartsWith("return "))
             {
-                var expr = line.Replace("return", "").Trim();
+                var expr = line[6..].Trim();
 
                 if (string.IsNullOrWhiteSpace(expr))
                 {
@@ -48,7 +48,7 @@ namespace AgeScript.Parser
             }
             else if (line.StartsWith("if "))
             {
-                var expr = line.Replace("if", "").Trim();
+                var expr = line[2..].Trim();
 
                 if (string.IsNullOrWhiteSpace(expr))
                 {
@@ -63,7 +63,7 @@ namespace AgeScript.Parser
             }
             else if (line.StartsWith("elif "))
             {
-                var expr = line.Replace("elif", "").Trim();
+                var expr = line[4..].Trim();
 
                 if (string.IsNullOrWhiteSpace(expr))
                 {
@@ -86,7 +86,7 @@ namespace AgeScript.Parser
             }
             else if (line.StartsWith("while "))
             {
-                var expr = line.Replace("while", string.Empty).Trim();
+                var expr = line[5..].Trim();
 
                 if (string.IsNullOrWhiteSpace(expr))
                 {

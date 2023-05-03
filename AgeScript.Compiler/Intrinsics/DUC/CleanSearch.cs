@@ -13,6 +13,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
 
         public CleanSearch() : base()
         {
+            ReturnType = Primitives.Int4;
             Parameters.Add(new() { Name = "search_source", Type = Primitives.Int });
             Parameters.Add(new() { Name = "object_data", Type = Primitives.Int });
             Parameters.Add(new() { Name = "search_order", Type = Primitives.Int });
@@ -36,6 +37,12 @@ namespace AgeScript.Compiler.Intrinsics.DUC
             }
 
             result.Rules.AddAction($"up-clean-search {ce0.Int} {ce1.Int} {ce2.Int}");
+
+            if (result_address is not null)
+            {
+                result.Rules.AddAction($"up-get-search-state {result.Memory.Intr0}");
+                Utils.MemCopy(result, result.Memory.Intr0, result_address.Value, 4, false, ref_result_address);
+            }
         }
     }
 }

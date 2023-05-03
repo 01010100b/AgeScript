@@ -57,7 +57,7 @@ namespace AgeScript.Optimizer
             Console.WriteLine($"Allowed rules: {rules.Count(x => x.AllowsOptimizations)}");
             Console.WriteLine($"Rules which jump: {rules.Count(x => x.IsJump)}");
             Console.WriteLine($"Always true rules: {rules.Count(x => x.IsAlwaysTrue)}");
-            Console.WriteLine($"Elements: {rules.Sum(x => x.Elements)} with {rules.Sum(x => x.Elements) / (double)rules.Count:N2} elements per rule.");
+            Console.WriteLine($"Commands: {rules.Sum(x => x.Elements)} with {rules.Sum(x => x.Elements) / (double)rules.Count:N2} commands per rule.");
             Console.WriteLine($"Compound commands: {rules.Sum(x => x.Commands.Count(x => x.IsCompound))}");
         }
 

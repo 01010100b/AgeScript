@@ -1,4 +1,6 @@
-﻿Globals:
+﻿#define MICRO_TEST true
+
+Globals:
 
 Int Tick
 Int Player
@@ -7,13 +9,20 @@ Function Void Main():
 
 if Equals(Tick, 0)
 	Main_Initialize()
+	
+	if MICRO_TEST
+		SetSn(SN_NUMBER_EXPLORE_GROUPS, 0)
+		SetSn(SN_TOTAL_NUMBER_EXPLORERS, 0)
+		ResetScouts()
+	endif
+	
 endif
 
-CivPopPercentage = 60
-
-DoStrategy()
-DoEconomy()
-DoBuilding()
+if Not(MICRO_TEST)
+	DoStrategy()
+	DoEconomy()
+	DoBuilding()
+endif
 
 Main_Test()
 
@@ -24,7 +33,7 @@ Function Void Main_Initialize():
 Player = GetConstant("my-player-number")
 
 SetSn(SN_CAP_CIVILIAN_BUILDERS, 200)
-SetSn(SN_CONSECUTIVE_IDLE_UNIT_LIMIT, 0)
+SetSn(SN_CONSECUTIVE_IDLE_UNIT_LIMIT, 1)
 SetSn(SN_DO_NOT_SCALE_FOR_DIFFICULTY_LEVEL, 1)
 SetSn(SN_ENABLE_BOAR_HUNTING, 1)
 SetSn(SN_ENABLE_OFFENSIVE_PRIORITY, 1)
@@ -50,22 +59,27 @@ ResetScouts()
 
 Function Void Main_Test():
 
-Int[3] a
-Int[5] b
+Int[4] search_state
+Int[2] retreat_point
 Int i
 
-b[0] = 10
-b[1] = 11
-b[2] = 12
+FullResetSearch()
+search_state = FindRemote(2, -1, 40)
 
-for i 0..a.Length
-	a[i] = b[i]
-	
-	if Equals(i, 1)
-		break
-	endif
-	
+if LessThanOrEquals(search_state[SEARCH_REMOTE_TOTAL], 0)
+	return
+endif
+
+search_state = FindLocal(-1, 40)
+
+if LessThanOrEquals(search_state[SEARCH_LOCAL_TOTAL], 0)
+	return
+endif
+
+for i 0..search_state[SEARCH_LOCAL_TOTAL]
+	ResetSearch(true, true, false, false)
+	FindLocal(-1, 40)
+	CleanSearch(SEARCH_LOCAL, OBJECT_DATA_ID, SEARCH_ORDER_ASC)
+	RemoveObjects("!=", SEARCH_LOCAL, OBJECT_DATA_INDEX, i)
+	MicroRangedRanged_Single(retreat_point)
 endfor
-
-ChatDataToSelf("a1 = %d", a[1])
-ChatDataToSelf("a2 = %d", a[2])

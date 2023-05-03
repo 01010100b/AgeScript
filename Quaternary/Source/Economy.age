@@ -12,6 +12,7 @@ Int ExtraGoldGathererPercentage
 
 Function Void DoEconomy():
 
+CivPopPercentage = 60
 Economy_GathererPercentageUpdate()
 Economy_ManagePopulation()
 

@@ -9,11 +9,11 @@ namespace AgeScript.Language
 {
     public abstract class Named : Validated
     {
-        private const string NameRegex = @"^[a-zA-Z][a-zA-Z_0-9]*$";
+        private static readonly Regex NameRegex = new(@"^[a-zA-Z][a-zA-Z_0-9]*$");
 
         public static void ValidateName(string name)
         {
-            if (!Regex.IsMatch(name, NameRegex))
+            if (!NameRegex.IsMatch(name))
             {
                 throw new Exception($"Name {name} does not follow rules.");
             }

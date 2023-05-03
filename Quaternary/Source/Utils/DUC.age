@@ -1,0 +1,8 @@
+﻿#define DUC_IN_GROUP_FLAG 9
+
+Function Void RemoveDUCGroupsFromLocal():
+
+RemoveObjects("==", SEARCH_LOCAL, OBJECT_DATA_GROUP_FLAG, DUC_IN_GROUP_FLAG)
+
+Function Void SetLocalFlag(Int value):
+

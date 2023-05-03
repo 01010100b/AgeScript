@@ -15,57 +15,59 @@ namespace AgeScript
             var settings = LoadJson<Settings>(file) ?? new Settings();
             WriteJson(settings, file);
 
+            if (args.Length == 0)
+            {
+                Console.WriteLine("No argument specified.");
+
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(settings.Name))
             {
                 Console.WriteLine($"Invalid name.");
 
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(settings.SourceFolder) || !Directory.Exists(settings.SourceFolder))
+            else if (!Directory.Exists(settings.SourceFolder))
             {
                 Console.WriteLine($"Can not find source folder.");
 
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(settings.WorkingFolder) || !Directory.Exists(settings.WorkingFolder))
+            else if (!Directory.Exists(settings.WorkingFolder))
             {
                 Console.WriteLine($"Can not find working folder.");
 
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(settings.DestinationFolder) || !Directory.Exists(settings.DestinationFolder))
+            else if (!Directory.Exists(settings.DestinationFolder))
             {
                 Console.WriteLine($"Can not find destination folder.");
 
                 return;
             }
 
-            if (args.Length > 0)
+            var arg = args[0].Trim();
+
+            if (arg == "-compile")
             {
-                if (args[0].Trim() == "-compile")
-                {
-                    RunCompile(settings);
-                }
-                else if (args[0].Trim() == "-optimize")
-                {
-                    RunOptimize(settings);
-                }
-                else if (args[0].Trim() == "-link")
-                {
-                    RunLink(settings);
-                }
-                else if (args[0].Trim() == "-full")
-                {
-                    RunFull(settings);
-                }
-                else
-                {
-                    throw new Exception("Argument not recognized.");
-                }
+                RunCompile(settings);
+            }
+            else if (arg == "-optimize")
+            {
+                RunOptimize(settings);
+            }
+            else if (arg == "-link")
+            {
+                RunLink(settings);
+            }
+            else if (arg == "-full")
+            {
+                RunFull(settings);
             }
             else
             {
-                RunFull(settings);
+                throw new Exception("Argument not recognized.");
             }
         }
 
@@ -94,7 +96,7 @@ namespace AgeScript
             var compiler = new ScriptCompiler();
             var result = compiler.Compile(script, settings.CompilerSettings);
             Console.WriteLine($"Compiled {settings.Name} succesfully.");
-            Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} elements for {result.CommandCount / (double)result.RuleCount:N2} elements per rule.");
+            Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} commands for {result.CommandCount / (double)result.RuleCount:N2} commands per rule.");
 
             var jtp = result.JumpTargetPer;
             var targets = new Dictionary<string, int>(result.JumpTargets);
@@ -126,14 +128,11 @@ namespace AgeScript
 
             var jtp = File.ReadAllText(file_jtp);
             var jt = LoadJson<Dictionary<string, int>>(file_jt) ?? throw new Exception("Files not found.");
-
-            foreach (var jump in jt)
-            {
-                jtp = jtp.Replace(jump.Key, jump.Value.ToString());
-            }
+            var linker = new ScriptLinker();
+            var code = linker.Link(jtp, jt);
 
             File.Delete(file_per);
-            File.WriteAllText(file_per, jtp);
+            File.WriteAllText(file_per, code);
 
             var ai = Path.Combine(settings.DestinationFolder, $"{settings.Name}.ai");
             if (!File.Exists(ai))
@@ -167,7 +166,7 @@ namespace AgeScript
             var compiler = new ScriptCompiler();
             var result = compiler.Compile(script, settings.CompilerSettings);
             Console.WriteLine($"Compiled {settings.Name} succesfully.");
-            Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} elements for {result.CommandCount / (double)result.RuleCount:N2} elements per rule.");
+            Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} commands for {result.CommandCount / (double)result.RuleCount:N2} commands per rule.");
 
             var jtp = result.JumpTargetPer;
             var targets = new Dictionary<string, int>(result.JumpTargets);
