@@ -7,10 +7,10 @@ Function Void MicroRangedRanged_Single(Int[2] retreat_point):
 // single unit to control must be in search-local, possible targets must be in search-remote
 
 Int[2] my_pos
-Int min_range
+Int my_range
 Int my_target_id
-Int my_reload_time
 Int my_next_attack
+Int my_time_since_attack
 Int my_modifier
 Int target_id
 Int[2] target_pos
@@ -19,17 +19,16 @@ Int[2] move_pos
 
 SetTargetObject(SEARCH_LOCAL, 0)
 my_pos = GetPoint(POSITION_OBJECT)
-min_range = GetObjectData(OBJECT_DATA_RANGE)
-min_range = Sub(min_range, 1)
+my_range = GetObjectData(OBJECT_DATA_RANGE)
 my_target_id = GetObjectData(OBJECT_DATA_TARGET_ID)
-my_reload_time = GetObjectData(OBJECT_DATA_RELOAD_TIME)
 my_next_attack = GetObjectData(OBJECT_DATA_NEXT_ATTACK)
-my_reload_time = Sub(my_reload_time, my_next_attack)
+my_time_since_attack = GetObjectData(OBJECT_DATA_RELOAD_TIME)
+my_time_since_attack = Sub(my_time_since_attack, my_next_attack)
 my_modifier = GetObjectData(OBJECT_DATA_ID)
 my_modifier = Add(my_modifier, Tick)
 my_modifier = Mod(my_modifier, 2)
 
-if LessThan(my_reload_time, 500)
+if LessThan(my_time_since_attack, 500)
 	return
 endif
 
@@ -50,16 +49,16 @@ endif
 target_pos = GetPoint(POSITION_OBJECT)
 
 if Equals(my_modifier, 0)
-	move_pos = Cross(my_pos, target_pos, 3)
+	move_pos = Cross(my_pos, target_pos, 2)
 else
-	move_pos = Cross(my_pos, target_pos, -3)
+	move_pos = Cross(my_pos, target_pos, -2)
 endif
 
 target_distance = GetPointDistance(my_pos, target_pos)
+my_range = Sub(my_range, 1)
 
-if LessThan(target_distance, min_range)
+if LessThan(target_distance, my_range)
 	move_pos = Lerp(move_pos, target_pos, -2)
-	ChatDataToSelf("backing up!", 0)
 endif
 
 TargetPoint(move_pos, ACTION_DEFAULT, FORMATION_NONE, STANCE_NO_ATTACK)

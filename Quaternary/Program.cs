@@ -18,8 +18,8 @@ namespace Quaternary
             {
                 Name = "Quaternary",
                 SourceFolder = @"F:\Repos\01010100b\AgeScript\Quaternary\Source",
-                WorkingFolder = @"F:\AoE\UP\Ai",
-                DestinationFolder = @"F:\AoE\UP\Ai",
+                WorkingFolder = @"F:\AoE\WK\Voobly Mods\AOC\Data Mods\WololoKingdoms\Script.Ai",
+                DestinationFolder = @"F:\AoE\WK\Voobly Mods\AOC\Data Mods\WololoKingdoms\Script.Ai",
                 CompilerSettings = new()
             };
 

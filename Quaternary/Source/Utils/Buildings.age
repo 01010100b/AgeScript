@@ -1,4 +1,4 @@
-﻿Function Bool BuildPoint(Bool escrow, Int[2] point, Int distance, Int building_id):
+﻿Function Bool UtilsBuildPoint(Bool escrow, Int[2] point, Int distance, Int building_id):
 // like up-build place-point but using build-line so no building queues getting stuck or weird stuff with target-point
 
 Int attempt
@@ -42,7 +42,7 @@ ChatDataToSelf("failed placement %d", building_id)
 
 return false
 
-Function Bool BuildDropsite(Bool escrow, Int[2] point, Int distance, Int dropsite_id, Int resource):
+Function Bool UtilsBuildDropsite(Bool escrow, Int[2] point, Int distance, Int dropsite_id, Int resource):
 // point and distance define a region in which the dropsite may be placed
 
 Int[4] search_state
@@ -82,7 +82,7 @@ for attempt 0..20
 	
 	for distance 0..4
 		
-		if BuildPoint(true, point, distance, dropsite_id)
+		if UtilsBuildPoint(true, point, distance, dropsite_id)
 			return true
 		endif
 		

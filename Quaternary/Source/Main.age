@@ -3,7 +3,6 @@
 Globals:
 
 Int Tick
-Int Player
 
 Function Void Main():
 
@@ -29,8 +28,6 @@ Main_Test()
 Tick = Add(Tick, 1)
 
 Function Void Main_Initialize():
-
-Player = GetConstant("my-player-number")
 
 SetSn(SN_CAP_CIVILIAN_BUILDERS, 200)
 SetSn(SN_CONSECUTIVE_IDLE_UNIT_LIMIT, 1)
@@ -64,7 +61,7 @@ Int[2] retreat_point
 Int target
 Int i
 
-for i 1..8
+for i 1..9
 	target = GetPlayerFact(i, FACT_PLAYER_IN_GAME, 0)
 	
 	if Equals(target, 1)

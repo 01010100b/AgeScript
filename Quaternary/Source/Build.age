@@ -6,13 +6,15 @@ Build_Dropsites()
 
 Function Void Build_Housing():
 
+Int player
 Int pop_headroom
 Int housing_headroom
 Bool no_pending
 Int[2] point
 
-pop_headroom = GetPlayerFact(Player, FACT_POPULATION_HEADROOM, 0)
-housing_headroom = GetPlayerFact(Player, FACT_HOUSING_HEADROOM, 0)
+player = GetConstant("my-player-number")
+pop_headroom = GetPlayerFact(player, FACT_POPULATION_HEADROOM, 0)
+housing_headroom = GetPlayerFact(player, FACT_HOUSING_HEADROOM, 0)
 
 if LessThan(pop_headroom, 1)
 	//ChatDataToSelf("no poproom", 1)
@@ -32,7 +34,7 @@ if Not(no_pending)
 endif
 
 point = GetPoint(POSITION_SELF)
-BuildPoint(true, point, 12, HOUSE)
+UtilsBuildPoint(true, point, 12, HOUSE)
 
 Function Void Build_Dropsites():
 
@@ -46,7 +48,7 @@ lack = ObjectTypeCountTotalLessThan(LUMBER_CAMP, 1)
 
 if And(seen, lack)
 	point = GetPoint(POSITION_SELF)
-	success = BuildDropsite(true, point, 20, LUMBER_CAMP, RESOURCE_WOOD)
+	success = UtilsBuildDropsite(true, point, 20, LUMBER_CAMP, RESOURCE_WOOD)
 endif
 
 if lack

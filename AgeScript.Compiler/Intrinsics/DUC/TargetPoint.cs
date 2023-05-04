@@ -36,6 +36,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
             }
 
             ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+            result.Rules.AddAction($"up-modify-sn 292 c:= 5");
             result.Rules.AddAction($"up-target-point {result.Memory.Intr0} {c1.Int} {c2.Int} {c3.Int}");
         }
     }
