@@ -61,10 +61,26 @@ Function Void Main_Test():
 
 Int[4] search_state
 Int[2] retreat_point
+Int target
 Int i
 
+for i 1..8
+	target = GetPlayerFact(i, FACT_PLAYER_IN_GAME, 0)
+	
+	if Equals(target, 1)
+		
+		if PlayerStance(i, PLAYER_STANCE_ENEMY)
+			target = i
+			
+			break
+		endif
+		
+	endif
+	
+endfor
+
 FullResetSearch()
-search_state = FindRemote(2, -1, 40)
+search_state = FindRemote(target, -1, 40)
 
 if LessThanOrEquals(search_state[SEARCH_REMOTE_TOTAL], 0)
 	return
