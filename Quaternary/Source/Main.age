@@ -62,10 +62,9 @@ Int target
 Int i
 
 for i 1..9
-	target = GetPlayerFact(i, FACT_PLAYER_IN_GAME, 0)
 	
-	if Equals(target, 1)
-		
+	if PlayerInGame(i)
+	
 		if PlayerStance(i, PLAYER_STANCE_ENEMY)
 			target = i
 			
