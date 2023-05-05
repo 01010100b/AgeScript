@@ -1,4 +1,4 @@
-﻿Function Bool UtilsBuildPoint(Bool escrow, Int[2] point, Int distance, Int building_id):
+﻿Function Bool UtilsBuildPoint(Bool escrow, Int[2] point, Int distance, Int min_distance, Int building_id):
 // like up-build place-point but using build-line so no building queues getting stuck or weird stuff with target-point
 
 Int attempt
@@ -26,6 +26,10 @@ for attempt 0..max_attempts
 	test_point[1] = Add(test_point[1], delta)
 	test_distance = GetPointDistance(point, test_point)
 	
+	if LessThanOrEquals(test_distance, min_distance)
+		continue
+	endif
+	
 	if LessThanOrEquals(test_distance, distance)
 	
 		if CanBuildLine(escrow, test_point, building_id)
@@ -37,8 +41,6 @@ for attempt 0..max_attempts
 	endif
 		
 endfor
-
-ChatDataToSelf("failed placement %d", building_id)
 
 return false
 
@@ -82,7 +84,7 @@ for attempt 0..20
 	
 	for distance 0..4
 		
-		if UtilsBuildPoint(true, point, distance, dropsite_id)
+		if UtilsBuildPoint(true, point, distance, 0, dropsite_id)
 			return true
 		endif
 		
@@ -90,6 +92,72 @@ for attempt 0..20
 	
 endfor
 
-ChatDataToSelf("failed placement %d", dropsite_id)
+return false
+
+Function Bool UtilsBuildFarm(Bool escrow, Int max_distance):
+
+Int[4] search_state
+
+FullResetSearch()
+search_state = FindLocal(TOWN_CENTER, 240)
+search_state = FindLocal(MILL, 240)
+
+if LessThanOrEquals(search_state[SEARCH_LOCAL_TOTAL, 0)
+	return false
+endif
+
+Int delta
+Int[2] point
+Int[2] from
+Int[2] to
+Int[2] test_point
+Int i
+Int d
+
+for i 0..search_state[SEARCH_LOCAL_TOTAL]
+	SetTargetObject(SEARCH_LOCAL, i)
+	point = GetPoint(POSITION_OBJECT)
+	
+	for delta 0..max_distance
+		from[0] = Sub(point[0], delta)
+		from[1] = Sub(point[1], delta)
+		to[0] = Add(point[0], delta)
+		to[1] = Add(point[1], delta)
+		
+		for d from[0]..to[0]
+			test_point[0] = d
+			test_point[1] = from[1]
+			
+			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+				return true
+			endif
+			
+			test_point[1] = to[1]
+			
+			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+				return true
+			endif
+			
+		endfor
+		
+		for d from[1]..to[1]
+			test_point[1] = d
+			test_point[0] = from[0]
+			
+			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+				return true
+			endif
+			
+			test_point[0] = to[0]
+			
+			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+				return true
+			endif
+			
+		endfor
+		
+	endfor
+	
+endfor
 
 return false

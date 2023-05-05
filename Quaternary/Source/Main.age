@@ -1,4 +1,4 @@
-﻿#define MICRO_TEST true
+﻿#define MICRO_TEST false
 
 Globals:
 
@@ -17,7 +17,9 @@ if Equals(Tick, 0)
 	
 endif
 
-if Not(MICRO_TEST)
+if MICRO_TEST
+	Main_MicroTest()
+else
 	DoStrategy()
 	DoEconomy()
 	DoBuilding()
@@ -55,6 +57,8 @@ SetSn(SN_TOTAL_NUMBER_EXPLORERS, 1)
 ResetScouts()
 
 Function Void Main_Test():
+
+Function Void Main_MicroTest():
 
 Int[4] search_state
 Int[2] retreat_point

@@ -114,7 +114,10 @@
 
 // Buildings
 
+#define FARM 50
+#define MILL 68
 #define HOUSE 70
+#define TOWN_CENTER 109
 #define LUMBER_CAMP 562
 
 // Units

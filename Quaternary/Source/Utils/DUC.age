@@ -1,9 +1,4 @@
-﻿#define DUC_IN_GROUP_FLAG 9
-
-Function Void UtilsRemoveDUCGroupsFromLocal():
-// remove objects from search-local which are part of DUC groups
-
-RemoveObjects("==", SEARCH_LOCAL, OBJECT_DATA_GROUP_FLAG, DUC_IN_GROUP_FLAG)
+﻿#define FLAG_IN_DUC_GROUP 9
 
 Function Void UtilsSetLocalFlag(Int value):
 // set object-data-group-flag for units in search-local to value
