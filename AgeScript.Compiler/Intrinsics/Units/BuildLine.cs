@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AgeScript.Compiler.Intrinsics
+namespace AgeScript.Compiler.Intrinsics.Units
 {
     internal class BuildLine : Inlined
     {

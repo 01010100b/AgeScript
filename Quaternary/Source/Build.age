@@ -3,13 +3,12 @@
 Build_Housing()
 Build_Dropsites()
 
-
 Function Void Build_Housing():
 
 Int player
 Int pop_headroom
 Int housing_headroom
-Bool no_pending
+Bool pending
 Int[2] point
 
 player = GetConstant("my-player-number")
@@ -17,24 +16,21 @@ pop_headroom = GetPlayerFact(player, FACT_POPULATION_HEADROOM, 0)
 housing_headroom = GetPlayerFact(player, FACT_HOUSING_HEADROOM, 0)
 
 if LessThan(pop_headroom, 1)
-	//ChatDataToSelf("no poproom", 1)
 	return
 endif
 
 if GreaterThan(housing_headroom, 5)
-	//ChatDataToSelf("housing room >= 5", 1)
 	return
 endif
 
-no_pending = PendingObjects("<", HOUSE, 1)
+pending = PendingObjects(">=", HOUSE, 1)
 
-if Not(no_pending)
-	//ChatDataToSelf("pending", 1)
+if pending
 	return
 endif
 
 point = GetPoint(POSITION_SELF)
-UtilsBuildPoint(true, point, 12, 6, HOUSE)
+UtilsBuildPoint(true, point, 12, 6, 0, HOUSE)
 
 Function Void Build_Dropsites():
 
@@ -43,17 +39,21 @@ Bool lack
 Int[2] point
 Bool success
 
+// first lumber camp
+
 seen = ResourceFound(RESOURCE_WOOD)
 lack = ObjectTypeCountTotal("<", LUMBER_CAMP, 1)
 
 if And(seen, lack)
 	point = GetPoint(POSITION_SELF)
-	success = UtilsBuildDropsite(true, point, 20, LUMBER_CAMP, RESOURCE_WOOD)
+	success = UtilsBuildDropsite(true, point, 30, LUMBER_CAMP, RESOURCE_WOOD)
 endif
 
 if lack
 	return
 endif
+
+// first mill
 
 seen = ResourceFound(RESOURCE_FOOD)
 lack = ObjectTypeCountTotal("<", MILL, 1)
@@ -64,5 +64,24 @@ if And(seen, lack)
 endif
 
 if lack
+	return
+endif
+
+// add some farms
+
+lack = ObjectTypeCountTotal("<", FARM, 3)
+
+if lack
+	success = UtilsBuildFarm(true, 5)
+	
+	if Not(success)
+	
+		if PendingObjects("<", MILL, 1)
+			point = GetPoint(POSITION_SELF)
+			UtilsBuildPoint(true, point, 20, 0, 0, MILL)
+		endif
+		
+	endif
+	
 	return
 endif

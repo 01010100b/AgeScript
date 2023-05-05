@@ -1,4 +1,4 @@
-﻿Function Bool UtilsBuildPoint(Bool escrow, Int[2] point, Int distance, Int min_distance, Int building_id):
+﻿Function Bool UtilsBuildPoint(Bool escrow, Int[2] point, Int distance, Int min_distance, Int flags, Int building_id):
 // like up-build place-point but using build-line so no building queues getting stuck or weird stuff with target-point
 
 Int attempt
@@ -6,8 +6,11 @@ Int max_attempts
 Int delta
 Int max_delta
 Int[2] test_point
+Int[2] build_point
 Int test_distance
 
+build_point[0] = -1
+build_point[1] = -1
 max_attempts = 100
 
 if LessThanOrEquals(distance, 3)
@@ -26,23 +29,27 @@ for attempt 0..max_attempts
 	test_point[1] = Add(test_point[1], delta)
 	test_distance = GetPointDistance(point, test_point)
 	
-	if LessThanOrEquals(test_distance, min_distance)
+	if LessThan(test_distance, min_distance)
 		continue
 	endif
 	
 	if LessThanOrEquals(test_distance, distance)
 	
 		if CanBuildLine(escrow, test_point, building_id)
-			BuildLine(test_point, building_id)
-			
-			return true
+			build_point = test_point
 		endif
 		
 	endif
 		
 endfor
 
-return false
+if GreaterThanOrEquals(build_point[0], 0)
+	BuildLine(build_point, building_id)
+	
+	return true
+else
+	return false
+endif
 
 Function Bool UtilsBuildDropsite(Bool escrow, Int[2] point, Int distance, Int dropsite_id, Int resource):
 // point and distance define a region in which the dropsite may be placed
@@ -84,7 +91,7 @@ for attempt 0..20
 	
 	for distance 0..4
 		
-		if UtilsBuildPoint(true, point, distance, 0, dropsite_id)
+		if UtilsBuildPoint(true, point, distance, 0, 0, dropsite_id)
 			return true
 		endif
 		
@@ -128,13 +135,13 @@ for i 0..search_state[SEARCH_LOCAL_TOTAL]
 			test_point[0] = d
 			test_point[1] = from[1]
 			
-			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+			if UtilsBuildPoint(escrow, test_point, 0, 0, 0, FARM)
 				return true
 			endif
 			
 			test_point[1] = to[1]
 			
-			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+			if UtilsBuildPoint(escrow, test_point, 0, 0, 0, FARM)
 				return true
 			endif
 			
@@ -144,13 +151,13 @@ for i 0..search_state[SEARCH_LOCAL_TOTAL]
 			test_point[1] = d
 			test_point[0] = from[0]
 			
-			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+			if UtilsBuildPoint(escrow, test_point, 0, 0, 0, FARM)
 				return true
 			endif
 			
 			test_point[0] = to[0]
 			
-			if UtilsBuildPoint(escrow, test_point, 0, 0, FARM)
+			if UtilsBuildPoint(escrow, test_point, 0, 0, 0, FARM)
 				return true
 			endif
 			

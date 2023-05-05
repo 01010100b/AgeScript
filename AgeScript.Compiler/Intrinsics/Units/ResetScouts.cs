@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgeScript.Compiler.Intrinsics
+namespace AgeScript.Compiler.Intrinsics.Units
 {
     internal class ResetScouts : Inlined
     {
