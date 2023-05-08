@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Language", "AgeSc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Parser", "AgeScript.Parser\AgeScript.Parser.csproj", "{9DF8DFE7-1F38-4F13-92FE-549A8B971489}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgeScript.Optimizer", "AgeScript.Optimizer\AgeScript.Optimizer.csproj", "{3F452AD4-B3C3-4EBF-B10B-7A8F6B6FFD4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Optimizer", "AgeScript.Optimizer\AgeScript.Optimizer.csproj", "{3F452AD4-B3C3-4EBF-B10B-7A8F6B6FFD4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgeScript", "AgeScript\AgeScript.csproj", "{3D079BE9-5244-41CE-BCCC-B7E159D3652C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript", "AgeScript\AgeScript.csproj", "{3D079BE9-5244-41CE-BCCC-B7E159D3652C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

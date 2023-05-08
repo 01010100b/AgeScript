@@ -32,9 +32,11 @@ namespace AgeScript.Compiler.Intrinsics
                 throw new Exception("fact_id and fact_parameter must be const expressions.");
             }
 
+            var player_name = cl.Arguments[0] is ConstExpression c0 && c0.Int == -1 ? "my-player-number" : "focus-player";
+
             ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             result.Rules.AddAction($"up-modify-sn sn-focus-player-number g:= {result.Memory.Intr0}");
-            result.Rules.AddAction($"up-get-focus-fact {ce1.Int} {ce2.Int} {result.Memory.Intr1}");
+            result.Rules.AddAction($"up-get-player-fact {player_name} {ce1.Int} {ce2.Int} {result.Memory.Intr1}");
             Utils.MemCopy(result, result.Memory.Intr1, result_address.Value, 1, false, ref_result_address);
         }
     }

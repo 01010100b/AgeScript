@@ -147,13 +147,16 @@ namespace AgeScript.Parser
                 }
             }
 
+            var sorted_defines = new List<string>(defines.Keys);
+            sorted_defines.Sort((a, b) => b.Length.CompareTo(a.Length));
+
             for (int i = 0; i < res.Count; i++)
             {
                 var line = res[i];
 
-                foreach (var kvp in defines)
+                foreach (var define in sorted_defines)
                 {
-                    line = line.Replace(kvp.Key, kvp.Value);
+                    line = line.Replace(define, defines[define]);
                 }
 
                 res[i] = line;

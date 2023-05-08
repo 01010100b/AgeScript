@@ -18,7 +18,6 @@ Economy_ManagePopulation()
 
 Function Void Economy_GathererPercentageUpdate():
 
-Int player
 Int total_gatherers
 Int remaining_gatherers
 Int food_gatherers
@@ -27,8 +26,7 @@ Int stone_gatherers
 Int gold_gatherers
 Int min_percent
 
-player = GetConstant("my-player-number")
-total_gatherers  = GetPlayerFact(player, FACT_CIVILIAN_POPULATION, 0)
+total_gatherers  = GetPlayerFact(-1, FACT_CIVILIAN_POPULATION, 0)
 remaining_gatherers = total_gatherers
 remaining_gatherers = Sub(remaining_gatherers, MinFoodGatherers)
 remaining_gatherers = Sub(remaining_gatherers, MinWoodGatherers)
@@ -63,15 +61,13 @@ SetSn(SN_GOLD_GATHERER_PERCENTAGE, gold_gatherers)
 
 Function Void Economy_ManagePopulation():
 
-Int player
 Int max_pop
 Int current_pop
 
-player = GetConstant("my-player-number")
-max_pop = GetPlayerFact(player, FACT_POPULATION_CAP, 0)
+max_pop = GetPlayerFact(-1, FACT_POPULATION_CAP, 0)
 max_pop = Mul(max_pop, CivPopPercentage)
 max_pop = Div(max_pop, 100)
-current_pop = GetPlayerFact(player, FACT_CIVILIAN_POPULATION, 0)
+current_pop = GetPlayerFact(-1, FACT_CIVILIAN_POPULATION, 0)
 
 if LessThan(current_pop, max_pop)
 	Train(false, VILLAGER)

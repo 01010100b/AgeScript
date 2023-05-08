@@ -1,4 +1,4 @@
-﻿#define MICRO_TEST false
+﻿#define MICRO_TEST true
 
 Globals:
 
@@ -22,7 +22,7 @@ if MICRO_TEST
 else
 	DoStrategy()
 	DoEconomy()
-	DoBuilding()
+	DoTown()
 endif
 
 Main_Test()

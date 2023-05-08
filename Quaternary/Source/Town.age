@@ -1,0 +1,174 @@
+﻿Function Void DoTown():
+
+if Equals(Tick, 0)
+	Town_Initialize()
+endif
+
+Town_Housing()
+Town_Dropsites()
+
+Int safe
+Int max
+safe = GetSn(SN_SAFE_TOWN_SIZE)
+max = GetSn(SN_MAXIMUM_TOWN_SIZE)
+
+if LessThanOrEquals(max, safe)
+	max = Add(safe, 1)
+	SetSn(SN_MAXIMUM_TOWN_SIZE, max)
+endif
+
+Function Void Town_Initialize():
+
+SetSn(SN_LUMBER_CAMP_MAX_DISTANCE, 30)
+SetSn(SN_MILL_MAX_DISTANCE, 20)
+SetSn(SN_SAFE_TOWN_SIZE, 12)
+
+Function Void Town_Housing():
+
+Int pop_headroom
+Int housing_headroom
+Int[2] point
+
+pop_headroom = GetPlayerFact(-1, FACT_POPULATION_HEADROOM, 0)
+housing_headroom = GetPlayerFact(-1, FACT_HOUSING_HEADROOM, 0)
+
+if LessThan(pop_headroom, 1)
+	return
+endif
+
+if GreaterThan(housing_headroom, 5)
+	return
+endif
+
+if PendingObjects(">=", HOUSE, 1)
+	return
+endif
+
+Town_Build(HOUSE)
+
+Function Void Town_Build(Int building_id):
+
+Bool afford
+Int[2] point
+Int distance
+Bool success
+
+afford = UtilsCanAffordObject(true, building_id)
+
+if Not(afford)
+	return
+endif
+
+point = GetPoint(POSITION_SELF)
+distance = GetSn(SN_SAFE_TOWN_SIZE)
+success = UtilsBuildPoint(true, point, distance, 7, 0, building_id)
+
+if Not(success)
+	distance = Add(distance, 1)
+	SetSn(SN_SAFE_TOWN_SIZE, distance)
+	ChatDataToSelf("town size %d", distance)
+endif
+
+Function Void Town_Dropsites():
+
+Bool seen
+Bool lack
+Bool afford
+Int[2] point
+Int distance
+Bool success
+
+// lumber camp
+
+seen = ResourceFound(RESOURCE_WOOD)
+lack = ObjectTypeCountTotal("<", LUMBER_CAMP, 1)
+
+if And(seen, lack)
+	afford = UtilsCanAffordObject(true, LUMBER_CAMP)
+
+	if Not(afford)
+		return
+	endif
+	
+	point = GetPoint(POSITION_SELF)
+	distance = GetSn(SN_LUMBER_CAMP_MAX_DISTANCE)
+	success = UtilsBuildDropsite(true, point, distance, LUMBER_CAMP, RESOURCE_WOOD)
+	
+	if Not(success)
+	
+		if ObjectTypeCountTotal(">=", LUMBER_CAMP, 1)
+			distance = Add(distance, 1)
+			SetSn(SN_LUMBER_CAMP_MAX_DISTANCE, distance)
+			ChatDataToSelf("lumber camp distance %d", distance)
+		endif
+		
+	endif
+	
+endif
+
+if lack
+	return
+endif
+
+// mill
+
+seen = ResourceFound(RESOURCE_FOOD)
+lack = ObjectTypeCountTotal("<", MILL, 1)
+
+if And(seen, lack)
+	afford = UtilsCanAffordObject(true, MILL)
+
+	if Not(afford)
+		return
+	endif
+	
+	point = GetPoint(POSITION_SELF)
+	distance = GetSn(SN_MILL_MAX_DISTANCE)
+	success = UtilsBuildDropsite(true, point, distance, MILL, RESOURCE_FOOD)
+	
+	if Not(success)
+		distance = Add(distance, 1)
+		SetSn(SN_MILL_MAX_DISTANCE, distance)
+		ChatDataToSelf("mill distance %d", distance)
+	endif
+	
+endif
+
+if lack
+	return
+endif
+
+// farms
+
+Int idle_farms
+idle_farms = GetPlayerFact(-1, FACT_IDLE_FARM_COUNT, 0)
+lack = LessThan(idle_farms, 3)
+
+if lack
+	success = UtilsBuildFarm(true, 5)
+	
+	if Not(success)
+	
+		if PendingObjects("<", MILL, 1)
+			afford = UtilsCanAffordObject(true, MILL)
+			
+			if Not(afford)
+				return
+			endif
+			
+			point = GetPoint(POSITION_SELF)
+			distance = GetSn(SN_MILL_MAX_DISTANCE)
+			success = UtilsBuildPoint(true, point, distance, 0, 0, MILL)
+			
+			if Not(success)
+				distance = Add(distance, 1)
+				SetSn(SN_MILL_MAX_DISTANCE, distance)
+				ChatDataToSelf("mill distance %d", distance)
+			endif
+	
+		endif
+		
+	endif
+	
+	return
+endif

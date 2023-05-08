@@ -134,7 +134,7 @@ namespace AgeScript.Parser
 
             if (expr is null)
             {
-                throw new Exception($"Failed to parse expression {expression}");
+                throw new Exception($"Failed to parse expression {expression} in function {function.Name}");
             }
 
             expr.Validate();
