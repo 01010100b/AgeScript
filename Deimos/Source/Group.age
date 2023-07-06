@@ -1,0 +1,74 @@
+﻿// Helper class for working with groups
+// note difference between group flags ("group") and duc control groups ("duc")
+
+Function Void Group_SetLocalGroupFlag(Int group):
+// sets local list to have group flag
+
+Int[4] search_state
+Int remaining
+Int index
+Int count
+
+index = 0
+search_state = GetSearchState()
+remaining = search_state[SEARCH_LOCAL_TOTAL]
+
+while GreaterThan(remaining, 0)
+	count = Min(40, remaining)
+	CreateGroup(index, count, group)
+	ModifyGroupFlag(false, group)
+	remaining = Sub(remaining, count)
+endwhile
+
+Function Void Group_RemoveLocalGroupFlag():
+// removes group flags from local list
+
+Int[4] search_state
+Int remaining
+Int index
+Int count
+
+index = 0
+search_state = GetSearchState()
+remaining = search_state[SEARCH_LOCAL_TOTAL]
+
+while GreaterThan(remaining, 0)
+	count = Min(40, remaining)
+	CreateGroup(index, count, 1)
+	ModifyGroupFlag(true, 1)
+	remaining = Sub(remaining, count)
+endwhile
+
+Function Void Group_FilterBuilders(Int duc):
+// filter builders out of duc group
+
+Int index
+Int length
+Int data
+
+length = GetGroupSize(duc)
+
+if Equals(length, 0)
+	return
+endif
+
+FullResetSearch()
+SetGroup(SEARCH_LOCAL, duc)
+
+for index 0..length
+	SetTargetObject(SEARCH_LOCAL, index)
+	data = GetObjectTargetData(OBJECT_DATA_STATUS)
+	
+	if Equals(data, 0)
+		RemoveObjects("==", SEARCH_LOCAL, OBJECT_DATA_INDEX, index)
+		index = Sub(index, 1)
+		length = Sub(length, 1)
+	endif
+	
+endfor
+
+ResetGroup(duc)
+
+if GreaterThan(length, 0)
+	CreateGroup(0, length, duc)
+endif

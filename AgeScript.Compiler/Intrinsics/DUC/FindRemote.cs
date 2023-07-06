@@ -20,10 +20,26 @@ namespace AgeScript.Compiler.Intrinsics.DUC
 
         internal override void CompileCall(CompilationResult result, CallExpression cl, int? result_address = null, bool ref_result_address = false)
         {
-            ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
             ExpressionCompiler.Compile(result, cl.Arguments[2], result.Memory.Intr2);
-            result.Rules.AddAction($"up-modify-sn 251 g:= {result.Memory.Intr0}");
+
+            if (cl.Arguments[0] is ConstExpression ce0 && ce0.Int < 0)
+            {
+                var player = "my-player-number";
+
+                if (ce0.Int == -2)
+                {
+                    player = "target-player";
+                }
+
+                result.Rules.AddAction($"up-modify-sn sn-focus-player-number c:= {player}");
+            }
+            else
+            {
+                ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
+                result.Rules.AddAction($"up-modify-sn sn-focus-player-number g:= {result.Memory.Intr0}");
+            }
+            
             result.Rules.AddAction($"up-find-remote g: {result.Memory.Intr1} g: {result.Memory.Intr2}");
 
             if (result_address is not null)

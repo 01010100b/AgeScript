@@ -76,8 +76,8 @@ namespace AgeScript.Compiler
                 return;
             }
 
-            var from_offset = 0;
             var ref_from_offset = false;
+            int from_offset;
 
             if (expression.Accessor.Offset is ConstExpression c)
             {

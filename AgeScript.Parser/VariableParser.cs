@@ -14,7 +14,7 @@ namespace AgeScript.Parser
         {
             variable = null;
 
-            var pieces = code.Trim().Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            var pieces = code.SplitFull(" ");
 
             if (pieces.Count != 2)
             {

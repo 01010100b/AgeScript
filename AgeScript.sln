@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Optimizer", "AgeS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript", "AgeScript\AgeScript.csproj", "{3D079BE9-5244-41CE-BCCC-B7E159D3652C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deimos", "Deimos\Deimos.csproj", "{588405B7-5294-478E-8057-FD04DE03B9EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{3D079BE9-5244-41CE-BCCC-B7E159D3652C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D079BE9-5244-41CE-BCCC-B7E159D3652C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D079BE9-5244-41CE-BCCC-B7E159D3652C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{588405B7-5294-478E-8057-FD04DE03B9EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{588405B7-5294-478E-8057-FD04DE03B9EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{588405B7-5294-478E-8057-FD04DE03B9EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{588405B7-5294-478E-8057-FD04DE03B9EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

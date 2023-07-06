@@ -22,7 +22,7 @@ namespace AgeScript.Compiler.Intrinsics
         private static List<Intrinsic> GetIntrinsics()
         {
             var intrinsics = new List<Intrinsic>();
-            var assembly = typeof(Inlined).Assembly;
+            var assembly = typeof(Intrinsic).Assembly;
 
             foreach (var type in assembly.GetTypes())
             {

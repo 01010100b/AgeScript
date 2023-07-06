@@ -101,7 +101,7 @@ namespace AgeScript.Language
 
                 if (names.Contains(type.Name))
                 {
-                    throw new Exception("Type name already used.");
+                    throw new Exception($"Type name {type.Name} already used.");
                 }
 
                 names.Add(type.Name);
@@ -113,7 +113,7 @@ namespace AgeScript.Language
 
                 if (names.Contains(global.Name))
                 {
-                    throw new Exception("Global name already used.");
+                    throw new Exception($"Global name {global.Name} already used.");
                 }
 
                 names.Add(global.Name);

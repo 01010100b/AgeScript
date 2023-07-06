@@ -1,0 +1,18 @@
+﻿// group 1 food
+// group 2 wood
+// group 3 stone
+// group 4 gold
+// group 5 forward build
+// group 6 attacking army
+
+#define GROUP_FOOD 1
+#define GROUP_WOOD 2
+#define GROUP_STONE 3
+#define GROUP_GOLD 4
+#define GROUP_DRAFTED 5
+#define GROUP_ARMY 6
+
+Globals:
+
+Int Tick
+Int[2] Home

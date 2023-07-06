@@ -105,7 +105,7 @@ namespace AgeScript.Compiler
 
             // registers below that
 
-            RegisterCount = script.Functions.Max(x => GetRegisterCount(x));
+            RegisterCount = script.Functions.Max(GetRegisterCount);
             goal -= RegisterCount;
             RegisterBase = goal;
 

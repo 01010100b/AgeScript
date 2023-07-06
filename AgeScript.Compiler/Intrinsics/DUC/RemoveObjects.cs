@@ -14,6 +14,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
 
         public RemoveObjects() : base()
         {
+            ReturnType = Primitives.Int4;
             Parameters.Add(new() { Name = "search_source", Type = Primitives.Int });
             Parameters.Add(new() { Name = "object_data", Type = Primitives.Int });
             Parameters.Add(new() { Name = "value", Type = Primitives.Int });
@@ -39,6 +40,12 @@ namespace AgeScript.Compiler.Intrinsics.DUC
             var op = cl.Literal.Replace("\"", string.Empty);
             ExpressionCompiler.Compile(result, cl.Arguments[2], result.Memory.Intr0);
             result.Rules.AddAction($"up-remove-objects {ce0.Int} {ce1.Int} g:{op} {result.Memory.Intr0}");
+
+            if (result_address is not null)
+            {
+                result.Rules.AddAction($"up-get-search-state {result.Memory.Intr0}");
+                Utils.MemCopy(result, result.Memory.Intr0, result_address.Value, 4, false, ref_result_address);
+            }
         }
     }
 }

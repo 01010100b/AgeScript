@@ -1,0 +1,93 @@
+﻿Globals:
+
+Int _Food_CurrentBoarId
+Int _Food_CurrentLurerId
+
+Function Void Food_Update():
+// food gatherers
+
+Int[4] search_state
+Int index
+Int count
+
+FullResetSearch()
+search_state = FindLocal(UNITCLASS_VILLAGER, 240)
+//search_state = RemoveObjects("!=", SEARCH_LOCAL, OBJECT_DATA_GROUP_FLAG, GROUP_FOOD)
+
+if Equals(search_state[SEARCH_LOCAL_TOTAL], 0)
+	return
+endif
+
+CleanSearch(SEARCH_LOCAL, OBJECT_DATA_ID, SEARCH_ORDER_ASC)
+ResetGroup(1)
+ResetGroup(2)
+ResetGroup(3)
+index = 0
+
+count = Min(7, search_state[SEARCH_LOCAL_TOTAL])
+CreateGroup(index, count, 1)
+index = Add(index, count)
+
+count = Sub(search_state[SEARCH_LOCAL_TOTAL], index)
+count = Min(4, count)
+CreateGroup(index, count, 2)
+index = Add(index, count)
+
+CreateGroup(index, 0, 3)
+
+_Food_Eat()
+_Food_Berries()
+_Food_Farm()
+
+Function Void _Food_Eat():
+
+Int size
+Int[4] search_state
+Int target_id
+
+Group_FilterBuilders(1)
+size = GetGroupSize(1)
+	
+if Equals(size, 0)
+	return
+endif
+
+SetTargetPoint(Home)
+target_id = -2
+
+FullResetSearch()
+FilterDistance(-1, 5)
+FilterStatus(STATUS_GATHER, LIST_ACTIVE)
+search_state = FindResource(-1, 10)
+
+if GreaterThan(search_state[SEARCH_REMOTE_TOTAL], 0)
+	CleanSearch(SEARCH_REMOTE, OBJECT_DATA_CARRY, SEARCH_ORDER_ASC)
+	SetTargetObject(SEARCH_REMOTE, 0)
+	target_id = GetObjectData(OBJECT_DATA_ID)
+endif
+
+if LessThan(target_id, 0)
+	FullResetSearch()
+	FilterDistance(-1, 3)
+	search_state = FindLocal(UNITCLASS_LIVESTOCK, 10)
+
+	if GreaterThan(search_state[SEARCH_LOCAL_TOTAL], 0)
+		CleanSearch(SEARCH_LOCAL, OBJECT_DATA_DISTANCE, SEARCH_ORDER_ASC)
+		SetTargetObject(SEARCH_LOCAL, 0)
+		target_id = GetObjectData(OBJECT_DATA_ID)
+	endif
+	
+endif
+
+if LessThan(target_id, 0)
+	return
+endif
+
+FullResetSearch()
+SetGroup(SEARCH_LOCAL, 1)
+RemoveObjects("==", SEARCH_LOCAL, OBJECT_DATA_TARGET_ID, target_id)
+TargetObjects(true, ACTION_DEFAULT, FORMATION_NONE, STANCE_NONE)
+
+Function Void _Food_Berries():
+
+Function Void _Food_Farm():

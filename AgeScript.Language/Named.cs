@@ -9,7 +9,7 @@ namespace AgeScript.Language
 {
     public abstract class Named : Validated
     {
-        private static readonly Regex NameRegex = new(@"^[a-zA-Z][a-zA-Z_0-9]*$");
+        private static readonly Regex NameRegex = new(@"^[a-zA-Z_][a-zA-Z_0-9]*$");
 
         public static void ValidateName(string name)
         {
