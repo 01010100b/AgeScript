@@ -33,6 +33,7 @@ namespace AgeScript.Compiler
         // info
         public int RegisterCount { get; private set; } // number of registers
         public int StackLimit { get; private set; } // stack-ptr can not grow beyond this
+        public int StaticMemoryUsage => Error - StackLimit;
 
         private Dictionary<Variable, int> VariableAddresses { get; } = new();
 

@@ -6,7 +6,12 @@ endif
 
 Home = GetPoint(POSITION_SELF)
 
+Production_TickStart()
+
 Economy_Update()
+Town_Update()
+
+Production_TickEnd()
 
 Tick = Add(Tick, 1)
 

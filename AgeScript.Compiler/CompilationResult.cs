@@ -11,6 +11,7 @@ namespace AgeScript.Compiler
     {
         public string JumpTargetPer => Rules.GetPer();
         public IReadOnlyDictionary<string, int> JumpTargets => Rules.GetJumpTargets();
+        public int StaticMemoryUsage => Memory.StaticMemoryUsage;
         public int RuleCount => Rules.TotalRules;
         public int CommandCount => Rules.TotalElements;
 

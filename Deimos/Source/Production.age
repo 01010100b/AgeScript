@@ -1,5 +1,86 @@
-﻿Function Void Production_Train(Int unit, Bool blocking, Int priority):
+﻿Globals:
 
-if CanTrain(blocking, unit)
-	Train(blocking, unit)
+// Priority between 0 and 1000
+Int _Production_Escrow_Unit
+Int _Production_Escrow_Unit_Priority
+Int _Production_Unit
+Int _Production_Unit_Priority
+Int _Production_Escrow_Tech
+Int _Production_Escrow_Tech_Priority
+Int _Production_Tech
+Int _Production_Tech_Priority
+Int _Production_Building
+Int _Production_Building_Priority
+Int[2] _Production_Building_Point
+Int _Production_Building_Distance
+Int _Production_Building_MinDistance
+Int _Production_Building_Flags
+
+Function Void Production_TickStart():
+
+_Production_Escrow_Unit = -2
+_Production_Escrow_Unit_Priority = -1
+_Production_Unit = -2
+_Production_Unit_Priority = -1
+_Production_Escrow_Tech = -2
+_Production_Escrow_Tech_Priority = -1
+_Production_Tech = -2
+_Production_Tech_Priority = -1
+_Production_Building = -2
+_Production_Building_Priority = -1
+_Production_Building_Point[0] = -1
+_Production_Building_Point[1] = -1
+_Production_Building_Distance = -1
+_Production_Building_MinDistance = -1
+_Production_Building_Flags = -1
+
+Function Void Production_TickEnd():
+
+if GreaterThanOrEquals(_Production_Escrow_Unit, 0)
+	
+	if CanTrain(true, _Production_Escrow_Unit)
+		Train(true, _Production_Escrow_Unit)
+	endif
+	
+endif
+
+if GreaterThanOrEquals(_Production_Building, 0)
+	Build_Point(true, _Production_Building_Point, _Production_Building_Distance, _Production_Building_MinDistance, _Production_Building_Flags, _Production_Building)
+endif
+
+if GreaterThanOrEquals(_Production_Unit, 0)
+	
+	if CanTrain(false, _Production_Unit)
+		Train(false, _Production_Unit)
+	endif
+	
+endif
+
+Function Void Production_Train(Int unit, Bool escrow, Int priority):
+
+if escrow
+
+	if GreaterThan(priority, _Production_Escrow_Unit_Priority)
+		_Production_Escrow_Unit = unit
+		_Production_Escrow_Unit_Priority = priority
+	endif
+
+else
+	
+	if GreaterThan(priority, _Production_Unit_Priority)
+		_Production_Unit = unit
+		_Production_Unit_Priority = priority
+	endif
+	
+endif
+
+Function Void Production_Build(Int building, Int priority, Int[2] point, Int distance, Int min_distance, Int flags):
+
+if GreaterThan(priority, _Production_Building_Priority)
+	_Production_Building = building
+	_Production_Building_Priority = priority
+	_Production_Building_Point = point
+	_Production_Building_Distance = distance
+	_Production_Building_MinDistance = min_distance
+	_Production_Building_Flags = flags
 endif

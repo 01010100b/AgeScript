@@ -1,0 +1,27 @@
+﻿Function Void Town_Update():
+
+_Town_Housing()
+
+Function Void _Town_Housing():
+
+Int pop_headroom
+Int housing_headroom
+Int distance
+
+pop_headroom = GetPlayerFact(-1, FACT_POPULATION_HEADROOM, 0)
+housing_headroom = GetPlayerFact(-1, FACT_HOUSING_HEADROOM, 0)
+
+if LessThanOrEquals(pop_headroom, 0)
+	return
+endif
+
+if GreaterThan(housing_headroom, 10)
+	return
+endif
+
+if PendingObjects(">=", HOUSE, 1)
+	return
+endif
+
+distance = GetSn(SN_MAXIMUM_TOWN_SIZE)
+Production_Build(HOUSE, 10, Home, distance, 7, 0)

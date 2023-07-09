@@ -165,7 +165,7 @@ namespace AgeScript
             var script = parser.Parse(lines);
             var compiler = new ScriptCompiler();
             var result = compiler.Compile(script, settings.CompilerSettings);
-            Console.WriteLine($"Compiled {settings.Name} succesfully.");
+            Console.WriteLine($"Compiled {settings.Name} succesfully using {result.StaticMemoryUsage} goals.");
             Console.WriteLine($"Used {result.RuleCount:N0} rules and {result.CommandCount:N0} commands for {result.CommandCount / (double)result.RuleCount:N2} commands per rule.");
 
             var jtp = result.JumpTargetPer;
