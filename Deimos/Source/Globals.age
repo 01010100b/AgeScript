@@ -16,3 +16,5 @@ Globals:
 
 Int Tick
 Int[2] Home
+
+Int CivilianPopulationPercentage

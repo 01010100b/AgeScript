@@ -1,8 +1,23 @@
 ﻿Function Void Economy_Update():
-
 SetSn(SN_MINIMUM_FOOD, 7)
+
+_Economy_Population()
 _Economy_Assignments()
 Food_Update()
+
+Function Void _Economy_Population():
+
+Int current_pop
+Int max_pop
+
+current_pop = GetPlayerFact(-1, FACT_CIVILIAN_POPULATION, 0)
+max_pop = GetPlayerFact(-1, FACT_POPULATION_CAP, 0)
+max_pop = Mul(max_pop, CivilianPopulationPercentage)
+max_pop = Div(max_pop, 100)
+
+if LessThan(current_pop, max_pop)
+	Production_Train(VILLAGER, true, 10)
+endif
 
 Function Void _Economy_Assignments():
 

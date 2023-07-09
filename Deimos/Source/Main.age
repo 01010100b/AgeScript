@@ -17,6 +17,7 @@ SetSn(SN_MINIMUM_FOOD, 0)
 SetSn(SN_MINIMUM_WOOD, 0)
 SetSn(SN_MINIMUM_STONE, 0)
 SetSn(SN_MINIMUM_GOLD, 0)
+CivilianPopulationPercentage = 60
 
 // building
 SetSn(SN_DISABLE_BUILDER_ASSISTANCE, 1)

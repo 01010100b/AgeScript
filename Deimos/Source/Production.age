@@ -1,0 +1,5 @@
+﻿Function Void Production_Train(Int unit, Bool blocking, Int priority):
+
+if CanTrain(blocking, unit)
+	Train(blocking, unit)
+endif
