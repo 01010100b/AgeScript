@@ -1,1 +1,118 @@
-﻿
+﻿Function Void Economy_Update():
+
+SetSn(SN_MINIMUM_FOOD, 7)
+_Economy_Assignments()
+Food_Update()
+
+Function Void _Economy_Assignments():
+
+Int[4] current
+Int[4] desired
+Int[4] search_state
+Int best_resource
+Int best_lack
+Int resource
+Int lack
+
+FullResetSearch()
+search_state = FindLocal(UNITCLASS_VILLAGER, 240)
+search_state = RemoveObjects(">=", SEARCH_LOCAL, OBJECT_DATA_GROUP_FLAG, 0)
+
+if LessThanOrEquals(search_state[SEARCH_LOCAL_TOTAL], 0)
+	return
+endif
+
+RemoveObjects(">", SEARCH_LOCAL, OBJECT_DATA_INDEX, 0)
+ResetGroup(0)
+CreateGroup(0, 1, 0)
+
+current = _Economy_GetCurrentGatherers()
+desired = _Economy_GetDesiredGatherers()
+best_resource = RESOURCE_FOOD
+best_lack = -1000000
+
+for resource 0..4
+	lack = desired[resource]
+	lack = Sub(lack, current[resource])
+	
+	if GreaterThan(lack, best_lack)
+		best_resource = resource
+		best_lack = lack
+	endif
+	
+endfor
+
+best_resource = Add(best_resource, 1)
+FullResetSearch()
+SetGroup(SEARCH_LOCAL, 0)
+Group_SetLocalGroupFlag(best_resource)
+ChatDataToSelf("assigned idle to %d", best_resource)
+
+Function Int[4] _Economy_GetCurrentGatherers():
+
+Int[4] current
+Int[4] search_state
+Int index
+Int group
+
+FullResetSearch()
+search_state = FindLocal(UNITCLASS_VILLAGER, 240)
+
+for  index 0..search_state[SEARCH_LOCAL_TOTAL]
+	SetTargetObject(SEARCH_LOCAL, index)
+	group = GetObjectData(OBJECT_DATA_GROUP_FLAG)
+	
+	if GreaterThan(group, 0)
+	
+		if LessThan(group, 5)
+			group = Sub(group, 1)
+			current[group] = Add(current[group], 1)
+		endif
+		
+	endif
+	
+endfor
+
+return current
+
+Function Int[4] _Economy_GetDesiredGatherers():
+
+Int[4] desired
+Int remaining
+Int gatherers
+
+desired[RESOURCE_FOOD] = GetSn(SN_MINIMUM_FOOD)
+desired[RESOURCE_WOOD] = GetSn(SN_MINIMUM_WOOD)
+desired[RESOURCE_STONE] = GetSn(SN_MINIMUM_STONE)
+desired[RESOURCE_GOLD] = GetSn(SN_MINIMUM_GOLD)
+remaining = GetPlayerFact(-1, FACT_CIVILIAN_POPULATION, 0)
+remaining = Sub(remaining, desired[RESOURCE_FOOD])
+remaining = Sub(remaining, desired[RESOURCE_WOOD])
+remaining = Sub(remaining, desired[RESOURCE_STONE])
+remaining = Sub(remaining, desired[RESOURCE_GOLD])
+
+if LessThanOrEquals(remaining, 0)
+	return desired
+endif
+
+gatherers = GetSn(SN_FOOD_GATHERER_PERCENTAGE)
+gatherers = Mul(gatherers, remaining)
+gatherers = Div(gatherers, 100)
+desired[RESOURCE_FOOD] = Add(desired[RESOURCE_FOOD], gatherers)
+
+gatherers = GetSn(SN_WOOD_GATHERER_PERCENTAGE)
+gatherers = Mul(gatherers, remaining)
+gatherers = Div(gatherers, 100)
+desired[RESOURCE_WOOD] = Add(desired[RESOURCE_WOOD], gatherers)
+
+gatherers = GetSn(SN_STONE_GATHERER_PERCENTAGE)
+gatherers = Mul(gatherers, remaining)
+gatherers = Div(gatherers, 100)
+desired[RESOURCE_STONE] = Add(desired[RESOURCE_STONE], gatherers)
+
+gatherers = GetSn(SN_GOLD_GATHERER_PERCENTAGE)
+gatherers = Mul(gatherers, remaining)
+gatherers = Div(gatherers, 100)
+desired[RESOURCE_GOLD] = Add(desired[RESOURCE_GOLD], gatherers)
+
+return desired

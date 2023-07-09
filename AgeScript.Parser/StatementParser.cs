@@ -162,7 +162,7 @@ namespace AgeScript.Parser
                     }
                     else
                     {
-                        throw new Exception("Failed to parse assign statement.");
+                        throw new Exception($"Failed to parse assign statement: {line}");
                     }
                 }
 

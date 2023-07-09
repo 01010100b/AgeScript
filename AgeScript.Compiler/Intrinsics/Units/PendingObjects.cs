@@ -27,7 +27,7 @@ namespace AgeScript.Compiler.Intrinsics.Units
             ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
             ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 0");
-            result.Rules.StartNewRule($"up-pending-objects g: {result.Memory.Intr0} g:{cl.Literal!.Replace("\"", string.Empty)} {result.Memory.Intr1}");
+            result.Rules.StartNewRule($"up-pending-objects g: {result.Memory.Intr0} g:{cl.Literal} {result.Memory.Intr1}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 1");
             result.Rules.StartNewRule();
             Utils.MemCopy(result, result.Memory.Intr2, result_address.Value, ReturnType.Size, false, ref_result_address);

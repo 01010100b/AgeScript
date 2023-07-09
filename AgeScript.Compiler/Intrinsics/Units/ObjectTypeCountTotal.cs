@@ -28,7 +28,7 @@ namespace AgeScript.Compiler.Intrinsics.Units
             ExpressionCompiler.Compile(result, cl.Arguments[1], result.Memory.Intr1);
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 0");
 
-            result.Rules.StartNewRule($"up-object-type-count-total g: {result.Memory.Intr0} g:{cl.Literal!.Replace("\"", string.Empty)} {result.Memory.Intr1}");
+            result.Rules.StartNewRule($"up-object-type-count-total g: {result.Memory.Intr0} g:{cl.Literal} {result.Memory.Intr1}");
             result.Rules.AddAction($"up-modify-goal {result.Memory.Intr2} c:= 1");
             result.Rules.StartNewRule();
 

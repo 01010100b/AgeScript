@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quaternary", "Quaternary\Quaternary.csproj", "{0389B98C-5DA9-42E7-8BF8-3D12A4543F09}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Linker", "AgeScript.Linker\AgeScript.Linker.csproj", "{76BB7FC7-6129-4BBA-A5D2-16ACDE941668}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Compiler", "AgeScript.Compiler\AgeScript.Compiler.csproj", "{DADA7B10-C304-475E-8FDA-72A61843EC42}"
@@ -17,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript.Optimizer", "AgeS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgeScript", "AgeScript\AgeScript.csproj", "{3D079BE9-5244-41CE-BCCC-B7E159D3652C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deimos", "Deimos\Deimos.csproj", "{588405B7-5294-478E-8057-FD04DE03B9EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deimos", "Deimos\Deimos.csproj", "{588405B7-5294-478E-8057-FD04DE03B9EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0389B98C-5DA9-42E7-8BF8-3D12A4543F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0389B98C-5DA9-42E7-8BF8-3D12A4543F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0389B98C-5DA9-42E7-8BF8-3D12A4543F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0389B98C-5DA9-42E7-8BF8-3D12A4543F09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76BB7FC7-6129-4BBA-A5D2-16ACDE941668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76BB7FC7-6129-4BBA-A5D2-16ACDE941668}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76BB7FC7-6129-4BBA-A5D2-16ACDE941668}.Release|Any CPU.ActiveCfg = Release|Any CPU

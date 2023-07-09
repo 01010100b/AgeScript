@@ -1,4 +1,0 @@
-﻿#define FLAG_IN_DUC_GROUP 9
-
-Function Void UtilsSetLocalFlag(Int value):
-// set object-data-group-flag for units in search-local to value

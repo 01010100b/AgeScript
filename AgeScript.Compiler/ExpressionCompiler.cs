@@ -139,10 +139,11 @@ namespace AgeScript.Compiler
             result.Rules.AddAction($"up-jump-direct c: {result.Rules.EndTarget}");
             result.Rules.StartNewRule();
 
-            // push registers to stack & clear registers
+            // push registers to stack & clear registers & call result
 
             Utils.MemCopy(result, result.Memory.RegisterBase, result.Memory.StackPtr, register_count, false, true);
             Utils.Clear(result.Rules, result.Memory.RegisterBase, called_register_count);
+            Utils.Clear(result.Rules, result.Memory.CallResultBase, called_function.ReturnType.Size);
 
             // set return address and parameters
 

@@ -18,6 +18,7 @@ while GreaterThan(remaining, 0)
 	CreateGroup(index, count, group)
 	ModifyGroupFlag(false, group)
 	remaining = Sub(remaining, count)
+	index = Add(index, count)
 endwhile
 
 Function Void Group_RemoveLocalGroupFlag():
@@ -37,6 +38,7 @@ while GreaterThan(remaining, 0)
 	CreateGroup(index, count, 1)
 	ModifyGroupFlag(true, 1)
 	remaining = Sub(remaining, count)
+	index = Add(index, count)
 endwhile
 
 Function Void Group_FilterBuilders(Int duc):

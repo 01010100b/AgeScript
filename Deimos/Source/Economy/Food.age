@@ -12,7 +12,7 @@ Int count
 
 FullResetSearch()
 search_state = FindLocal(UNITCLASS_VILLAGER, 240)
-//search_state = RemoveObjects("!=", SEARCH_LOCAL, OBJECT_DATA_GROUP_FLAG, GROUP_FOOD)
+search_state = RemoveObjects("!=", SEARCH_LOCAL, OBJECT_DATA_GROUP_FLAG, GROUP_FOOD)
 
 if Equals(search_state[SEARCH_LOCAL_TOTAL], 0)
 	return
@@ -35,18 +35,18 @@ index = Add(index, count)
 
 CreateGroup(index, 0, 3)
 
-_Food_Eat()
-_Food_Berries()
-_Food_Farm()
+_Food_Eat(1)
+_Food_Berries(2)
+_Food_Farm(3)
 
-Function Void _Food_Eat():
+Function Void _Food_Eat(Int group):
 
 Int size
 Int[4] search_state
 Int target_id
 
-Group_FilterBuilders(1)
-size = GetGroupSize(1)
+Group_FilterBuilders(group)
+size = GetGroupSize(group)
 	
 if Equals(size, 0)
 	return
@@ -55,15 +55,18 @@ endif
 SetTargetPoint(Home)
 target_id = -2
 
-FullResetSearch()
-FilterDistance(-1, 5)
-FilterStatus(STATUS_GATHER, LIST_ACTIVE)
-search_state = FindResource(-1, 10)
+if LessThan(target_id, 0)
+	FullResetSearch()
+	FilterDistance(-1, 5)
+	FilterStatus(STATUS_GATHER, LIST_ACTIVE)
+	search_state = FindResource(-1, 10)
 
-if GreaterThan(search_state[SEARCH_REMOTE_TOTAL], 0)
-	CleanSearch(SEARCH_REMOTE, OBJECT_DATA_CARRY, SEARCH_ORDER_ASC)
-	SetTargetObject(SEARCH_REMOTE, 0)
-	target_id = GetObjectData(OBJECT_DATA_ID)
+	if GreaterThan(search_state[SEARCH_REMOTE_TOTAL], 0)
+		CleanSearch(SEARCH_REMOTE, OBJECT_DATA_CARRY, SEARCH_ORDER_ASC)
+		SetTargetObject(SEARCH_REMOTE, 0)
+		target_id = GetObjectData(OBJECT_DATA_ID)
+	endif
+	
 endif
 
 if LessThan(target_id, 0)
@@ -84,10 +87,10 @@ if LessThan(target_id, 0)
 endif
 
 FullResetSearch()
-SetGroup(SEARCH_LOCAL, 1)
+SetGroup(SEARCH_LOCAL, group)
 RemoveObjects("==", SEARCH_LOCAL, OBJECT_DATA_TARGET_ID, target_id)
 TargetObjects(true, ACTION_DEFAULT, FORMATION_NONE, STANCE_NONE)
 
-Function Void _Food_Berries():
+Function Void _Food_Berries(Int group):
 
-Function Void _Food_Farm():
+Function Void _Food_Farm(Int group):

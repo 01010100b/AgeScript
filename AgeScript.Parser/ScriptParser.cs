@@ -124,7 +124,7 @@ namespace AgeScript.Parser
                 {
                     var id = Guid.NewGuid().ToString().Replace("-", string.Empty);
                     var lit = line[bo..(bc + 1)];
-                    literals.Add(id, lit);
+                    literals.Add(id, lit.Replace("\"", string.Empty).Trim());
                     line = line.Replace(lit, id);
                 }
 

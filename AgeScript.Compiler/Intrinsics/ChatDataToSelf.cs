@@ -26,7 +26,7 @@ namespace AgeScript.Compiler.Intrinsics
             }
 
             ExpressionCompiler.Compile(result, cl.Arguments[0], result.Memory.Intr0);
-            result.Rules.AddAction($"up-chat-data-to-self {cl.Literal} g: {result.Memory.Intr0}");
+            result.Rules.AddAction($"up-chat-data-to-self \"{cl.Literal}\" g: {result.Memory.Intr0}");
         }
     }
 

@@ -105,6 +105,13 @@ Function Bool Build_Farm(Bool escrow, Int max_distance):
 // build a farm at max max_distance from tc/mill dropsite
 
 Int[4] search_state
+Int delta
+Int[2] point
+Int[2] from
+Int[2] to
+Int[2] test_point
+Int i
+Int d
 
 FullResetSearch()
 search_state = FindLocal(TOWN_CENTER, 240)
@@ -113,14 +120,6 @@ search_state = FindLocal(MILL, 240)
 if LessThanOrEquals(search_state[SEARCH_LOCAL_TOTAL, 0)
 	return false
 endif
-
-Int delta
-Int[2] point
-Int[2] from
-Int[2] to
-Int[2] test_point
-Int i
-Int d
 
 for i 0..search_state[SEARCH_LOCAL_TOTAL]
 	SetTargetObject(SEARCH_LOCAL, i)

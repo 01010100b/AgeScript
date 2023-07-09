@@ -37,7 +37,7 @@ namespace AgeScript.Compiler.Intrinsics.DUC
                 throw new Exception("object_data must be const expression.");
             }
 
-            var op = cl.Literal.Replace("\"", string.Empty);
+            var op = cl.Literal;
             ExpressionCompiler.Compile(result, cl.Arguments[2], result.Memory.Intr0);
             result.Rules.AddAction($"up-remove-objects {ce0.Int} {ce1.Int} g:{op} {result.Memory.Intr0}");
 
