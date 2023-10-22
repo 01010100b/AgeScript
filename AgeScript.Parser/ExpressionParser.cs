@@ -112,6 +112,18 @@ namespace AgeScript.Parser
                                 throw new Exception("Only array variables have Length property.");
                             }
                         }
+                        else if (pieces[1] == "Address")
+                        {
+                            expr = new AccessorExpression()
+                            {
+                                Accessor = new Accessor()
+                                {
+                                    Variable = variable!,
+                                    Offset = ConstExpression.FromInt(-1),
+                                    Type = Primitives.Int
+                                }
+                            };
+                        }
                         else
                         {
                             throw new Exception("Property not recognized.");
@@ -173,7 +185,7 @@ namespace AgeScript.Parser
 
                 if (pieces.Count != 2)
                 {
-                    throw new Exception("Accessor not parsed.");
+                    throw new Exception($"Accessor not parsed: {code}");
                 }
 
                 var vname = pieces[0].Trim();

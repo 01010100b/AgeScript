@@ -82,6 +82,14 @@ namespace AgeScript.Compiler
             if (expression.Accessor.Offset is ConstExpression c)
             {
                 from_offset = c.Int;
+
+                if (from_offset == -1)
+                {
+                    result.Rules.AddAction($"up-modify-goal {result.Memory.ExpressionGoal} c:= {result.Memory.GetAddress(expression.Accessor.Variable)}");
+                    Utils.MemCopy(result, result.Memory.ExpressionGoal, result_address.Value, 1, ref_result_address);
+
+                    return;
+                }
             }
             else if (expression.Accessor.Offset is AccessorExpression acc)
             {

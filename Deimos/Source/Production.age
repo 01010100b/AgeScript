@@ -1,86 +1,191 @@
-﻿Globals:
+﻿#define _PRODUCTION_MAX_COMMANDS 16
+#define _PRODUCTION_BUILDING 1
+#define _PRODUCTION_TRAINING 2
+#define _PRODUCTION_RESEARCH 3
+
+Globals:
+
+Int[_PRODUCTION_MAX_COMMANDS] _Production_Commands
+Int[_PRODUCTION_MAX_COMMANDS] _Production_Parameters
+Int _Production_NextCommand
 
 // Priority between 0 and 1000
-Int _Production_Escrow_Unit
-Int _Production_Escrow_Unit_Priority
-Int _Production_Unit
-Int _Production_Unit_Priority
-Int _Production_Escrow_Tech
-Int _Production_Escrow_Tech_Priority
-Int _Production_Tech
-Int _Production_Tech_Priority
-Int _Production_Building
-Int _Production_Building_Priority
-Int[2] _Production_Building_Point
-Int _Production_Building_Distance
-Int _Production_Building_MinDistance
-Int _Production_Building_Flags
 
 Function Void Production_TickStart():
 
-_Production_Escrow_Unit = -2
-_Production_Escrow_Unit_Priority = -1
-_Production_Unit = -2
-_Production_Unit_Priority = -1
-_Production_Escrow_Tech = -2
-_Production_Escrow_Tech_Priority = -1
-_Production_Tech = -2
-_Production_Tech_Priority = -1
-_Production_Building = -2
-_Production_Building_Priority = -1
-_Production_Building_Point[0] = -1
-_Production_Building_Point[1] = -1
-_Production_Building_Distance = -1
-_Production_Building_MinDistance = -1
-_Production_Building_Flags = -1
+Int i
+
+for i 0.._Production_Commands.Length
+	_Production_Commands[i] = -1
+	_Production_Parameters[i] = -1
+endfor
+
+_Production_NextCommand = 0
 
 Function Void Production_TickEnd():
 
-if GreaterThanOrEquals(_Production_Escrow_Unit, 0)
+Int i
+Int j
+Int[4] resources
+Int[4] cost
+Int command
+Int parameter
+Int id
+Int type
+Bool blocking
+Int[2] point
+Bool can_afford
+
+if LessThanOrEquals(_Production_NextCommand, 0)
+	return
+endif
+
+if GreaterThan(_Production_NextCommand, 1)
+	_Production_Sort()
+endif
+
+resources[RESOURCE_FOOD] = GetPlayerFact(-1, FACT_FOOD_AMOUNT, 0)
+resources[RESOURCE_WOOD] = GetPlayerFact(-1, FACT_WOOD_AMOUNT, 0)
+resources[RESOURCE_STONE] = GetPlayerFact(-1, FACT_STONE_AMOUNT, 0)
+resources[RESOURCE_GOLD] = GetPlayerFact(-1, FACT_GOLD_AMOUNT, 0)
+
+for i 0.._Production_NextCommand
+	command = _Production_Commands[i]
+	parameter = _Production_Parameters[i]
 	
-	if CanTrain(true, _Production_Escrow_Unit)
-		Train(true, _Production_Escrow_Unit)
+	command = Div(command, 1000)
+	j = Mod(command, 2)
+	command = Div(command, 2)
+	type = Mod(command, 4)
+	command = Div(command, 4)
+	id = command
+	point[1] = Mod(parameter, 10000)
+	parameter = Div(parameter, 10000)
+	point[0] = parameter
+	blocking = false
+	
+	if Equals(j, 1)
+		blocking = true
 	endif
 	
-endif
-
-if GreaterThanOrEquals(_Production_Building, 0)
-	Build_Point(true, _Production_Building_Point, _Production_Building_Distance, _Production_Building_MinDistance, _Production_Building_Flags, _Production_Building)
-endif
-
-if GreaterThanOrEquals(_Production_Unit, 0)
-	
-	if CanTrain(false, _Production_Unit)
-		Train(false, _Production_Unit)
+	if Equals(type, _PRODUCTION_RESEARCH)
+		
+	else
+		cost = GetObjectCost(id)
 	endif
 	
-endif
-
-Function Void Production_Train(Int unit, Bool escrow, Int priority):
-
-if escrow
-
-	if GreaterThan(priority, _Production_Escrow_Unit_Priority)
-		_Production_Escrow_Unit = unit
-		_Production_Escrow_Unit_Priority = priority
-	endif
-
-else
+	can_afford = true
 	
-	if GreaterThan(priority, _Production_Unit_Priority)
-		_Production_Unit = unit
-		_Production_Unit_Priority = priority
+	for j 0..4
+		if GreaterThan(cost[j], resources[j])
+			can_afford = false
+		endif
+	endfor
+	
+	if can_afford
+		if Equals(type, _PRODUCTION_TRAINING)
+			if CanTrain(false, id)
+				Train(false, id)
+			endif
+		elif Equals(type, _PRODUCTION_BUILDING)
+			if CanBuildLine(false, point, id)
+				BuildLine(point, id)
+			endif
+		elif Equals(type, _PRODUCTION_RESEARCH)
+		
+		endif
 	endif
 	
+	if Or(can_afford, blocking)
+		for j 0..4
+			resources[j] = Sub(resources[j], cost[j])
+		endfor
+	endif
+	
+endfor
+
+Function Void Production_Build(Int building, Int[2] point, Int priority, Bool blocking):
+
+Int command
+Int parameter
+
+if GreaterThanOrEquals(_Production_NextCommand, _PRODUCTION_MAX_COMMANDS)
+	return
 endif
 
-Function Void Production_Build(Int building, Int priority, Int[2] point, Int distance, Int min_distance, Int flags):
+command = building
+command = Mul(command, 4)
+command = Add(command, _PRODUCTION_BUILDING)
+command = Mul(command, 2)
 
-if GreaterThan(priority, _Production_Building_Priority)
-	_Production_Building = building
-	_Production_Building_Priority = priority
-	_Production_Building_Point = point
-	_Production_Building_Distance = distance
-	_Production_Building_MinDistance = min_distance
-	_Production_Building_Flags = flags
+if blocking
+	command = Add(command, 1)
 endif
+
+command = Mul(command, 1000)
+command = Add(command, priority)
+
+parameter = point[0]
+parameter = Mul(parameter, 10000)
+parameter = Add(parameter, point[1])
+
+_Production_Commands[_Production_NextCommand] = command
+_Production_Parameters[_Production_NextCommand] = parameter
+_Production_NextCommand = Add(_Production_NextCommand, 1)
+
+Function Void Production_Train(Int unit, Int priority, Bool blocking):
+
+Int command
+
+if GreaterThanOrEquals(_Production_NextCommand, _PRODUCTION_MAX_COMMANDS)
+	return
+endif
+
+command = unit
+command = Mul(command, 4)
+command = Add(command, _PRODUCTION_TRAINING)
+command = Mul(command, 2)
+
+if blocking
+	command = Add(command, 1)
+endif
+
+command = Mul(command, 1000)
+command = Add(command, priority)
+
+_Production_Commands[_Production_NextCommand] = command
+_Production_Parameters[_Production_NextCommand] = -1
+_Production_NextCommand = Add(_Production_NextCommand, 1)
+
+Function Void _Production_Sort():
+
+Int priority1
+Int priority2
+Bool changed
+Int i
+Int j
+Int temp
+
+changed = true
+
+while changed
+	changed = false
+	
+	for i 1.._Production_NextCommand
+		j = Sub(i, 1)
+		priority1 = Mod(_Production_Commands[j], 1000)
+		priority2 = Mod(_Production_Commands[i], 1000)
+		
+		if LessThan(priority1, priority2)
+			temp = _Production_Commands[j]
+			_Production_Commands[j] = _Production_Commands[i]
+			_Production_Commands[i] = temp
+			temp = _Production_Parameters[j]
+			_Production_Parameters[j] = _Production_Parameters[i]
+			_Production_Parameters[i] = temp
+			changed = true
+		endif
+		
+	endfor
+	
+endwhile

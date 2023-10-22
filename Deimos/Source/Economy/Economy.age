@@ -16,7 +16,9 @@ max_pop = Mul(max_pop, CivilianPopulationPercentage)
 max_pop = Div(max_pop, 100)
 
 if LessThan(current_pop, max_pop)
-	Production_Train(VILLAGER, true, 10)
+	if PendingObjects("<=", VILLAGER, 1)
+		Production_Train(VILLAGER, 500, true)
+	endif
 endif
 
 Function Void _Economy_Assignments():
@@ -73,7 +75,7 @@ Int group
 FullResetSearch()
 search_state = FindLocal(UNITCLASS_VILLAGER, 240)
 
-for  index 0..search_state[SEARCH_LOCAL_TOTAL]
+for index 0..search_state[SEARCH_LOCAL_TOTAL]
 	SetTargetObject(SEARCH_LOCAL, index)
 	group = GetObjectData(OBJECT_DATA_GROUP_FLAG)
 	

@@ -1,5 +1,4 @@
-﻿Function Bool Build_Point(Bool escrow, Int[2] point, Int distance, Int min_distance, Int flags, Int building_id):
-// like up-build place-point but using build-line so no building queues getting stuck or weird stuff with target-point
+﻿Function Int[2] Build_GetPoint(Int building_id, Int[2] point, Int distance, Int min_distance, Int flags):
 
 Int attempt
 Int max_attempts
@@ -35,7 +34,7 @@ for attempt 0..max_attempts
 	
 	if LessThanOrEquals(test_distance, distance)
 	
-		if CanBuildLine(escrow, test_point, building_id)
+		if CanBuildLine(true, test_point, building_id)
 			build_point = test_point
 		endif
 		
@@ -43,21 +42,18 @@ for attempt 0..max_attempts
 	
 endfor
 
-if GreaterThanOrEquals(build_point[0], 0)
-	BuildLine(build_point, building_id)
-	
-	return true
-else
-	return false
-endif
+return build_point
 
-Function Bool Build_Dropsite(Bool escrow, Int[2] point, Int distance, Int dropsite_id, Int resource):
+Function Int[2] Build_GetDropsitePoint(Int dropsite_id, Int[2] point, Int distance, Int resource):
 // point and distance define a region in which the dropsite may be placed
 
+Int[2] build_point
 Int[4] search_state
 Int index
 Int attempt
 
+build_point[0] = -1
+build_point[1] = -1
 SetTargetPoint(point)
 FullResetSearch()
 FilterDistance(-1, distance)
@@ -71,13 +67,13 @@ endif
 search_state = FindResource(resource, 100)
 
 if LessThanOrEquals(search_state[SEARCH_REMOTE_TOTAL], 0)
-	return false
+	return build_point
 endif
 
 if Equals(resource, RESOURCE_WOOD)
 	
 	if LessThanOrEquals(search_state[SEARCH_REMOTE_TOTAL], 30)
-		return false
+		return build_point
 	endif
 	
 	CleanSearch(SEARCH_REMOTE, OBJECT_DATA_DISTANCE, SEARCH_ORDER_ASC)
@@ -90,19 +86,19 @@ for attempt 0..20
 	point = GetPoint(POSITION_OBJECT)
 	
 	for distance 0..4
+		build_point = Build_GetPoint(dropsite_id, point, distance, 0, 0)
 		
-		if Build_Point(true, point, distance, 0, 0, dropsite_id)
-			return true
+		if GreaterThanOrEquals(build_point[0], 0)
+			return build_point
 		endif
 		
 	endfor
 	
 endfor
 
-return false
+return build_point
 
-Function Bool Build_Farm(Bool escrow, Int max_distance):
-// build a farm at max max_distance from tc/mill dropsite
+Function Int[2] Build_GetFarmPoint(Int max_distance):
 
 Int[4] search_state
 Int delta
@@ -112,13 +108,16 @@ Int[2] to
 Int[2] test_point
 Int i
 Int d
+Int[2] build_point
 
+build_point[0] = -1
+build_point[1] = -1
 FullResetSearch()
 search_state = FindLocal(TOWN_CENTER, 240)
 search_state = FindLocal(MILL, 240)
 
 if LessThanOrEquals(search_state[SEARCH_LOCAL_TOTAL, 0)
-	return false
+	return build_point
 endif
 
 for i 0..search_state[SEARCH_LOCAL_TOTAL]
@@ -134,15 +133,17 @@ for i 0..search_state[SEARCH_LOCAL_TOTAL]
 		for d from[0]..to[0]
 			test_point[0] = d
 			test_point[1] = from[1]
+			build_point = Build_GetPoint(FARM, test_point, 0, 0, 0)
 			
-			if Build_Point(escrow, test_point, 0, 0, 0, FARM)
-				return true
+			if GreaterThanOrEquals(build_point[0], 0)
+				return build_point
 			endif
 			
 			test_point[1] = to[1]
+			build_point = Build_GetPoint(FARM, test_point, 0, 0, 0)
 			
-			if Build_Point(escrow, test_point, 0, 0, 0, FARM)
-				return true
+			if GreaterThanOrEquals(build_point[0], 0)
+				return build_point
 			endif
 			
 		endfor
@@ -150,15 +151,17 @@ for i 0..search_state[SEARCH_LOCAL_TOTAL]
 		for d from[1]..to[1]
 			test_point[1] = d
 			test_point[0] = from[0]
+			build_point = Build_GetPoint(FARM, test_point, 0, 0, 0)
 			
-			if Build_Point(escrow, test_point, 0, 0, 0, FARM)
-				return true
+			if GreaterThanOrEquals(build_point[0], 0)
+				return build_point
 			endif
 			
 			test_point[0] = to[0]
+			build_point = Build_GetPoint(FARM, test_point, 0, 0, 0)
 			
-			if Build_Point(escrow, test_point, 0, 0, 0, FARM)
-				return true
+			if GreaterThanOrEquals(build_point[0], 0)
+				return build_point
 			endif
 			
 		endfor
@@ -167,4 +170,4 @@ for i 0..search_state[SEARCH_LOCAL_TOTAL]
 	
 endfor
 
-return false
+return build_point

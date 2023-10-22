@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="notepad++ lang def.xml" />
+    <None Remove="VariableParser.cs~RFe50e4e.TMP" />
   </ItemGroup>
 
   <ItemGroup>

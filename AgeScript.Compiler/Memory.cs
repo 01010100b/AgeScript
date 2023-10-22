@@ -102,6 +102,7 @@ namespace AgeScript.Compiler
             {
                 goal -= variable.Type.Size;
                 VariableAddresses.Add(variable, goal);
+                Console.WriteLine($"Global variable {variable.Name} at address {goal}");
             }
 
             // registers below that
@@ -109,6 +110,8 @@ namespace AgeScript.Compiler
             RegisterCount = script.Functions.Max(GetRegisterCount);
             goal -= RegisterCount;
             RegisterBase = goal;
+
+            Console.WriteLine($"{RegisterCount} registers at address {RegisterBase}");
 
             foreach (var function in script.Functions)
             {

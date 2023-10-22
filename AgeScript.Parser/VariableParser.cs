@@ -31,8 +31,10 @@ namespace AgeScript.Parser
 
                 return true;
             }
-
-            return false;
+            else
+            {
+                throw new Exception($"Failed to parse variable {code}");
+            }
         }
     }
 }

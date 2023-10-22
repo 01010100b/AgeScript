@@ -6,7 +6,7 @@ Function Void _Town_Housing():
 
 Int pop_headroom
 Int housing_headroom
-Int distance
+Int[2] point
 
 pop_headroom = GetPlayerFact(-1, FACT_POPULATION_HEADROOM, 0)
 housing_headroom = GetPlayerFact(-1, FACT_HOUSING_HEADROOM, 0)
@@ -23,5 +23,8 @@ if PendingObjects(">=", HOUSE, 1)
 	return
 endif
 
-distance = GetSn(SN_MAXIMUM_TOWN_SIZE)
-Production_Build(HOUSE, 10, Home, distance, 7, 0)
+point = Build_GetPoint(HOUSE, Home, 12, 7, 0)
+
+if GreaterThanOrEquals(point[0], 0)
+	Production_Build(HOUSE, point, 400, true)
+endif

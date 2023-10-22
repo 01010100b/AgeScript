@@ -30,6 +30,8 @@ namespace AgeScript.Optimizer
 
             WriteState(rules);
 
+            Utils.RemoveEmptyRules(rules);
+
             for (int pass = 0; pass < PASSES; pass++)
             {
                 foreach (var optimization in GetOptimizations())
